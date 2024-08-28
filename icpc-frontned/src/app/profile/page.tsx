@@ -16,14 +16,16 @@ const myTabs = [
   { name: 'Ejercicios', href: '#', icon: ListBulletIcon, current: true },
   { name: 'Apuntes', href: '#', icon: BookmarkIcon, current: false },
   { name: 'Noticias', href: '#', icon: NewspaperIcon, current: false },
-  { name: 'Pendientes', href: '#', icon: ArchiveBoxIcon, current: false }
+  { name: 'Pendientes', href: '#', icon: ArchiveBoxIcon, current: false },
+  { name: 'Crear', href: '#', current: false }
 ]
 
 const availableTabs = {
   EXERCISES: 'Ejercicios',
   NOTES: 'Apuntes',
   NEWS: 'Noticias',
-  PENDING: 'Pendientes'
+  PENDING: 'Pendientes',
+  CREATE: 'Crear'
 }
 
 function Page() {
@@ -166,6 +168,9 @@ function Page() {
             </div>
             <div className='mx-10'>
               <TabComponent tabs={myTabs} handleChange={handleChange} />
+            </div>
+            <div className-'mr'>
+
             </div>
             <div className='mx-10'>
               <ProfileTableComponent data={tableData} itemType={mode}/>
