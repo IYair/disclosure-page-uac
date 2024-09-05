@@ -30,7 +30,7 @@ export class Note extends BaseEntity {
   @JoinTable()
   tags: Tag[];
 
-  @Column({ nullable: false })
+  @Column('text', { nullable: false })
   body: string;
 
   @Column({ nullable: false })
