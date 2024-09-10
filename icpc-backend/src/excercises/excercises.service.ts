@@ -120,7 +120,15 @@ export class ExcercisesService {
   }
 
   async findOne(id: string) {
-    return await this.excerciseRepository.findBy({ id });
+    return await this.excerciseRepository
+      .createQueryBuilder('excercise')
+      .where('excercise.id = :id', { id })
+      .leftJoinAndSelect('excercise.category', 'category')
+      .leftJoinAndSelect('excercise.tags', 'tags')
+      .leftJoinAndSelect('excercise.memoryId', 'memory')
+      .leftJoinAndSelect('excercise.difficulty', 'difficulty')
+      .leftJoinAndSelect('excercise.time', 'time')
+      .getOne();
   }
 
   async findOneByName(name: string) {

@@ -20,6 +20,7 @@ interface UtilsState {
 interface Actions {
   getTags: () => Promise<Tags[]>
   getCategories: () => Promise<Categories[]>
+  getCategory: (id: string) => Promise<Categories>
   createCategory: ({ name, commentId }: { name: string; commentId: string }) => Promise<IApiResponse | TResponseBasicError>
   getDifficulties: () => Promise<Difficulties[]>
   getTimeLimit: () => Promise<TimeLimit[]>
@@ -53,6 +54,15 @@ const useUtilsStore = create<Actions & UtilsState>()(
           try {
             const response = await api.get('/api/v1/categories')
             set(() => ({ categories: response.data }))
+            return response.data
+          } catch (error: any) {
+            return error.response.data
+          }
+        },
+
+        getCategory: async (id: string): Promise<Categories> => {
+          try {
+            const response = await api.get(`/api/v1/categories/${id}`)
             return response.data
           } catch (error: any) {
             return error.response.data
