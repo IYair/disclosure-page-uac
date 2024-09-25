@@ -36,7 +36,7 @@ const CreateNewsComponent = () => {
         title: String(formData.title),
         imageId: uploadedImage.data?.id,
         body: String(formData.content),
-        userAuthor: String(useAuthStore.getState().user?.userName),
+        userAuthor: String(useAuthStore.getState().user?.id),
         role: String(useAuthStore.getState().user?.role)
       })
       if ('statusCode' in response && response.statusCode === 201) {

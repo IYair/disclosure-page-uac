@@ -73,7 +73,7 @@ const CreateNoteComponent = () => {
       categoryId: { name: data.category.label, id: data.category.value },
       tags: data.tags,
       isVisible: (useAuthStore.getState().user?.role === 'admin' ? true : false),
-      userAuthor: String(useAuthStore.getState().user?.userName),
+      userAuthor: String(useAuthStore.getState().user.id),
       role: String(useAuthStore.getState().user?.role)
     })
 

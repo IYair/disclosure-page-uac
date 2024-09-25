@@ -128,8 +128,8 @@ export interface News {
   id: string
   title: string
   body: string
-  author: string
-  createdAt: string
+  created_by: string
+  created_at: string
   imageId: {
     id: string
   }

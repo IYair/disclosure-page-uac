@@ -87,9 +87,9 @@ export class ExcercisesService {
     newExcercise.difficulty = newExcerciseDifficulty;
     newExcercise.time = newExcerciseTime;
     const user = await this.userRepository.findOneBy({
-      userName: createExcerciseDto.userAuthor
+      id: createExcerciseDto.userAuthor
     });
-    newExcercise.created_by = user.name;
+    newExcercise.created_by = user.id;
     newExcercise.isVisible = createExcerciseDto.role === 'admin';
     const savedExcercise = await this.excerciseRepository.save(newExcercise);
     const commentBody = `${user.name} ha creado un nuevo ejercicio con el nombre ${newExcercise.title}`;

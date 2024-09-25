@@ -62,9 +62,9 @@ export class NotesService {
       article.commentId = newComment; // assign the comment to the note object
     }
     const user = await this.userRepository.findOneBy({
-      userName: createNoteDto.userAuthor
+      id: createNoteDto.userAuthor
     });
-    article.created_by = user.name; // assign the user's name to the note object
+    article.created_by = user.id; // assign the user's name to the note object
     article.isVisible = createNoteDto.role === 'admin'; // if the author is an admin, the note is visible
     const newNote = await this.noteRepository.save(article); // save the note object to the database
     const commentBody = `${user.name} ha creado un nuevo apunte con el título ${article.title}`;

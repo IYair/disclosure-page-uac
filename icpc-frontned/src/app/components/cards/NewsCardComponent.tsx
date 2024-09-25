@@ -51,12 +51,12 @@ async function NewsCardComponent({ ...props }: Readonly<NewsCardComponentProps>)
       <TextComponent
         sizeFont='s14'
         className='text-gray-500 font-medium my-4'>
-        {news.author ?? 'Anónimo'}
+        {news.created_by ?? 'Anónimo'}
       </TextComponent>
       <TextComponent
         sizeFont='s14'
         className='text-gray-500 font-medium my-4'>
-        {news.createdAt ?? ''}
+        {news.created_at ?? ''}
       </TextComponent>
       <MarkdownBodyComponent body={body.compiledSource} />
     </BasicPanelComponent>

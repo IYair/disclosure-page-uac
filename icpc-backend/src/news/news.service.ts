@@ -35,9 +35,9 @@ export class NewsService {
       const news = this.newsRepository.create(createNewsDto);
       news.isVisible = true;
       const user = await this.userRepository.findOneBy({
-        userName: createNewsDto.userAuthor
+        id: createNewsDto.userAuthor
       });
-      news.created_by = user.name;
+      news.created_by = user.id;
       const savedNews = await this.newsRepository.save(news);
       const commentBody = `${user.name} ha creado una nueva noticia con el título ${news.title}`;
       const comment = this.commentRepository.create({
