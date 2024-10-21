@@ -13,7 +13,7 @@ export class Comment extends BaseEntity {
   @OneToMany(() => Category, category => category.comment)
   category: Category[];
 
-  @OneToMany(() => Note, note => note.commentId)
+  @OneToMany(() => Note, note => note.commentId, { onDelete: 'SET NULL' })
   notes: Note[];
 
   @OneToMany(() => Ticket, ticket => ticket.commentId)
