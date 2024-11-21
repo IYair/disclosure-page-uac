@@ -2,17 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Ticket } from './entities/ticket.entity';
+import {
+  Ticket,
+  TicketType,
+  TicketStatus,
+  TicketOperation
+} from './entities/ticket.entity';
 import { Repository } from 'typeorm';
 import { Excercise } from 'src/excercises/entities/excercise.entity';
 import { Note } from 'src/notes/entities/note.entity';
 import { News } from 'src/news/entities/news.entity';
 import { Comment } from 'src/comment/entities/comment.entity';
-import {
-  TicketType,
-  TicketStatus,
-  TicketOperation
-} from './entities/ticket.entity';
 import { Image } from 'src/image/entities/image.entity';
 
 @Injectable()
@@ -42,7 +42,7 @@ export class TicketService {
       body: createTicketDto.description
     });
     if (comment === null) {
-      comment = await this.commentRepository.create();
+      comment = this.commentRepository.create();
       comment.body = createTicketDto.description;
       comment = await this.commentRepository.save(comment);
     }
@@ -113,7 +113,77 @@ export class TicketService {
   }
 
   async findOne(id: string) {
-    return await this.ticketRepository.findOneBy({ id: id });
+    const ticket = await this.ticketRepository.findOneBy({ id: id });
+    switch (ticket.itemType) {
+      case TicketType.EXERCISE:
+        return ticket.operation == TicketOperation.UPDATE
+          ? await this.ticketRepository
+              .createQueryBuilder('ticket')
+              .where('ticket.id = :id', { id: id })
+              .leftJoinAndSelect(
+                'ticket.originalExerciseId',
+                'originalExerciseId'
+              )
+              .leftJoinAndSelect('originalExerciseId.category', 'category')
+              .leftJoinAndSelect('originalExerciseId.tags', 'tags')
+              .leftJoinAndSelect('originalExerciseId.memoryId', 'memory')
+              .leftJoinAndSelect('originalExerciseId.difficulty', 'difficulty')
+              .leftJoinAndSelect('originalExerciseId.time', 'time')
+              .leftJoinAndSelect(
+                'ticket.modifiedExerciseId',
+                'modifiedExerciseId'
+              )
+              .leftJoinAndSelect('modifiedExerciseId.category', 'category')
+              .leftJoinAndSelect('modifiedExerciseId.tags', 'tags')
+              .leftJoinAndSelect('modifiedExerciseId.memoryId', 'memory')
+              .leftJoinAndSelect('modifiedExerciseId.difficulty', 'difficulty')
+              .leftJoinAndSelect('modifiedExerciseId.time', 'time')
+              .getOne()
+          : await this.ticketRepository
+              .createQueryBuilder('ticket')
+              .where('ticket.id = :id', { id: id })
+              .leftJoinAndSelect(
+                'ticket.originalExerciseId',
+                'originalExerciseId'
+              )
+              .leftJoinAndSelect('originalExerciseId.category', 'category')
+              .leftJoinAndSelect('originalExerciseId.tags', 'tags')
+              .leftJoinAndSelect('originalExerciseId.difficulty', 'difficulty')
+              .leftJoinAndSelect('originalExerciseId.time', 'time')
+              .leftJoinAndSelect('originalExerciseId.memoryId', 'memory')
+              .getOne();
+      case TicketType.NOTE:
+        return ticket.operation == TicketOperation.UPDATE
+          ? await this.ticketRepository
+              .createQueryBuilder('ticket')
+              .where('ticket.id = :id', { id: id })
+              .leftJoinAndSelect('ticket.originalNoteId', 'originalNoteId')
+              .leftJoinAndSelect('originalNoteId.commentId', 'comment')
+              .leftJoinAndSelect('originalNoteId.category', 'category')
+              .leftJoinAndSelect('ticket.modifiedNoteId', 'modifiedNoteId')
+              .leftJoinAndSelect('modifiedNoteId.commentId', 'comment')
+              .leftJoinAndSelect('modifiedNoteId.category', 'category')
+              .getOne()
+          : await this.ticketRepository
+              .createQueryBuilder('ticket')
+              .where('ticket.id = :id', { id: id })
+              .leftJoinAndSelect('ticket.originalNoteId', 'originalNoteId')
+              .leftJoinAndSelect('originalNoteId.commentId', 'comment')
+              .getOne();
+      case TicketType.NEWS:
+        return ticket.operation == TicketOperation.UPDATE
+          ? await this.ticketRepository
+              .createQueryBuilder('ticket')
+              .where('ticket.id = :id', { id: id })
+              .leftJoinAndSelect('ticket.originalNewsId', 'originalNewsId')
+              .leftJoinAndSelect('ticket.modifiedNewsId', 'modifiedNewsId')
+              .getOne()
+          : await this.ticketRepository
+              .createQueryBuilder('ticket')
+              .where('ticket.id = :id', { id: id })
+              .leftJoinAndSelect('ticket.originalNewsId', 'originalNewsId')
+              .getOne();
+    }
   }
 
   async update(id: string, updateTicketDto: UpdateTicketDto) {

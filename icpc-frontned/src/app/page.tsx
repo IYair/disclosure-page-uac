@@ -14,21 +14,24 @@ export default async function Home() {
     {
       title: 'Noticias',
       icon: 'NewspaperIcon',
-      info: 'Mantente al día con los eventos más recientes y las actualizaciones del mundo tecnológico y académico. Explora nuestras noticias para estar siempre informado.',
+      info: `Mantente al día con los eventos más recientes y las actualizaciones del mundo tecnológico y académico. 
+      Explora nuestras noticias para estar siempre informado.`,
       href: 'newslist',
       exercises: 126
     },
     {
       title: 'Ejercicios',
       icon: 'ListBulletIcon',
-      info: 'Pon a prueba tus habilidades con nuestra amplia colección de ejercicios diseñados para fortalecer tus conocimientos en programación y resolver problemas desafiantes.',
+      info: `Pon a prueba tus habilidades con nuestra amplia colección de ejercicios diseñados 
+      para fortalecer tus conocimientos en programación y resolver problemas desafiantes.`,
       href: 'exercises',
       exercises: 255
     },
     {
       title: 'Apuntes',
       icon: 'BookOpenIcon',
-      info: 'Accede a una variedad de apuntes detallados que te ayudarán a consolidar tus conocimientos y profundizar en conceptos clave para tu aprendizaje.',
+      info: `Accede a una variedad de apuntes detallados que te ayudarán a consolidar tus conocimientos y 
+      profundizar en conceptos clave para tu aprendizaje.`,
       href: 'notelist',
       exercises: 150
     }
@@ -100,17 +103,17 @@ ejercicios propuestos de diferentes niveles.`}
 
       <div className='flex flex-col md:flex-row-reverse gap-4 h-full'>
         <div className='flex flex-col gap-4 my-7 px-4 md:px-0 md:pr-4'>
-            <DataCardComponent
-              title={dataCard.title}
-              info={dataCard.info}
-              autor={dataCard.autor}
-            />
-            <DataCardComponent
-              title={dataRamdomCard.title}
-              info={dataRamdomCard.info}
-              autor={dataRamdomCard.autor}
-              image={dataRamdomCard.image}
-            />
+          <DataCardComponent
+            title={dataCard.title}
+            info={dataCard.info}
+            autor={dataCard.autor}
+          />
+          <DataCardComponent
+            title={dataRamdomCard.title}
+            info={dataRamdomCard.info}
+            autor={dataRamdomCard.autor}
+            image={dataRamdomCard.image}
+          />
         </div>
         <div className='px-4 md:px-0 md:pl-4 h-full'>
           <LastNewsComponent />

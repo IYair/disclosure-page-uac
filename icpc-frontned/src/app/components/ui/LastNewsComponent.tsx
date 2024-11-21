@@ -2,23 +2,22 @@ import { enumTextTags } from '@/constants/types'
 import { TextComponent } from '../text/TextComponent'
 import Link from 'next/link'
 import NewsItemComponent from '../cards/NewsItemComponent'
-import useNewsStore from '@/store/useNewsStore'; // Importa el store para acceder a las noticias
+import useNewsStore from '@/store/useNewsStore'
 
 export const LastNewsComponent = async () => {
-  const lastNews = await useNewsStore.getState().getNews(3); // Llama al método getNews para obtener solo 3 noticias
-
+  const lastNews = await useNewsStore.getState().getLatest();
   return (
     <div className='h-full'>
       <div className='flex justify-between'>
         <TextComponent
           tag={enumTextTags.h2}
           sizeFont='s20'
-          className='font-bold text-gray-800'>
+          className='font-bold text-gray-800 dark:text-dark-accent'>
           Últimas Noticias
         </TextComponent>
 
         <div className='flex justify-end'>
-          <Link href='/noticias' className='text-primary'>
+          <Link href='/noticias' className='text-primary dark:text-dark-accent'>
             Ver más noticias
           </Link>
         </div>
