@@ -198,3 +198,16 @@ export interface IProfileTableItem {
   id: string
   title: string
 }
+
+  export interface Ticket {
+    itemType: TicketType,
+    description: string,
+    operation: TicketOperation,
+    originalExerciseId: Exercise,
+    modifiedExerciseId: Exercise,
+    originalNoteId: Note,
+    modifiedNoteId: Note,
+    originalNewsId: News,
+    modifiedNewsId: News,
+    status: TicketStatus
+  }
