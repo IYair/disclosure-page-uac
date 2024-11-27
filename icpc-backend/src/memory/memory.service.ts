@@ -13,11 +13,24 @@ export class MemoryService {
   ) {}
 
   async create(createMemoryDto: CreateMemoryDto) {
-    const newVal = await this.memoryRepository.save(createMemoryDto);
-    return {
-      id: newVal.id,
-      memoryLimit: newVal.memoryLimit
-    };
+    let finalValue = 0;
+    switch (createMemoryDto.id) {
+      case 'MB':
+        finalValue = createMemoryDto.value * 1024;
+        break;
+      case 'GB':
+        finalValue = createMemoryDto.value * 1024 * 1024;
+        break;
+      default:
+        finalValue = createMemoryDto.value;
+        break;
+    }
+    const memory = await this.memoryRepository.findOneBy({
+      memoryLimit: finalValue
+    });
+    if (memory) {
+      return memory;
+    } else return await this.memoryRepository.save({ memoryLimit: finalValue });
   }
 
   async findAll() {

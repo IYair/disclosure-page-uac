@@ -27,11 +27,53 @@ const TicketPage = async ({ params }: Readonly<{ params: { id: string } }>) => {
   if (ticket.operation == TicketOperation.UPDATE) {
     switch (ticket.itemType) {
       case TicketType.EXERCISE:
-        pageContent = <ExerciseCardComponent exercise={ticket.originalExerciseId} />
+        pageContent = (
+          <div className='grid place-items-center grid-cols-1 gap-16'>
+            <div>
+              <TextComponent
+                tag={enumTextTags.h1}
+                sizeFont='s20'
+                className='font-bold text-gray-800 dark:text-dark-accent'>
+                Ejercicio original
+              </TextComponent>
+              <ExerciseCardComponent exercise={ticket.originalExerciseId} />
+            </div>
+            <div>
+              <TextComponent
+                tag={enumTextTags.h1}
+                sizeFont='s20'
+                className='font-bold text-gray-800 dark:text-dark-accent'>
+                Ejercicio modificado
+              </TextComponent>
+              <ExerciseCardComponent exercise={ticket.modifiedExerciseId} />
+            </div>
+          </div>
+        )
         break
 
       case TicketType.NEWS:
-        pageContent = <NewsCardComponent id={ticket.originalNewsId.id} />
+        pageContent = (
+          <div className='grid place-items-center grid-cols-1 gap-16'>
+            <div>
+              <TextComponent
+                tag={enumTextTags.h1}
+                sizeFont='s20'
+                className='font-bold text-gray-800 dark:text-dark-accent'>
+                Noticia original
+              </TextComponent>
+              <NewsCardComponent id={ticket.originalNewsId.id} />
+            </div>
+            <div>
+              <TextComponent
+                tag={enumTextTags.h1}
+                sizeFont='s20'
+                className='font-bold text-gray-800 dark:text-dark-accent'>
+                Noticia modificada
+              </TextComponent>
+              <NewsCardComponent id={ticket.modifiedNewsId.id} />
+            </div>
+          </div>
+        )
         break
 
       case TicketType.NOTE:

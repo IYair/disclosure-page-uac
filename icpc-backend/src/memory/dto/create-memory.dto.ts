@@ -1,8 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 
 export class CreateMemoryDto {
   @ApiProperty()
   @IsNumber()
-  memoryLimit: number;
+  value: number;
+
+  @ApiProperty()
+  @IsString()
+  id: string;
 }
