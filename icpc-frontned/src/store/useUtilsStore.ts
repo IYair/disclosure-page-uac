@@ -34,6 +34,7 @@ interface Actions {
   getTimeLimit: () => Promise<TimeLimit[]>
   createTimeLimit: (time: number) => Promise<IApiResponse | TResponseBasicError>
   getMemoryLimit: () => Promise<MemoryLimit[]>
+  createMemoryLimit: ({ value, id } : {value: number; id: string }) => Promise<IApiResponse | TResponseBasicError>
   createImage: (image: File) => Promise<IApiResponse | TResponseBasicError>
   getDailyQuote: () => Promise<Quote>
   getTicket: (id:string) => Promise <Ticket>
@@ -168,10 +169,28 @@ const useUtilsStore = create<Actions & UtilsState>()(
             return error.response.data
           }
         },
+
         getMemoryLimit: async (): Promise<MemoryLimit[]> => {
           try {
             const response = await api.get('/api/v1/memory')
             set(() => ({ memoryLimit: response.data }))
+            return response.data
+          } catch (error: any) {
+            return error.response.data
+          }
+        },
+
+        createMemoryLimit: async ({ value, id }): Promise<IApiResponse | TResponseBasicError> => {
+          try {
+            const response = await api.post(
+              '/api/v1/memory',
+              { value, id },
+              {
+                headers: {
+                  Authorization: `Bearer ${useAuthStore.getState().token}`
+                }
+              }
+            )
             return response.data
           } catch (error: any) {
             return error.response.data

@@ -56,4 +56,4 @@ const CreateTimeLimitComponent = () => {
   );
 };
 
-export default CreateTimeComponent;
+export default CreateTimeLimitComponent;
