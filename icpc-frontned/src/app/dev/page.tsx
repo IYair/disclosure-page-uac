@@ -13,7 +13,6 @@ export default function Home() {
       <CreateNewsComponent />
       <CreateNoteComponent />
       <CreateExcerciseComponent />
-
       <CreateCategoryComponent />
       <CreateDifficultyComponent />
       <CreateMemoryComponent />
