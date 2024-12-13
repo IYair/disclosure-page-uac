@@ -14,8 +14,8 @@ export default async function Home() {
     {
       title: 'Noticias',
       icon: 'NewspaperIcon',
-      info: `Mantente al día con los eventos más recientes y las actualizaciones del mundo tecnológico y académico.
-       Explora nuestras noticias para estar siempre informado.`,
+      info: `Mantente al día con los eventos más recientes y las actualizaciones del mundo tecnológico y académico. 
+      Explora nuestras noticias para estar siempre informado.`,
       href: 'newslist',
       exercises: 126
     },
@@ -30,8 +30,8 @@ export default async function Home() {
     {
       title: 'Apuntes',
       icon: 'BookOpenIcon',
-      info: `Accede a una variedad de apuntes detallados que te ayudarán a consolidar tus conocimientos y
-       profundizar en conceptos clave para tu aprendizaje.`,
+      info: `Accede a una variedad de apuntes detallados que te ayudarán a consolidar tus conocimientos y 
+      profundizar en conceptos clave para tu aprendizaje.`,
       href: 'notelist',
       exercises: 150
     }

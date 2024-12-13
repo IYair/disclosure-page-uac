@@ -65,7 +65,7 @@ const useNewsStore = create<Actions & NewsState>()(
             const response = await api.get(`/api/v1/news/${id}`);
             return { ...response.data, index: 0 }; // Devuelve la noticia específica
           } catch (error: any) {
-            return error.response.data; // Maneja errores
+            return error.response.data
           }
         },
         search: async (query: string): Promise<News[]> => {
