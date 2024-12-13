@@ -15,6 +15,7 @@ import { toast } from 'sonner'
 import InputSelectorComponent from '../dropdowns/InputSelectorComponent'
 import InputSelectorCreateComponent from '../dropdowns/InputSelectorCreateComponent'
 import useAuthStore from '@/store/useStore'
+import TextAreaComponent from '../forms/TextAreaComponent'
 
 /*
 Input: None
@@ -173,6 +174,7 @@ const CreateExcerciseComponent = () => {
             <Controller
               defaultValue={[]}
               control={methods.control}
+              rules={{required:true}}
               render={({ field }) => (
                 <InputSelectorCreateComponent
                   label='Categoría'
@@ -191,6 +193,7 @@ const CreateExcerciseComponent = () => {
             <Controller
               defaultValue={[]}
               control={methods.control}
+              rules={{required:true}}
               render={({ field }) => (
                 <InputSelectorComponent
                   label='Nivel de dificultad'
@@ -257,15 +260,21 @@ const CreateExcerciseComponent = () => {
               type='text'
               auto='off'
             />
-            <TextFieldComponent
-              labelText='Restricciones'
-              register={methods.register}
-              fieldName='constraints'
-              id='constraints'
-              necessary={true}
-              type='text'
-              auto='off'
+            <Controller
+              name='restriction'
+              defaultValue=''
+              control={methods.control}
+              rules={{required:true}}
+              render={({ field }) => (
+                <MarkdownAreaComponent
+                  value={field.value}
+                  onChange={newValue => field.onChange(newValue)}
+                  labelText='Restricciones'
+                  className='p-2'
+                />
+              )}
             />
+            
             <TextFieldComponent
               labelText='Pista'
               register={methods.register}
@@ -304,6 +313,7 @@ const CreateExcerciseComponent = () => {
               name='description'
               defaultValue=''
               control={methods.control}
+              rules={{required:true}}
               render={({ field }) => (
                 <MarkdownAreaComponent
                   value={field.value}
@@ -313,28 +323,25 @@ const CreateExcerciseComponent = () => {
                 />
               )}
             />
-            <TextFieldComponent
+            <TextAreaComponent
               labelText='Ejemplo de entrada'
               register={methods.register}
               fieldName='example_input'
               id='example_input'
               necessary={true}
-              type='text'
-              auto='off'
             />
-            <TextFieldComponent
+            <TextAreaComponent
               labelText='Ejemplo de salida'
               register={methods.register}
               fieldName='example_output'
               id='example_output'
               necessary={true}
-              type='text'
-              auto='off'
             />
             <Controller
               name='solution'
               defaultValue=''
               control={methods.control}
+              rules={{required:true}}
               render={({ field }) => (
                 <MarkdownAreaComponent
                   value={field.value}
@@ -349,9 +356,18 @@ const CreateExcerciseComponent = () => {
         <div className='flex flex-col items-center'>
           <SubmitComponent text='Crear ejercicio' />
         </div>
+        <div className='mt-4'>
+          <button
+            type='button'
+            className='inline-flex items-center gap-x-2 rounded-md bg-primary text-complementary px-3.5 py-2.5 
+              font-medium shadow-sm hover:bg-secondary focus-visible:outline 
+              focus-visible:outline-offset-2 focus-visible:outline-complementary'
+            >
+            {}Borrar formulario
+          </button>
+        </div>
       </BasicPanelComponent>
     </form>
   )
 }
-
 export default CreateExcerciseComponent

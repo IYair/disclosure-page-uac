@@ -34,6 +34,8 @@ interface Actions {
   createExcercise: (exercise: ICreateExcercise) => Promise<IApiResponse | TResponseBasicError>
   getExercise: (id: string) => Promise<Exercise>
   getExerciseList: (tags: Tags[], category?: string, difficulty?: string) => Promise<Exercise[]>
+  search: (query: string) => Promise<Exercise[]>
+
 }
 
 const useExcerciseStore = create<Actions>()(
@@ -70,6 +72,16 @@ const useExcerciseStore = create<Actions>()(
             return response.data
           } catch (error: any) {
             return error.response.data
+          }
+        },
+        
+        search: async (query: string) => {
+          try {
+            const response = await api.post(`/api/v1/excercises/search/${query}`)
+            return response.data
+          } catch (error: any) {
+            console.error('Error searching exercises:', error)
+            return []
           }
         }
 

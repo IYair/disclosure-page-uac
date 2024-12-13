@@ -65,6 +65,16 @@ export class ExcercisesController {
     return this.excercisesService.getList(body);
   }
 
+  @Post('search/:query')
+  @ApiCreatedResponse({
+    description: 'Los ejercicios se han obtenido exitosamente.'
+  })
+  @ApiBadRequestResponse({ description: 'Bad request' })
+  @ApiInternalServerErrorResponse({ description: 'Internal Server Error' })
+  search(@Param('query') query: string) {
+    return this.excercisesService.search(query);
+  }
+
   @Patch(':id')
   @ApiBearerAuth()
   @UseGuards(AuthGuard)

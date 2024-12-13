@@ -36,12 +36,18 @@ export class Note extends BaseEntity {
   @Column({ nullable: false })
   isVisible: boolean;
 
-  @OneToMany(() => Ticket, ticket => ticket.originalNoteId)
+  @OneToMany(() => Ticket, ticket => ticket.originalNoteId, {
+    onDelete: 'CASCADE'
+  })
   ticketOriginal: Ticket[];
 
-  @OneToMany(() => Ticket, ticket => ticket.modifiedNoteId)
+  @OneToMany(() => Ticket, ticket => ticket.modifiedNoteId, {
+    onDelete: 'CASCADE'
+  })
   ticketModified: Ticket[];
 
-  @OneToMany(() => Report, report => report.note)
+  @OneToMany(() => Report, report => report.note, {
+    onDelete: 'CASCADE'
+  })
   reports: Report[];
 }

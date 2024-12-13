@@ -192,16 +192,20 @@ export const AllTabs = {
 }
 
 export interface IProfileTableItem {
-  color: string
-  tagName: string
+  color?: string
+  tagName?: string
   index: number
   id: string
   title: string
 }
 
   export interface Ticket {
+    id: string,
     itemType: TicketType,
-    description: string,
+    commentId: {
+      id: string,
+      body: string
+    },
     operation: TicketOperation,
     originalExerciseId: Exercise,
     modifiedExerciseId: Exercise,
@@ -210,4 +214,14 @@ export interface IProfileTableItem {
     originalNewsId: News,
     modifiedNewsId: News,
     status: TicketStatus
+  }
+
+  export interface Report {
+    id: string,
+    summary: string,
+    report: string,
+    itemType: TicketType,
+    note: Note,
+    exercise: Exercise,
+    news: News
   }

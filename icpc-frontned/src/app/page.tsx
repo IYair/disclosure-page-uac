@@ -9,26 +9,29 @@ import useUtilsStore from '@/store/useUtilsStore'
 
 export default async function Home() {
   //TODO: Agregar descripciones pertinentes a cada item+
-  const dailyQuote:Quote = await useUtilsStore.getState ().getDailyQuote()
+  const dailyQuote: Quote = await useUtilsStore.getState().getDailyQuote()
   const items = [
     {
       title: 'Noticias',
       icon: 'NewspaperIcon',
-      info: 'Mantente al día con los eventos más recientes y las actualizaciones del mundo tecnológico y académico. Explora nuestras noticias para estar siempre informado.',
+      info: `Mantente al día con los eventos más recientes y las actualizaciones del mundo tecnológico y académico.
+       Explora nuestras noticias para estar siempre informado.`,
       href: 'newslist',
       exercises: 126
     },
     {
       title: 'Ejercicios',
       icon: 'ListBulletIcon',
-      info: 'Pon a prueba tus habilidades con nuestra amplia colección de ejercicios diseñados para fortalecer tus conocimientos en programación y resolver problemas desafiantes.',
+      info: `Pon a prueba tus habilidades con nuestra amplia colección de ejercicios diseñados para fortalecer tus conocimientos en programación
+       y resolver problemas desafiantes.`,
       href: 'exercises',
       exercises: 255
     },
     {
       title: 'Apuntes',
       icon: 'BookOpenIcon',
-      info: 'Accede a una variedad de apuntes detallados que te ayudarán a consolidar tus conocimientos y profundizar en conceptos clave para tu aprendizaje.',
+      info: `Accede a una variedad de apuntes detallados que te ayudarán a consolidar tus conocimientos y
+       profundizar en conceptos clave para tu aprendizaje.`,
       href: 'notelist',
       exercises: 150
     }

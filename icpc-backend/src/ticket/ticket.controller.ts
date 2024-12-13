@@ -27,6 +27,11 @@ export class TicketController {
     return this.ticketService.findAll();
   }
 
+  @Get('pending')
+  findPending() {
+    return this.ticketService.findPending();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.ticketService.findOne(id);

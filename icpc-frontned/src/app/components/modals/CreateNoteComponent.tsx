@@ -123,6 +123,7 @@ const CreateNoteComponent = () => {
           <Controller
             defaultValue={[]}
             control={methods.control}
+            rules={{required:true}}
             render={({ field }) => (
               <InputSelectorCreateComponent
                 label='Categoría'
@@ -162,6 +163,7 @@ const CreateNoteComponent = () => {
             name='content'
             defaultValue=''
             control={methods.control}
+            rules={{required:true}}
             render={({ field }) => (
               <MarkdownAreaComponent
                 value={field.value}
@@ -172,6 +174,16 @@ const CreateNoteComponent = () => {
             )}
           />
           <SubmitComponent text='Crear apunte' />
+        </div>
+        <div className='mt-4'>
+          <button
+            type='button'
+            className='inline-flex items-center gap-x-2 rounded-md bg-primary text-complementary px-3.5 py-2.5 
+              font-medium shadow-sm hover:bg-secondary focus-visible:outline 
+              focus-visible:outline-offset-2 focus-visible:outline-complementary'
+            >
+            {}Borrar formulario
+          </button>
         </div>
       </BasicPanelComponent>
     </form>

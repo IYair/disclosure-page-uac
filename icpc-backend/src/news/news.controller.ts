@@ -59,6 +59,16 @@ export class NewsController {
     return this.newsService.findOne(id);
   }
 
+  @Post('search/:query')
+  @ApiCreatedResponse({
+    description: 'Las noticias se han obtenido exitosamente.'
+  })
+  @ApiBadRequestResponse({ description: 'Bad request' })
+  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
+  search(@Param('query') query: string) {
+    return this.newsService.search(query);
+  }
+
   @Patch(':id')
   @ApiBearerAuth()
   @UseGuards(AuthGuard)

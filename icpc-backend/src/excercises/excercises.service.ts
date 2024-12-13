@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateExcerciseDto } from './dto/create-excercise.dto';
 import { UpdateExcerciseDto } from './dto/update-excercise.dto';
-import { Repository } from 'typeorm';
+import { Repository, Like } from 'typeorm';
 import { Memory } from 'src/memory/entities/memory.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Excercise } from './entities/excercise.entity';
@@ -325,5 +325,12 @@ export class ExcercisesService {
   async remove(id: string) {
     const excercise = await this.excerciseRepository.findOneBy({ id });
     return await this.excerciseRepository.remove(excercise);
+  }
+  
+  async search(query: string): Promise<Excercise[]> {
+    return this.excerciseRepository.find({
+      where: { title: Like(`%${query}%`) },
+      take: 5,
+    });
   }
 }

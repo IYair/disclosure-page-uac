@@ -7,7 +7,20 @@ import { NewspaperIcon, ArchiveBoxIcon, ListBulletIcon, BookmarkIcon } from '@he
 import useAuthStore, { IUser } from '@/store/useStore'
 import { useCallback, useEffect, useState } from 'react'
 import useNewsStore from '@/store/useNewsStore'
-import { Categories, Exercise, News, Note, Tags, AllTabs, TimeLimit, MemoryLimit, Difficulties, IProfileTableItem } from '@/constants/types'
+import {
+  Categories,
+  Exercise,
+  News,
+  Note,
+  Tags,
+  AllTabs,
+  TimeLimit,
+  MemoryLimit,
+  Difficulties,
+  IProfileTableItem,
+  Report,
+  Ticket
+} from '@/constants/types'
 import ProfileTableComponent from '../components/tables/ProfileTableComponent'
 import useExcerciseStore from '@/store/useExcerciseStore'
 import useNoteStore from '@/store/useNoteStore'
@@ -45,6 +58,9 @@ function Page() {
   const getTime = useUtilsStore.getState().getTimeLimit
   const getMemory = useUtilsStore.getState().getMemoryLimit
   const getDifficulty = useUtilsStore.getState().getDifficulties
+  const getUsers = useAuthStore.getState().getUsers
+  const getReports = useUtilsStore.getState().getReports
+  const getPendingTickets = useUtilsStore.getState().getPendingTickets
 
   const handleChange = useCallback(
     async (data: string) => {
@@ -52,8 +68,8 @@ function Page() {
       switch (tab) {
         case AllTabs.EXERCISES:
           const exercises: Exercise[] = await getExercises([], '', '')
-          const mappedExercises = exercises.map((exercise, index) => {
-            return { index, ...exercise }
+          const mappedExercises: IProfileTableItem[] = exercises.map((exercise, index) => {
+            return { title: exercise.title, index, id: exercise.id }
           })
           setTableData(mappedExercises)
           setMode(AllTabs.EXERCISES)
@@ -68,20 +84,32 @@ function Page() {
           break
         case AllTabs.NEWS:
           const news: News[] = await getNews()
-          const mappedNews = news.map((note, index) => {
-            return { index, title: note.title, id: note.id }
+          const mappedNews = news.map((newsArticle, index) => {
+            return { index, title: newsArticle.title, id: newsArticle.id }
           })
           setTableData(mappedNews)
           setMode(AllTabs.NEWS)
           break
         case AllTabs.REPORTS:
+          const reports: Report[] = await getReports()
+          const mappedReports = reports.map((report, index) => {
+            return { index, title: report.summary, id: report.id }
+          })
+          setTableData(mappedReports)
+          setMode(AllTabs.REPORTS)
           break
         case AllTabs.CHANGES:
+          const tickets: Ticket[] = await getPendingTickets()
+          const mappedTickets = tickets.map((ticket, index) => {
+            return { index, title: ticket.commentId.body, id: ticket.id }
+          })
+          setTableData(mappedTickets)
+          setMode(AllTabs.CHANGES)
           break
         case AllTabs.CATEGORIES:
           const categories: Categories[] = await getCategories()
           const mappedCategories = categories.map((category, index) => {
-            return { index, title: category.name, id: category.id }
+            return { index: index, title: category.name, id: category.id }
           })
           setTableData(mappedCategories)
           setMode(AllTabs.CATEGORIES)
@@ -89,7 +117,7 @@ function Page() {
         case AllTabs.TAGS:
           const tags: Tags[] = await getTags()
           const mappedTags = tags.map((tag, index) => {
-            return { index, title: tag.name, id: tag.id }
+            return { index, title: tag.name, id: tag.id, color: tag.color, tagName: tag.name }
           })
           setTableData(mappedTags)
           setMode(AllTabs.TAGS)
@@ -97,7 +125,7 @@ function Page() {
         case AllTabs.TIME:
           const time: TimeLimit[] = await getTime()
           const mappedTime = time.map((time, index) => {
-            return { index, title: time.timeLimit.toString(), id: time.id }
+            return { index, title: `${time.timeLimit.toString()} seg.`, id: time.id }
           })
           setTableData(mappedTime)
           setMode(AllTabs.TIME)
@@ -105,7 +133,7 @@ function Page() {
         case AllTabs.MEMORY:
           const memory: MemoryLimit[] = await getMemory()
           const mappedMemory = memory.map((memory, index) => {
-            return { index, title: memory.memoryLimit.toString(), id: memory.id }
+            return { index, title: `${memory.memoryLimit.toString()} KB.`, id: memory.id }
           })
           setTableData(mappedMemory)
           setMode(AllTabs.MEMORY)
@@ -119,7 +147,7 @@ function Page() {
           setMode(AllTabs.DIFFICULTY)
           break
         case AllTabs.ACCOUNT:
-          const account: IUser[] = await getAccount()
+          const account: IUser[] = await getUsers()
           const mappedAccount = account.map((account, index) => {
             return { index, title: account.userName, id: account.id }
           })
@@ -128,7 +156,7 @@ function Page() {
           break
       }
     },
-    [getCategories, getDifficulty, getExercises, getMemory, getNews, getNotes, getTags, getTime]
+    [getCategories, getDifficulty, getExercises, getMemory, getNews, getNotes, getTags, getTime, getUsers, getReports, getPendingTickets]
   )
 
   useEffect(() => {

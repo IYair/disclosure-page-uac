@@ -1,7 +1,19 @@
 import axios from 'axios'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
-import {Tags, Categories, Difficulties, TimeLimit, MemoryLimit, IApiResponse, TResponseBasicError, DBImage, Quote, Ticket} from '@/constants/types'
+import {
+  Tags,
+  Categories,
+  Difficulties,
+  TimeLimit,
+  MemoryLimit,
+  IApiResponse,
+  TResponseBasicError,
+  DBImage,
+  Quote,
+  Ticket,
+  Report
+} from '@/constants/types'
 import useAuthStore from './useStore'
 
 const api = axios.create({
@@ -37,7 +49,10 @@ interface Actions {
   createMemoryLimit: ({ value, id } : {value: number; id: string }) => Promise<IApiResponse | TResponseBasicError>
   createImage: (image: File) => Promise<IApiResponse | TResponseBasicError>
   getDailyQuote: () => Promise<Quote>
-  getTicket: (id:string) => Promise <Ticket>
+  getTickets: () => Promise<Ticket[]>
+  getPendingTickets: () => Promise<Ticket[]>
+  getTicket: (id: string) => Promise<Ticket>
+  getReports: () => Promise<Report[]>
 }
 
 const useUtilsStore = create<Actions & UtilsState>()(
@@ -50,7 +65,7 @@ const useUtilsStore = create<Actions & UtilsState>()(
         timeLimit: [] as TimeLimit[],
         memoryLimit: [] as MemoryLimit[],
         images: [] as unknown as { [key: string]: DBImage },
-        quote: { phrase: '', author: '' }, 
+        quote: { phrase: '', author: '' },
         ticket: null as unknown as Ticket,
 
         getTags: async (): Promise<Tags[]> => {
@@ -214,16 +229,51 @@ const useUtilsStore = create<Actions & UtilsState>()(
             return response.data
           } catch (error: any) {
             return {
-              phrase: "",
-              author : ""
+              phrase: '',
+              author: ''
             }
           }
         },
 
-        getTicket: async (id:string): Promise<Ticket> => {
+        getTickets: async (): Promise<Ticket[]> => {
+          try {
+            const response = await api.get('/api/v1/ticket')
+            return response.data
+          } catch (error: any) {
+            return error.response.data
+          }
+        },
+
+        getPendingTickets: async (): Promise<Ticket[]> => {
+          try {
+            const response = await api.get('/api/v1/ticket/pending', {
+              headers: {
+                Authorization: `Bearer ${useAuthStore.getState().token}`
+              }
+            })
+            return response.data
+          } catch (error: any) {
+            return error.response.data
+          }
+        },
+
+        getTicket: async (id: string): Promise<Ticket> => {
           try {
             const response = await api.get(`/api/v1/ticket/${id}`)
             set(() => ({ ticket: response.data }))
+            return response.data
+          } catch (error: any) {
+            return error.response.data
+          }
+        },
+
+        getReports: async (): Promise<Report[]> => {
+          try {
+            const response = await api.get('/api/v1/report', {
+              headers: {
+                Authorization: `Bearer ${useAuthStore.getState().token}`
+              }
+            })
             return response.data
           } catch (error: any) {
             return error.response.data

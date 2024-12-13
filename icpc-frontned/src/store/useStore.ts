@@ -35,6 +35,7 @@ interface Actions {
   setError: (error: string | null) => void
   createUser: (user: ICreateUser) => Promise<IApiResponse> | TResponseBasicError
   getProfile: () => Promise<IUser>
+  getUsers: () => Promise<IUser[]>
 }
 
 const api = axios.create({
@@ -81,6 +82,15 @@ const useAuthStore = create<AuthState & Actions>()(
             }
           })
           set(() => ({ user: response.data }))
+          return response.data
+        },
+
+        getUsers: async (): Promise<IUser[]> => {
+          const response = await api.get('/api/v1/users/users', {
+            headers: {
+              Authorization: `Bearer ${get().token}`
+            }
+          })
           return response.data
         }
       }),

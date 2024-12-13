@@ -100,6 +100,7 @@ const CreateNewsComponent = () => {
             name='file'
             defaultValue={null}
             control={methods.control}
+            rules={{required:true}}
             render={({ field }) => (
               <ImageInputComponent
                 value={field.value}
@@ -124,6 +125,16 @@ const CreateNewsComponent = () => {
             )}
           />
           <SubmitComponent text='Crear noticia' />
+        </div>
+        <div className='mt-4'>
+          <button
+            type='button'
+            className='inline-flex items-center gap-x-2 rounded-md bg-primary text-complementary px-3.5 py-2.5 
+              font-medium shadow-sm hover:bg-secondary focus-visible:outline 
+              focus-visible:outline-offset-2 focus-visible:outline-complementary'
+            >
+            {}Borrar formulario
+          </button>
         </div>
       </BasicPanelComponent>
     </form>

@@ -71,12 +71,18 @@ export class Excercise extends BaseEntity {
   @JoinTable()
   tags: Tag[];
 
-  @OneToMany(() => Ticket, ticket => ticket.originalNoteId)
+  @OneToMany(() => Ticket, ticket => ticket.originalNoteId, {
+    onDelete: 'CASCADE'
+  })
   ticketOriginal: Ticket[];
 
-  @OneToMany(() => Ticket, ticket => ticket.modifiedNoteId)
+  @OneToMany(() => Ticket, ticket => ticket.modifiedNoteId, {
+    onDelete: 'CASCADE'
+  })
   ticketModified: Ticket[];
 
-  @OneToMany(() => Report, report => report.excercise)
+  @OneToMany(() => Report, report => report.excercise, {
+    onDelete: 'CASCADE'
+  })
   reports: Report[];
 }

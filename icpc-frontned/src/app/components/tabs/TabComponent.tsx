@@ -1,29 +1,13 @@
-import { useState } from 'react'
-/*
-Input: a list of strings that define CSS classes
-Output: a single string of Tailwind CSS
-Return value: a string with the CSS classes
-Function: joins multiple strings into a single string
-Variables: classes
-Date: 21 - 03 - 2024
-Author: Gerardo Omar Rodriguez Ramirez
-*/
+import { useState } from 'react';
+import CreateExerciseComponent from '../modals/CreateExcerciseComponent';
+import CreateNoteComponent from '../modals/CreateNoteComponent';
+import CreateNewsComponent from '../modals/CreateNewsComponent';
+import { ButtonComponent } from '../buttons/ButtonComponent'; // Importa tu ButtonComponent
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-/*
-Input: a list of tabs with icon, href, name and a boolean to identify the currently selected tab
-Output: a set of tabs to select different sections of a page
-Return value: a set of tab buttons as a component
-Function: creates a set of tab buttons to navigate through different sections of a page
-Variables: icon, href, name, current
-Date: 11 - 04 - 2024
-Author: Gerardo Omar Rodriguez Ramirez
-*/
-
-// Update type annotation of the 'tabs' parameter
 export default function TabComponent({
   myTabs,
   adminTabs,
@@ -31,13 +15,11 @@ export default function TabComponent({
   handleChange
 }: Readonly<{
   readonly myTabs: ReadonlyArray<{
-    //    icon: any
     href: string | undefined
     name: string
     current?: boolean
   }>
   readonly adminTabs: ReadonlyArray<{
-    //   icon: any
     href: string | undefined
     name: string
     current?: boolean
@@ -48,21 +30,66 @@ export default function TabComponent({
   const tabs = myTabs.concat(adminTabs)
   const accountTab = tabs.find(tab => tab.name === 'Cuentas')
   const filteredAdminTabs = adminTabs.filter(tab => tab.name !== 'Cuentas')
-
+  const [showModal, setShowModal] = useState(false)
+  const [showCreateButton, setShowCreateButton] = useState(false)
+  const [modalComponent, setModalComponent] = useState<JSX.Element | null>(null)
   const [activeTab, setActiveTab] = useState(tabs.find(tab => tab.current)?.name)
 
   const handleTabChange = (tabName: string) => {
-    setActiveTab(tabName)
-  }
+    setActiveTab(tabName);
+    handleChange(tabName);
+
+    if (tabName === 'Apuntes' || tabName === 'Noticias' || tabName === 'Ejercicios') {
+      setShowCreateButton(true); 
+      if (tabName === 'Apuntes') {
+        setModalComponent(<CreateNoteComponent />);
+      } else if (tabName === 'Noticias') {
+        setModalComponent(<CreateNewsComponent />);
+      } else if (tabName === 'Ejercicios') {
+        setModalComponent(<CreateExerciseComponent />);
+      }
+    } else {
+      setShowCreateButton(false); 
+      setModalComponent(null);
+    }
+  };
+
+  const handleModalOpen = () => {
+    if (activeTab === 'Apuntes') {
+      setModalComponent(<CreateNoteComponent />);
+    } else if (activeTab === 'Noticias') {
+      setModalComponent(<CreateNewsComponent />);
+    } else if (activeTab === 'Ejercicios') {
+      setModalComponent(<CreateExerciseComponent />);
+    }
+    setShowModal(true);
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    setModalComponent(null);
+  };
 
   return (
     <div>
-      <div className='lg:hidden'>
-        <label
-          htmlFor='tabs'
-          className='sr-only'>
-          Select a tab
-        </label>
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="rounded-lg p-6 w-full max-h-[90%] overflow-y-auto"> 
+            {modalComponent}
+            <div className="flex justify-center">
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded"
+                onClick={handleModalClose}
+              >
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className='sm:hidden'>
+        <label htmlFor='tabs' className='sr-only'>Select a tab</label>
         <select
           id='tabs'
           name='tabs'
@@ -108,13 +135,6 @@ export default function TabComponent({
                     handleChange(tab.name)
                   }}
                   aria-current={tab.name === activeTab ? 'page' : undefined}>
-                  {/*<tab.icon
-                  className={classNames(
-                    tab.name === activeTab ? 'text-indigo-500' : 'text-gray-400 group-hover:text-gray-500',
-                    '-ml-0.5 mr-2 h-5 w-5'
-                  )}
-                  aria-hidden='true'
-                />*/}
                   <span>{tab.name}</span>
                 </a>
               ))}
@@ -138,13 +158,6 @@ export default function TabComponent({
                     handleChange(tab.name)
                   }}
                   aria-current={tab.name === activeTab ? 'page' : undefined}>
-                  {/*<tab.icon
-                  className={classNames(
-                    tab.name === activeTab ? 'text-indigo-500' : 'text-gray-400 group-hover:text-gray-500',
-                    '-ml-0.5 mr-2 h-5 w-5'
-                  )}
-                  aria-hidden='true'
-                />*/}
                   <span>{tab.name}</span>
                 </a>
               ))}
@@ -167,20 +180,21 @@ export default function TabComponent({
                     handleChange(accountTab.name)
                   }}
                   aria-current={accountTab.name === activeTab ? 'page' : undefined}>
-                  {/*<tab.icon
-                  className={classNames(
-                    tab.name === activeTab ? 'text-indigo-500' : 'text-gray-400 group-hover:text-gray-500',
-                    '-ml-0.5 mr-2 h-5 w-5'
-                  )}
-                  aria-hidden='true'
-                />*/}
                   <span>{accountTab.name}</span>
                 </a>
               )}
             </div>}
+            {showCreateButton && ( 
+              <ButtonComponent
+              text="Crear"
+              buttonType="button"
+              onClick={handleModalOpen}
+              className="ml-auto" // Agrega margen a la izquierda 
+            />
+            )}
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

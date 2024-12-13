@@ -27,7 +27,8 @@ interface NoteState {
 interface Actions {
   createNote: (note: any) => Promise<IApiResponse | TResponseBasicError>
   getNote: (id: string) => Promise<Note>
-  getList: (tags: Tags[],category?: string) => Promise<Note[]>
+  getList: (tags: Tags[], category?: string) => Promise<Note[]>
+  search: (query: string) => Promise<Note[]>
 }
 
 const useNoteStore = create<Actions & NoteState>()(
@@ -72,6 +73,16 @@ const useNoteStore = create<Actions & NoteState>()(
             else return [];
           } catch (error: any) {
             return error.response.data
+          }
+        },
+
+        search: async (query: string) => {
+          try {
+            const response = await api.post(`/api/v1/notes/search/${query}`)
+            return response.data
+          } catch (error: any) {
+            console.error('Error searching notes:', error)
+            return []
           }
         }
 

@@ -109,7 +109,18 @@ export class TicketService {
   }
 
   async findAll() {
-    return await this.ticketRepository.find();
+    return await this.ticketRepository
+      .createQueryBuilder('ticket')
+      .leftJoinAndSelect('ticket.commentId', 'comment')
+      .getMany();
+  }
+
+  async findPending() {
+    return await this.ticketRepository
+      .createQueryBuilder('ticket')
+      .where('ticket.status = :status', { status: TicketStatus.PENDING })
+      .leftJoinAndSelect('ticket.commentId', 'comment')
+      .getMany();
   }
 
   async findOne(id: string) {

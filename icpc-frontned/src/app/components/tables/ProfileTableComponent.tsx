@@ -17,6 +17,40 @@ const ProfileTableComponent = (props: Readonly<IProfileTableComponentProps>) => 
     console.log('Le picó en Eliminar', id, itemType)
   }
 
+  const tableData = props.data.length !== 0 ? (props.data.map(item => (
+    <tr
+      key={item.index}
+      className='cursor-pointer hover:bg-slate-200'>
+      <td
+        className={`whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 
+        dark:text-dark-accent sm:pl-6 lg:pl-8 w-full justify-between items-center`}>
+        <TextComponent>{item.title}</TextComponent>
+        {item.tagName && item.color && (
+          <div className='max-w-min'>
+            <TagComponent
+              color={item.color}
+              tagName={item.title}
+              showIcon={false}
+            />
+          </div>
+        )}
+      </td>
+      <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 dark:text-dark-accent sm:pl-6 lg:pl-8'>
+        <ThreeDotComponent
+          handleDelete={handleDelete}
+          handleEdit={handleEdit}
+          id={item.id}
+          itemType={props.itemType}
+        />
+      </td>
+    </tr>
+  ))) : (<tr>
+    <td
+      className='whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 
+      dark:text-dark-accent sm:pl-6 lg:pl-8 w-full justify-between items-center'>
+      <TextComponent>¡Ups! No hay elementos para mostrar</TextComponent></td>
+  </tr>)
+
   return (
     <table className='min-w-full border-separate border-spacing-0'>
       <thead>
@@ -36,27 +70,7 @@ const ProfileTableComponent = (props: Readonly<IProfileTableComponentProps>) => 
         </tr>
       </thead>
       <tbody>
-        {props.data.map(item => (
-          <tr
-            key={item.index}
-            className='cursor-pointer hover:bg-slate-200'>
-            <td
-              className={`whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 
-              dark:text-dark-accent sm:pl-6 lg:pl-8 w-full justify-between items-center`}>
-              <TextComponent>{item.title}</TextComponent>
-              {typeof item === 'object' && item.hasOwnProperty('color') && <TagComponent color={item.color} tagName={item.title} showIcon={false} />}
-              
-            </td>
-            <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 dark:text-dark-accent sm:pl-6 lg:pl-8'>
-            <ThreeDotComponent
-                handleDelete={handleDelete}
-                handleEdit={handleEdit}
-                id={item.id}
-                itemType={props.itemType}
-              />
-            </td>
-          </tr>
-        ))}
+        {tableData}
       </tbody>
     </table>
   )

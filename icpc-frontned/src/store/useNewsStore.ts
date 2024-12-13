@@ -24,6 +24,8 @@ interface Actions {
   createNews: (news: ICreateNews) => Promise<IApiResponse | TResponseBasicError>
   getNews: (limit?: number) => Promise<News[]>
   getNewsArticle: (id: string) => Promise<News>
+  search: (query: string) => Promise<News[]>
+  
 }
 
 const useNewsStore = create<Actions & NewsState>()(
@@ -64,6 +66,19 @@ const useNewsStore = create<Actions & NewsState>()(
             return { ...response.data, index: 0 }; // Devuelve la noticia específica
           } catch (error: any) {
             return error.response.data; // Maneja errores
+          }
+        },
+        search: async (query: string): Promise<News[]> => {
+          try {
+            const response = await api.post(`/api/v1/news/search/${query}`);
+            return response.data;
+          } catch (error: any) {
+            if (error.response) {
+              return error.response.data; // Maneja errores con respuesta del servidor
+            } else {
+              console.error('Error searching news:', error);
+              return []; // Retorna una lista vacía en caso de error
+            }
           }
         }
       }),
