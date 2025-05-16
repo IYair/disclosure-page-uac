@@ -36,7 +36,7 @@ export default function Home() {
             necessary={true}
             id='email'
           />
-          <SubmitComponent text='Enviar correo' />
+          <SubmitComponent text='Enviar correo' action={() => {}} />
         </form>
       </BasicPanelComponent>
     </main>
