@@ -10,7 +10,7 @@ const montserrat = Montserrat({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Sistema de divulgación de ICPC',
-  description: 'Plataforma para la divulgación de información y recursos del ICPC',
+  description: 'Plataforma para la divulgación de información y recursos del ICPC'
 }
 
 export default function RootLayout({

@@ -1,3 +1,4 @@
+'use client'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import LogoComponent from '../LogoComponent'
 import { TextComponent } from '../text/TextComponent'
@@ -52,7 +53,7 @@ export default function PasswordCardComponent({ children, onSubmit, ...props}: R
                 })
               : child
           })}
-          <SubmitComponent text='Actualizar contraseña'/>
+          <SubmitComponent text='Actualizar contraseña' action={() => {}}/>
         </form>
       </div>
     </div>

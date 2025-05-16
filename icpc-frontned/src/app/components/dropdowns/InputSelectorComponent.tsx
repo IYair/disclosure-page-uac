@@ -34,7 +34,7 @@ const colourStyles: StylesConfig<Option> = {
         backgroundColor: 'white'
       }
     }
-  },
+  }
 }
 
 /*

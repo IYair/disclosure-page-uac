@@ -49,7 +49,8 @@ interface Actions {
   getUsers: () => Promise<IUser[]>
   deleteUser: (id: string) => Promise<IApiResponse | TResponseBasicError>
   updateUser: (id: string, user: IUpdateUser) => Promise<IUser | TResponseBasicError>
-  getUser: (id: string) => Promise<IUser> 
+  getUser: (id: string) => Promise<IUser>
+  logout: () => void 
 }
 
 const api = axios.create({
@@ -95,8 +96,8 @@ const useAuthStore = create<AuthState & Actions>()(
         getProfile: async (): Promise<IUser> => {
           const response = await api.get('/api/v1/auth/profile', {
             headers: {
-              Authorization: `Bearer ${get().token}`, // Solo envía el token
-            },
+              Authorization: `Bearer ${get().token}`
+            }
           });
           set(() => ({ user: response.data }));
           return response.data;
@@ -128,8 +129,8 @@ const useAuthStore = create<AuthState & Actions>()(
           try {
             const response = await api.patch(`/api/v1/users/${id}`, user, {
               headers: {
-                Authorization: `Bearer ${get().token}`,
-              },
+                Authorization: `Bearer ${get().token}`
+              }
             });
             return response.data; // Devuelve los datos actualizados
           } catch (error: any) {

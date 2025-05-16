@@ -1,3 +1,4 @@
+'use client'
 import { enumTextTags } from '@/constants/types'
 import cn from 'classnames'
 import { TextComponent } from '../text/TextComponent'
@@ -44,6 +45,7 @@ export const CardWithHeaderComponent = ({ className = [], ...props }: CardWithHe
           <ButtonComponent
             text='¡Ponte a practicar!'
             icon
+            onClick={() => {}}
           />
         </a>
         <a href='/note'>
@@ -51,6 +53,7 @@ export const CardWithHeaderComponent = ({ className = [], ...props }: CardWithHe
             buttonType='button_outline'
             text='Aprende más'
             icon
+            onClick={() => {}}
           />
         </a>
       </div>
