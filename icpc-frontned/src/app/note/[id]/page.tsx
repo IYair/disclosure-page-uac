@@ -5,9 +5,11 @@ import { serialize } from 'next-mdx-remote/serialize'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import useNoteStore from '@/store/useNoteStore'
+import useStore from '@/store/useStore'
 import { Note } from '@/constants/types'
 
 export default async function Page({ params }: Readonly<{ params: { id: string } }>) {
+  const isLoggedIn = await useStore.getState().isLogged
   const getNote = useNoteStore.getState().getNote
   if (params.id) {
     const note: Note = await getNote(params.id)
@@ -17,6 +19,9 @@ export default async function Page({ params }: Readonly<{ params: { id: string }
         rehypePlugins: [rehypeKatex as any]
       }
     })
+    if (!isLoggedIn) {
+      useNoteStore.getState().log(params.id)
+    }
     return (
       <main className='grid min-h-screen grid-cols-1 place-items-center justify-between py-24'>
         <NoteCardComponent
