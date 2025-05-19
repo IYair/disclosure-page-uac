@@ -14,6 +14,7 @@ import { CommentService } from 'src/comment/comment.service';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import {
+  ApiBadRequestResponse,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiInternalServerErrorResponse,
@@ -86,6 +87,27 @@ export class NotesController {
   @ApiInternalServerErrorResponse({ description: 'Internal Server Error' })
   search(@Param('query') query: string) {
     return this.notesService.search(query);
+  }
+
+  @Post('notes/log/:id')
+  @ApiCreatedResponse({
+    description: 'La lectura se ha registrado exitosamente.'
+  })
+  @ApiBadRequestResponse({ description: 'Bad request' })
+  @ApiInternalServerErrorResponse({ description: 'Internal Server Error' })
+  async logRead(@Param('id') id: string) {
+    const item = await this.findOne(id);
+    try {
+      this.loggerService.logRead(
+        'notes',
+        item.id,
+        `${item.category.name} ${item.category.id}`,
+        item.tags.map(tag => `${tag.name} ${tag.id}`).join(', ')
+      );
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
   @Get('notes/category/:categoryId')
