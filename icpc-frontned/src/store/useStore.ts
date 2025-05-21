@@ -56,7 +56,7 @@ interface Actions {
   updateUser: (id: string, user: IUpdateUser) => Promise<IUser | TResponseBasicError>
   getUser: (id: string) => Promise<IUser>
   logout: () => void
-  captcha: (token: string) => Promise<any>
+  captcha: (token: string) => Promise<CaptchaResponse>
 }
 
 const api = axios.create({
