@@ -23,7 +23,6 @@ import {
 import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { GetExerciseListDto } from './dto/get-exercise-list.dto';
 import { LoggerService } from '../services/logger.service'; // Importa el LoggerService
-import { identity } from 'rxjs';
 
 @Controller('excercises')
 @ApiTags('Exercises')
