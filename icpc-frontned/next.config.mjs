@@ -8,7 +8,7 @@ const nextConfig = {
   pageExtensions: ['md', 'mdx', 'ts', 'tsx'],
   reactStrictMode: true,
   images: {
-    domains: ['localhost', '192.168.3.19']
+    domains: ['localhost', 'ip address']
   },
   async headers() {
     return [

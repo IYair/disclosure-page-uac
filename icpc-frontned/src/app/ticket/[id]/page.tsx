@@ -17,8 +17,8 @@ const TicketPage = async ({ params }: Readonly<{ params: { id: string } }>) => {
     return await serialize(mdx, {
       mdxOptions: {
         remarkPlugins: [remarkMath],
-        rehypePlugins: [rehypeKatex as any],
-      },
+        rehypePlugins: [rehypeKatex as any]
+      }
     });
   }
 

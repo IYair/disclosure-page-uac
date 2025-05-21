@@ -32,10 +32,10 @@ const colourStyles: StylesConfig<Option> = {
       color: 'black',
       ':active': {
         ...styles[':active'],
-        backgroundColor: 'white',
-      },
+        backgroundColor: 'white'
+      }
     };
-  },
+  }
 };
 
 const InputSelectorCreateComponent = forwardRef(
@@ -47,7 +47,7 @@ const InputSelectorCreateComponent = forwardRef(
       clear() {
         inputRef.current?.clearValue(); // Limpia el valor seleccionado
         onChange(null); // Notifica automáticamente al componente padre
-      },
+      }
     }));
 
     return (

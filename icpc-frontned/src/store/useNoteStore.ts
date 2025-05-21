@@ -32,6 +32,7 @@ interface Actions {
   search: (query: string) => Promise<Note[]>
   getCount: () => Promise<number>; // Acción para obtener el conteo
   deleteNote: (id: string) => Promise<IApiResponse | TResponseBasicError>
+  log: (id: string) => Promise<IApiResponse | TResponseBasicError>
 }
 
 const useNoteStore = create<Actions & NoteState>()(
@@ -123,6 +124,15 @@ const useNoteStore = create<Actions & NoteState>()(
                 Authorization: `Bearer ${useAuthStore.getState().token}`
               }
             })
+            return response.data
+          } catch (error: any) {
+            return error.response.data
+          }
+        },
+
+        log: async (id: string) => {
+          try {
+            const response = await api.post(`/api/v1/notes/log/${id}`)
             return response.data
           } catch (error: any) {
             return error.response.data

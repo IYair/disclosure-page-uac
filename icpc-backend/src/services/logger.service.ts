@@ -28,4 +28,32 @@ export class LoggerService {
       console.error('Error writing to log file', error);
     }
   }
+
+  logRead(module: string, itemId: string, category: string, tags: string) {
+    const timestamp = new Date().toISOString();
+    const currentMonth = new Date().toLocaleString('default', {
+      month: 'long'
+    });
+    const currentYear = new Date().getFullYear();
+    const logEntry = `${timestamp} - Type: ${module} - ID: ${itemId} - Category: ${category} - Tags: ${tags}`;
+    try {
+      console.log(
+        `Attempting to write to log file: ${path.join(
+          process.cwd(),
+          `src/services/${currentMonth}-${currentYear}.log`
+        )}`
+      );
+      fs.appendFileSync(
+        path.join(
+          process.cwd(),
+          `src/services/${currentMonth}-${currentYear}.log`
+        ),
+        logEntry + '\n',
+        'utf-8'
+      );
+      console.log(`Log entry created: ${logEntry}`);
+    } catch (error) {
+      console.error('Error writing to log file', error);
+    }
+  }
 }

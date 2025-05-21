@@ -68,7 +68,7 @@ export default async function Home() {
       <CardWithHeaderComponent
         title={'¡Bienvenido a la comunidad de desarrolladores de software!'}
         comments={`Esta página ha nacido con el propósito de recoger de forma libre y gratuita 
-material de preparación para olimpiadas de matemáticas destinado a alumnos de enseñanza secundaria. 
+material de preparación para el Concurso Universitario Internacional de Programación (ICPC por sus siglas en inglés) organizado por la ACM. 
 Encontrarás dicho material organizado por categorías con unidades teóricas, ejercicios resueltos y 
 ejercicios propuestos de diferentes niveles.`}
         className='z-10 -mt-36 shadow-lg max-w-4xl'
