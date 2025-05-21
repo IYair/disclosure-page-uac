@@ -1,8 +1,8 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
-  HttpStatus,
   Post,
   Req,
   UseGuards
@@ -24,6 +24,12 @@ import { RoleEnum } from '../common/enums/role.enum';
 import { CreateUserResponseDto } from '../users/dto/create-user.dto';
 import { Auth } from 'src/common/decorators/auth.decorator';
 import { AuthGuard } from './guard/auth.guard';
+import { HttpService } from '@nestjs/axios';
+
+interface CaptchaResponse {
+  message: string;
+  success: boolean;
+}
 
 interface RequestWithUser extends Request {
   user: {
@@ -36,7 +42,10 @@ interface RequestWithUser extends Request {
 @Controller('auth')
 @ApiTags('Auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly httpService: HttpService
+  ) {}
 
   @Post('login')
   @ApiCreatedResponse({
@@ -48,6 +57,25 @@ export class AuthController {
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
   async login(@Body() loginDto: LoginDto): Promise<LoginResponseDto> {
     return await this.authService.login(loginDto);
+  }
+
+  @Post('captcha')
+  @ApiCreatedResponse({
+    description: 'Captcha verified successfully',
+    type: String
+  })
+  @ApiBadRequestResponse({ description: 'Invalid captcha' })
+  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
+  async captcha(@Body('token') token: string): Promise<CaptchaResponse> {
+    const secretKey = process.env.CAPTCHA_SECRET;
+    const url = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${token}`;
+    const response = await this.httpService.axiosRef.post(url);
+    const { success, score } = response.data;
+    if (success && score > 0.5) {
+      return { message: 'Captcha verified successfully', success: true };
+    } else {
+      throw new BadRequestException('Captcha verification failed');
+    }
   }
 
   @Post('register')
@@ -79,15 +107,16 @@ export class AuthController {
   })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   async profile(@Req() req: RequestWithUser) {
-    const userData = await this.authService.profile({ id: (req.user as any).id });
+    const userData = await this.authService.profile({
+      id: (req.user as any).id
+    });
     return {
       id: userData.id,
       name: userData.name,
       lastName: userData.lastName,
       userName: userData.userName,
       email: userData.email,
-      role: userData.role.role,
+      role: userData.role.role
     };
   }
-  
 }

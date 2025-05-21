@@ -10,35 +10,52 @@ import { TextComponent } from '../components/text/TextComponent'
 import useStore from '@/store/useStore'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 
 export default function Home() {
   const login = useStore(state => state.login)
+  const captcha = useStore(state => state.captcha)
   const router = useRouter()
   const methods = useForm()
+  const { executeRecaptcha } = useGoogleReCaptcha()
 
   const onSubmit: SubmitHandler<{ username: string; password: string }> = async data => {
-    try {
-      const { username, password } = data
-      // Determinar si el input es email o username
-      const credentials = username.includes('@') ? { email: username, password } : { username: username, password }
-
-      await login(credentials) // Envía el objeto correcto al store
-      router.push('/')
-      toast.success('Inicio de sesión exitoso', {
-        duration: 5000,
-        style: {
-          backgroundColor: 'green',
-          color: '#ffffff'
-        }
-      })
-    } catch (error) {
-      toast.error('Error al iniciar sesión, verifica tus credenciales', {
+    if (!executeRecaptcha) {
+      toast.error('Error al cargar el CAPTCHA, carga la página nuevamente', {
         duration: 5000,
         style: {
           backgroundColor: '#ff0000',
           color: '#ffffff'
         }
       })
+    } else {
+      try {
+        const recaptchaToken = await executeRecaptcha('login')
+        const captchaVerified = await captcha(recaptchaToken)
+        if (captchaVerified.success) {
+          const { username, password } = data
+          // Determinar si el input es email o username
+          const credentials = username.includes('@') ? { email: username, password } : { username: username, password }
+
+          await login(credentials) // Envía el objeto correcto al store
+          router.push('/')
+          toast.success('Inicio de sesión exitoso', {
+            duration: 5000,
+            style: {
+              backgroundColor: 'green',
+              color: '#ffffff'
+            }
+          })
+        }
+      } catch (error) {
+        toast.error('Error al iniciar sesión, verifica tus credenciales', {
+          duration: 5000,
+          style: {
+            backgroundColor: '#ff0000',
+            color: '#ffffff'
+          }
+        })
+      }
     }
   }
 

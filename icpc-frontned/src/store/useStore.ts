@@ -41,6 +41,11 @@ interface AuthState {
   isLogged: boolean
 }
 
+interface CaptchaResponse {
+  message: string
+  success: boolean
+}
+
 interface Actions {
   login: (credentials: { username?: string; email?: string; password: string }) => Promise<void> // Cambiar firma  logout: () => void
   setError: (error: string | null) => void
@@ -49,7 +54,9 @@ interface Actions {
   getUsers: () => Promise<IUser[]>
   deleteUser: (id: string) => Promise<IApiResponse | TResponseBasicError>
   updateUser: (id: string, user: IUpdateUser) => Promise<IUser | TResponseBasicError>
-  getUser: (id: string) => Promise<IUser> 
+  getUser: (id: string) => Promise<IUser>
+  logout: () => void
+  captcha: (token: string) => Promise<any>
 }
 
 const api = axios.create({
@@ -63,7 +70,7 @@ const useAuthStore = create<AuthState & Actions>()(
         token: null,
         user: null,
 
-        login: async (credentials) => {
+        login: async credentials => {
           const response = await api.post('/api/v1/auth/login', credentials)
           set(() => ({ token: response.data.token }))
           if (get().token !== null) {
@@ -77,17 +84,17 @@ const useAuthStore = create<AuthState & Actions>()(
 
         createUser: async (user: ICreateUser) => {
           try {
-          const response = await api.post('/api/v1/auth/register', user, {
-            headers: {
-              Authorization: `Bearer ${get().token}`
+            const response = await api.post('/api/v1/auth/register', user, {
+              headers: {
+                Authorization: `Bearer ${get().token}`
+              }
+            })
+            if (response.status === 201) {
+              return response.data
             }
-          })
-          if (response.status === 201) {
-            return response.data
+          } catch (error: any) {
+            return error.response.data
           }
-        } catch (error: any) {
-          return error.response.data
-        }
         },
 
         isLogged: false,
@@ -95,11 +102,11 @@ const useAuthStore = create<AuthState & Actions>()(
         getProfile: async (): Promise<IUser> => {
           const response = await api.get('/api/v1/auth/profile', {
             headers: {
-              Authorization: `Bearer ${get().token}`, // Solo envía el token
-            },
-          });
-          set(() => ({ user: response.data }));
-          return response.data;
+              Authorization: `Bearer ${get().token}`
+            }
+          })
+          set(() => ({ user: response.data }))
+          return response.data
         },
 
         getUsers: async (): Promise<IUser[]> => {
@@ -128,13 +135,13 @@ const useAuthStore = create<AuthState & Actions>()(
           try {
             const response = await api.patch(`/api/v1/users/${id}`, user, {
               headers: {
-                Authorization: `Bearer ${get().token}`,
-              },
-            });
-            return response.data; // Devuelve los datos actualizados
+                Authorization: `Bearer ${get().token}`
+              }
+            })
+            return response.data // Devuelve los datos actualizados
           } catch (error: any) {
             // Lanza el error para que sea manejado en el componente
-            throw error.response?.data || new Error('Error al actualizar el usuario');
+            throw error.response?.data || new Error('Error al actualizar el usuario')
           }
         },
 
@@ -143,8 +150,19 @@ const useAuthStore = create<AuthState & Actions>()(
             headers: {
               Authorization: `Bearer ${get().token}`
             }
-          });
-          return response.data;
+          })
+          return response.data
+        },
+
+        captcha: async (token: string): Promise<CaptchaResponse> => {
+          try {
+            const response = await api.post('/api/v1/auth/captcha', {
+              token
+            })
+            return response.data
+          } catch (error: any) {
+            return error.response.data
+          }
         }
       }),
       {
