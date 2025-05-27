@@ -155,7 +155,7 @@ export class ExcercisesService {
     });
     const savedTicket = await this.ticketRepository.save(ticket);
     this.mailerService.sendMail(
-      'al057564@uacam.mx',
+      true,
       'create',
       savedExcercise.title,
       'ejercicio'
@@ -523,7 +523,7 @@ export class ExcercisesService {
         const savedTicket = await this.ticketRepository.save(ticket);
         if (savedTicket) {
           this.mailerService.sendMail(
-            'al057564@uacam.mx',
+            true,
             'update',
             savedUpdatedExercise.title,
             'ejercicio'
@@ -577,12 +577,7 @@ export class ExcercisesService {
       });
       const savedTicket = await this.ticketRepository.save(ticket);
       if (savedTicket) {
-        this.mailerService.sendMail(
-          'al057564@uacam.mx',
-          'delete',
-          title,
-          'ejercicio'
-        );
+        this.mailerService.sendMail(true, 'delete', title, 'ejercicio');
         return savedTicket;
       } else {
         throw new BadRequestException('Error al eliminar el ejercicio');
