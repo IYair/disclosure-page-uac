@@ -75,7 +75,7 @@ export class ReportService {
       report.report = createReportDto.report;
       const savedReport = await this.reportRepository.save(report);
       this.mailerService.sendMail(
-        'al057564@uacam.mx',
+        false,
         'report',
         createReportDto.summary,
         'reporte'

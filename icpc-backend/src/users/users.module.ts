@@ -7,6 +7,7 @@ import { Role } from 'src/roles/entities/role.entity';
 import { Comment } from 'src/comment/entities/comment.entity';
 import { Ticket } from 'src/ticket/entities/ticket.entity';
 import { LoggerService } from 'src/services/logger.service';
+import { MailerService } from 'src/mailer/mailer.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Role, Comment, Ticket])],

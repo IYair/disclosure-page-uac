@@ -17,6 +17,9 @@ import { Note } from 'src/notes/entities/note.entity';
 import { News } from 'src/news/entities/news.entity';
 import { Image } from 'src/image/entities/image.entity';
 import { MailerService } from 'src/mailer/mailer.service';
+import { MailerModule } from 'src/mailer/mailer.module';
+import { UsersService } from 'src/users/users.service';
+import { Role } from 'src/roles/entities/role.entity';
 
 @Module({
   imports: [
@@ -32,12 +35,14 @@ import { MailerService } from 'src/mailer/mailer.service';
       Comment,
       Note,
       News,
-      Image
+      Image,
+      Role
     ]),
-    forwardRef(() => AppModule)
+    forwardRef(() => AppModule),
+    MailerModule
   ],
   controllers: [ExcercisesController],
-  providers: [ExcercisesService, TicketService, MailerService],
+  providers: [ExcercisesService, TicketService, MailerService, UsersService],
   exports: [ExcercisesService]
 })
 export class ExcercisesModule {}
