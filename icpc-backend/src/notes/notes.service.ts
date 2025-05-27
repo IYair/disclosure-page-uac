@@ -96,12 +96,7 @@ export class NotesService {
     });
     const savedTicket = await this.ticketRepository.save(ticket); // save the ticket object to the database
     if (newNote && savedTicket) {
-      this.mailerService.sendMail(
-        'al057564@uacam.mx',
-        'create',
-        newNote.title,
-        'apunte'
-      );
+      this.mailerService.sendMail(true, 'create', newNote.title, 'apunte');
       return {
         // return the note object
         id: newNote.id,
@@ -331,7 +326,7 @@ export class NotesService {
         const savedTicket = await this.ticketRepository.save(ticket);
         if (savedTicket) {
           this.mailerService.sendMail(
-            'al057564@uacam.mx',
+            true,
             'update',
             savedModifiedNote.title,
             'apunte'
@@ -385,12 +380,7 @@ export class NotesService {
       });
       const savedTicket = await this.ticketRepository.save(ticket);
       if (savedTicket) {
-        this.mailerService.sendMail(
-          'al057564@uacam.mx',
-          'delete',
-          note.title,
-          'apunte'
-        );
+        this.mailerService.sendMail(true, 'delete', note.title, 'apunte');
         return note;
       } else {
         throw new BadRequestException('Error al eliminar el apunte');

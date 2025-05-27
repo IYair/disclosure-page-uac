@@ -67,12 +67,7 @@ export class NewsService {
       });
       const savedTicket = await this.ticketRepository.save(ticket);
       if (savedNews && savedTicket) {
-        this.mailerService.sendMail(
-          'al057564@uacam.mx',
-          'create',
-          savedNews.title,
-          'noticia'
-        );
+        this.mailerService.sendMail(true, 'create', savedNews.title, 'noticia');
         return savedNews;
       } else {
         throw new BadRequestException('Error al crear la noticia');
@@ -178,7 +173,7 @@ export class NewsService {
         const savedTicket = await this.ticketRepository.save(ticket);
         if (savedTicket) {
           this.mailerService.sendMail(
-            'al057564@uacam.mx',
+            true,
             'update',
             savedUpdatedNews.title,
             'noticia'
@@ -232,12 +227,7 @@ export class NewsService {
       });
       const savedTicket = await this.ticketRepository.save(ticket);
       if (savedTicket) {
-        this.mailerService.sendMail(
-          'al057564@uacam.mx',
-          'delete',
-          news.title,
-          'noticia'
-        );
+        this.mailerService.sendMail(true, 'delete', news.title, 'noticia');
         return savedTicket;
       }
     }

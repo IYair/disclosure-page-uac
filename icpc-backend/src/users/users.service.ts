@@ -112,6 +112,23 @@ export class UsersService {
     };
   }
 
+  async getMails(adminsOnly: boolean): Promise<string[]> {
+    const users = adminsOnly
+      ? await this.userRepository.find({
+          where: { role: { role: RoleEnum.ADMIN } },
+          select: ['email']
+        })
+      : await this.userRepository.find({
+          select: ['email']
+        });
+
+    if (users.length === 0) {
+      throw new BadRequestException('No hay usuarios registrados');
+    }
+
+    return users.map(user => user.email);
+  }
+
   async update(id: string, updateUserDto: UpdateUserDto) {
     if (updateUserDto.password && updateUserDto.password.length < 8) {
       throw new BadRequestException(
