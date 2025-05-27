@@ -55,13 +55,13 @@ export default async function Home() {
 
   return (
     <main className='flex min-h-screen flex-col items-center mt-16 gap-8'>
-      <section className='flex relative w-full h-[90vw] lg:h-[50vw] dark:invert items-stretch'>
+      <section className='flex relative w-full h-[90vw] lg:h-[50vw] items-stretch'>
         <Image
           src='/images/Portada_Portal_lCPC.jpg'
           alt='Logo'
           fill
           priority
-          className='object-cover object-top invert -z-10'
+          className='object-cover object-top -z-10'
         />
         <div className='h-40 w-full bg-gradient-to-t from-white self-end'></div>
       </section>
