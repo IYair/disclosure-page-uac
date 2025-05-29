@@ -44,6 +44,18 @@ const adminTabs = [
   { name: 'Cuentas', href: '#', icon: ArchiveBoxIcon, current: false }
 ]
 
+/*
+Input: None (uses hooks and store state)
+Output: Profile page with user info and data tables
+Return value: React Node (profile page)
+Function: Renders the user profile page, handles user info update, and displays data tables
+Variables: methods, user, getProfile, tableData, mode, update, currentUser, getNews,
+getExercises, getNotes, getCategories, getTags, getTime, getMemory, getDifficulty,
+getUsers, getOpenReports, getPendingTickets, updateUser, handleSubmitUserInfo, handleChange
+Date: 29 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
+
 function Page() {
   const methods = useForm()
 
@@ -76,9 +88,10 @@ function Page() {
         password: null,
         passwordVerify: null
       })
+      // If an id is found in the response, the request was successful
       if ('id' in result) {
-        setCurrentUser(result) // Actualiza el estado local
-        useAuthStore.setState({ user: result }) // Actualiza el estado global del usuario
+        setCurrentUser(result)
+        useAuthStore.setState({ user: result })
         toast.success('¡Información actualizada!', {
           duration: 5000,
           style: { backgroundColor: 'green', color: '#ffffff' }
@@ -94,9 +107,11 @@ function Page() {
     }
   }
 
+  // Function to handle tab changes and fetch data accordingly
   const handleChange = useCallback(
     async (data: string) => {
       const tab = data
+      // Update the data in the table according to the current tab
       switch (tab) {
         case AllTabs.EXERCISES:
           const exercises: Exercise[] = await getExercises([], '', '')
@@ -203,6 +218,7 @@ function Page() {
     ]
   )
 
+  // Effect to fetch the profile data and set the initial mode
   useEffect(() => {
     getProfile()
     handleChange(mode)
@@ -252,6 +268,7 @@ function Page() {
                         register={methods.register}
                         necessary={false}
                         type='text'
+                        // Search for the current user info to put it as placeholder for the field
                         placeholder={currentUser ? currentUser.lastName : 'Apellidos'}
                       />
                     </div>
@@ -266,6 +283,7 @@ function Page() {
                         register={methods.register}
                         necessary={false}
                         type='email'
+                        // Search for the current user info to put it as placeholder for the field
                         placeholder={currentUser ? currentUser.email : 'Correo electrónico'}
                       />
                     </div>
@@ -280,6 +298,7 @@ function Page() {
                         register={methods.register}
                         necessary={false}
                         type='text'
+                        // Search for the current user info to put it as placeholder for the field
                         placeholder={currentUser ? currentUser.userName : 'Nombre de usuario'}
                       />
                     </div>

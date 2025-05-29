@@ -1,3 +1,4 @@
+
 'use client'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import CheckboxComponent from '../components/forms/CheckboxComponent'
@@ -12,6 +13,15 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 
+/*
+Input: None (uses hooks and store state)
+Output: JSX.Element with the login page layout
+Return value: JSX.Element
+Function: Renders the login page, handles authentication, CAPTCHA, and redirects
+Variables: login, captcha, router, methods, executeRecaptcha, onSubmit
+Date: 29 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 export default function Home() {
   const login = useStore(state => state.login)
   const captcha = useStore(state => state.captcha)

@@ -3,21 +3,29 @@ import { TextComponent } from './text/TextComponent'
 import TagListComponent from './tags/TagListComponent'
 import { Note } from '@/constants/types'
 
+/*
+Input: note (Note object), index (number)
+Output: Note item as a component
+Return value: JSX.Element (note item)
+Function: Renders a note item card with title, description, and tags
+Variables: note, index
+Date: 29 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 interface NoteItemProps {
   note: Note
   index: number
 }
 
 /*
-Input: a note object with id, title, description, and a list of tag objects with id, name, and color
-Output: an item of a list of notes with the title, description, and tags
-Return value: an item of a list of notes as a component
-Function: maps the different parts of a notes article into a card that acts as an item of a list
-Variables: note { id, title, description, tags { id, name, color } }
-Date: 12 - 04 - 2024
+Input: note (Note object), index (number)
+Output: Note item as a component
+Return value: JSX.Element (note item)
+Function: Renders a note item card with title, description, and tags
+Variables: note, index
+Date: 29 - 05 - 2025
 Author: Gerardo Omar Rodriguez Ramirez
 */
-
 const NoteItemComponent = ({ ...props }: Readonly<NoteItemProps>) => {
   return (
     <div className='bg-white dark:bg-dark-primary flex flex-col w-full rounded-md shadow-md p-2'>
@@ -27,10 +35,11 @@ const NoteItemComponent = ({ ...props }: Readonly<NoteItemProps>) => {
           className='text-secondary dark:text-dark-complementary'>{`${props.index}.- ${props.note.title}`}</TextComponent>
         <div className='flex flex-row'>
           <TagListComponent
-            tags={props.note.tags.slice(0, 3)} // Mostrar solo las primeras etiquetas
+            tags={props.note.tags.slice(0, 3)}
             showIcon={false}
           />
-          {props.note.tags.length > 3 && ( // Mostrar puntos suspensivos si hay más etiquetas N. debe ser igual que el de arriba
+          {/* If the amount of tags is greater than 3, show ellipsis */}
+          {props.note.tags.length > 3 && (
             <span className='ml-1 text-gray-400'> ... </span>
           )}
         </div>

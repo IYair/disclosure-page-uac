@@ -4,6 +4,16 @@ import cn from 'classnames'
 import { TextComponent } from '../text/TextComponent'
 import { ButtonComponent } from '../buttons/ButtonComponent'
 
+/*
+Input: A title string, an optional comments string, and an optional className array or string
+Output:  An object with properties for the CardWithHeaderComponent
+Return value: An object with the properties of the CardWithHeaderComponent
+Function: To describe the properties (required and optional) of the CardWithHeaderComponent
+Variables: title, comments, className
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
+
 interface CardWithHeaderComponentProps {
   title: string
   comments?: string
@@ -13,10 +23,10 @@ interface CardWithHeaderComponentProps {
 /*
 Input: the title and comments to display in the card, styles for the card
 Output: a card with a title, comments, style, and buttons
-Return value: a card component used in the landing page to display a welcome message
+Return value: A React Node
 Function: creates a card with a header, comments, and buttons
 Variables: title, comments, className, classes
-Date: 21 - 03 - 2024
+Date: 28 - 05 - 2025
 Author: Gerardo Omar Rodriguez Ramirez
 */
 

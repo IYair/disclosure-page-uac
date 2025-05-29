@@ -5,6 +5,17 @@ import CreatableSelect from 'react-select/creatable';
 import { StylesConfig, SelectInstance } from 'react-select';
 import chroma from 'chroma-js';
 
+/*
+Input: An array of Option objects, the currently selected option, an id for the selector,
+label for the selector, a function to handle changes, and a function to handle creating new options.
+Output: An object with properties for the InputSelectorCreateComponent
+Return value: An object with the properties of the InputSelectorCreateComponent
+Function: To describe the properties (required and optional) of the InputSelectorCreateComponent
+Variables: options, selectedOption, id, label, onChange, handleCreate
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
+
 interface InputSelectorCreateProps {
   options: Option[];
   selectedOption: Option | null;
@@ -14,6 +25,7 @@ interface InputSelectorCreateProps {
   handleCreate: (val: Option) => void;
 }
 
+// Define the styles for the react-select component
 const colourStyles: StylesConfig<Option> = {
   control: styles => ({ ...styles, backgroundColor: 'white' }),
   option: (styles, { isDisabled, isFocused, isSelected }) => {
@@ -38,15 +50,24 @@ const colourStyles: StylesConfig<Option> = {
   }
 };
 
+/*
+Input: An object with properties described in the InputSelectorCreateProps interface, see above
+Output: A creatable selector with the options and the selected value, allowing users to create new options 
+Return value: A React Node
+Function: Create a selector where the users can write a query to search an item and create new options
+Variables: options, selectedOption, id, label, onChange, handleCreate, ref
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
+
 const InputSelectorCreateComponent = forwardRef(
   ({ options, selectedOption, id, label, onChange, handleCreate }: InputSelectorCreateProps, ref) => {
     const inputRef = useRef<SelectInstance<Option>>(null);
 
-    // Exponer el método `clear` al componente padre
     useImperativeHandle(ref, () => ({
       clear() {
-        inputRef.current?.clearValue(); // Limpia el valor seleccionado
-        onChange(null); // Notifica automáticamente al componente padre
+        inputRef.current?.clearValue();
+        onChange(null);
       }
     }));
 
@@ -58,7 +79,7 @@ const InputSelectorCreateComponent = forwardRef(
         <CreatableSelect
           instanceId={id}
           options={options}
-          value={selectedOption} // Usar valor controlado
+          value={selectedOption}
           isSearchable={true}
           isClearable={true}
           styles={colourStyles}
@@ -66,12 +87,12 @@ const InputSelectorCreateComponent = forwardRef(
           getOptionValue={option => option.value}
           ref={inputRef}
           onChange={newValue => {
-            onChange(newValue); // Notifica al padre sobre cambios
+            onChange(newValue);
           }}
           onCreateOption={inputValue => {
             const newOption = { label: inputValue, value: inputValue };
-            handleCreate(newOption); // Agrega la nueva opción
-            onChange(newOption); // Notifica con la nueva opción
+            handleCreate(newOption);
+            onChange(newOption);
           }}
         />
       </div>

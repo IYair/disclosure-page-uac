@@ -8,18 +8,39 @@ import { ButtonComponent } from '../buttons/ButtonComponent'
 import { toast } from 'sonner'
 import { XMarkIcon } from '@heroicons/react/20/solid'
 
+/*
+Input: The id of the report and a function to close the report modal
+Output: An object with properties for the DisplayReportComponent
+Return value: An object with the properties of the DisplayReportComponent
+Function: To describe the properties of the DisplayReportComponent
+Variables: id, onClose
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
+
 interface DisplayReportComponentProps {
   id: string
   onClose: () => void
 }
+
+/*
+Input: An object with properties described in the DisplayReportComponentProps interface, see above
+Output: A modal component to display a report
+Return value: A React Node
+Function: To fetch and display the content of a report, allowing the user to close it
+Variables: id, report, reportBody
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 
 const DisplayReportComponent = ({ id, onClose }: Readonly<DisplayReportComponentProps>) => {
   const getReport = useUtilsStore(state => state.getReport)
   const closeReport = useUtilsStore(state => state.closeReport)
   const [report, setReport] = useState<Report | null>(null)
   const [reportBody, setReportBody] = useState<string>('')
-
+  // An effect hook to fetch the report and display it in the UI
   useEffect(() => {
+    // Fetch the report data when the component mounts
     const fetchReport = async () => {
       try {
         const response = await getReport(id)
@@ -34,6 +55,7 @@ const DisplayReportComponent = ({ id, onClose }: Readonly<DisplayReportComponent
     fetchReport()
   }, [id, getReport, setReport, setReportBody])
 
+  // Function to get the URL based on the report item type
   const getUrl = (id: string | undefined) => {
     if (report?.itemType === 'exercise') {
       return `/exercises/${id}`
@@ -46,6 +68,7 @@ const DisplayReportComponent = ({ id, onClose }: Readonly<DisplayReportComponent
     }
   }
 
+  // Function to set the report as "closed" in the database and display a success message
   const close = async () => {
     try {
       const response = await closeReport(id)
@@ -97,7 +120,9 @@ const DisplayReportComponent = ({ id, onClose }: Readonly<DisplayReportComponent
             <a
               className='underline hover:text-dark-complementary'
               target='_blank'
+              // This call to the function will grab the first existing id from the report
               href={getUrl(report?.note?.id ?? report?.excercise?.id ?? report?.news?.id)}>
+              {/* This will display the first title that exists in the report */}
               {report?.note?.title ?? report?.excercise?.title ?? report?.news?.title}
             </a>
           </TextComponent>

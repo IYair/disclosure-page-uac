@@ -8,6 +8,15 @@ import useExcerciseStore from '@/store/useExcerciseStore';
 import useNewsStore from '@/store/useNewsStore';
 import useNoteStore from '@/store/useNoteStore';
 
+/*
+Input: None (uses hooks and store state)
+Output: Search bar UI with autocomplete and navigation
+Return value: JSX.Element (search bar)
+Function: Provides a search bar that fetches and displays search results for exercises, news, and notes, and navigates to the selected item
+Variables: options, inputValue, isClient, router, exerciseSearch, newsSearch, notesSearch
+Date: 29 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 const SearchBarComponent = () => {
   const [options, setOptions] = useState<{ value: string; label: string; type: string; url: string }[]>([]);
   const [inputValue, setInputValue] = useState('');
@@ -17,10 +26,12 @@ const SearchBarComponent = () => {
   const newsSearch = useNewsStore(state => state.search);
   const notesSearch = useNoteStore(state => state.search);
 
+  // Effect to set isClient to true after the component mounts
   useEffect(() => {
     setIsClient(true);
   }, []);
 
+  // Effect to fetch options based on inputValue
   useEffect(() => {
     const fetchOptions = async () => {
       if (inputValue.trim() === '') return;
@@ -62,14 +73,17 @@ const SearchBarComponent = () => {
     fetchOptions();
   }, [inputValue]);
 
+  // Function to handle input changes
   const handleInputChange = (newValue: string) => {
     setInputValue(newValue);
   };
 
+  // Function to handle option selection
   const handleChange = (selectedOption: any) => {
     router.push(selectedOption.url);
   };
 
+  // If not client-side, return null to avoid rendering on the server
   if (!isClient) {
     return null;
   }

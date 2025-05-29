@@ -19,21 +19,20 @@ Variables: classes
 Date: 21 - 03 - 2024
 Author: Gerardo Omar Rodriguez Ramirez
 */
-
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
 /*
-Input: a list of exercises with id, name, dificult, category and tags
-Output: a table of exercises to see the items and enter to their pages
-Return value: a table component with the exercises
-Function: creates a table of exercises as a component
-Variables: exercises, id, name, dificult, categorie, tag
-Date: 11 - 04 - 2024
+Input: None (uses hooks and store state)
+Output: Table of exercises with filtering by category, tags, and difficulty
+Return value: JSX.Element (table UI or message if no exercises)
+Function: Renders a table of exercises, allows filtering by category, tags, and difficulty, and displays exercise details
+Variables: tags, getTags, categories, getCategories, difficulties, getDifficulties,
+methods, tagOptions, category, categoryOptions, selectedTags, difficultyOptions, difficulty, exercises, getExcerciseList
+Date: 28 - 05 - 2025
 Author: Gerardo Omar Rodriguez Ramirez
 */
-
 export default function TableComponent() {
   const tags = useUtilsStore().tags
   const getTags = useUtilsStore.getState().getTags
@@ -51,6 +50,7 @@ export default function TableComponent() {
   const [exercises, setExercises] = useState<Exercise[]>([])
   const getExcerciseList = useExcerciseStore.getState().getExerciseList
 
+  // Effect hook to fetch categories, difficulties, tags, and exercises
   useEffect(() => {
     getCategories().then(response => {
       setCategoryOptions(response)
@@ -78,6 +78,7 @@ export default function TableComponent() {
               id='category'
               onChange={val => {
                 field.onChange(val)
+                // Update the category state with the selected value
                 setCategory((val === null ? '' : val.label) as string)
               }}
               options={categoryOptions.map(item => {
@@ -116,6 +117,7 @@ export default function TableComponent() {
               id='difficulty'
               onChange={val => {
                 field.onChange(val)
+                // Update the difficulty state with the selected value
                 setDifficulty((val === null ? '' : val.label) as string)
               }}
               options={difficultyOptions.map(item => {
@@ -128,18 +130,16 @@ export default function TableComponent() {
           name='difficulty'
         />
       </form>
-
+      {/* If the length of the exercises list is greater than 0 */}
       {exercises.length > 0 ? (
         <div className='mt-8'>
           <div className='-mx-4 -my-2 sm:-mx-6 lg:-mx-8 overflow-x-auto'>
             {' '}
-            {/* Permitir desplazamiento horizontal */}
             <div
               className={`ring-1 ring-gray-300 sm:mx-0 sm:rounded-lg inline-block 
               min-w-full align-middle scroll-smooth`}>
               <table className='min-w-full border-separate border-spacing-0'>
                 {' '}
-                {/* Asegurar que la tabla ocupe el ancho completo */}
                 <thead>
                   <tr>
                     <th
@@ -176,6 +176,7 @@ export default function TableComponent() {
                   </tr>
                 </thead>
                 <tbody>
+                  {/* Loop through all exercises in the list to display items in the table */}
                   {exercises.map((exercise, id) => (
                     <tr
                       key={exercise.id}
@@ -221,11 +222,11 @@ export default function TableComponent() {
                         )}>
                         <div className='flex flex-row'>
                           <TagListComponent
-                            tags={exercise.tags.slice(0, 3)} // Mostrar solo las primeras 3 etiquetas
+                            tags={exercise.tags.slice(0, 3)}
                             showIcon={false}
                           />
                           {exercise.tags.length > 3 && (
-                            <span className='ml-1 text-gray-400'>...</span> // Mostrar puntos suspensivos si hay más etiquetas
+                            <span className='ml-1 text-gray-400'>...</span>
                           )}
                         </div>
                       </td>
