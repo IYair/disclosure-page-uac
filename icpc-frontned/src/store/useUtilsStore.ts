@@ -16,14 +16,32 @@ import {
 } from '@/constants/types'
 import useAuthStore from './useStore'
 
+/*
+Input: None
+Output: Zustand store for managing utility state and API calls (tags, categories, difficulties, time/memory limits, images, quotes, tickets, reports)
+Return value: Provides actions and state for CRUD operations and retrieval of utility data used throughout the frontend application
+Function: Centralizes logic for interacting with backend endpoints related to tags, categories, difficulties, time/memory limits, 
+images, quotes, tickets, and reports. Handles authentication, state management, and API communication for utility data.
+Variables: getTags, hasPendingTicket, createTag, updateTag, deleteTag, getCategories, getCategory, createCategory, deleteCategory, 
+getDifficulties, getDifficulty, createDifficulty, updateDifficulty, deleteDifficulty, getTimeLimit, createTimeLimit, updateTimeLimit, 
+deleteTimeLimit, getMemoryLimit, getMemory, createMemory, updateMemory, deleteMemoryLimit, createImage, updateImage, getDailyQuote, 
+getRandomFact, getTickets, getPendingTickets, getTicket, getReports, getOpenReports, getReport, closeReport, approveTicket, rejectTicket, 
+createReport, tags, categories, difficulty, timeLimit, memoryLimit, images, quote, ticket
+Date: 28 - 05 - 2025
+Author: Mario Fernando Landa López
+*/
+
+// Axios instance for main API
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL
 })
 
+// Axios instance for quote API
 const quoteApi = axios.create({
   baseURL: process.env.NEXT_PUBLIC_QUOTE_URL
 })
 
+// State interface for utility data
 interface UtilsState {
   tags: Tags[]
   categories: Categories[]
@@ -35,6 +53,7 @@ interface UtilsState {
   ticket: Ticket
 }
 
+// Actions available in the utility store
 interface Actions {
   getTags: () => Promise<Tags[]>
   hasPendingTicket: (itemId: string, itemType: string) => Promise<boolean>
@@ -52,12 +71,12 @@ interface Actions {
   deleteDifficulty: (id: string) => Promise<IApiResponse | TResponseBasicError>
   getTimeLimit: () => Promise<TimeLimit[]>
   createTimeLimit: (time: number) => Promise<IApiResponse | TResponseBasicError>
-  updateTimeLimit: (id: string, data: { timeLimit: number }) => Promise<IApiResponse | TResponseBasicError> // Añade esta línea
+  updateTimeLimit: (id: string, data: { timeLimit: number }) => Promise<IApiResponse | TResponseBasicError>
   deleteTimeLimit: (id: string) => Promise<IApiResponse | TResponseBasicError>
   getMemoryLimit: () => Promise<MemoryLimit[]>
-  getMemory: (id: string) => Promise<MemoryLimit> // Añade esta línea
+  getMemory: (id: string) => Promise<MemoryLimit>
   createMemory: (memory: { value: number; id: string }) => Promise<IApiResponse | TResponseBasicError>
-  updateMemory: (id: string, data: { value: number }) => Promise<IApiResponse | TResponseBasicError> // Añade esta línea
+  updateMemory: (id: string, data: { value: number }) => Promise<IApiResponse | TResponseBasicError>
   deleteMemoryLimit: (id: string) => Promise<IApiResponse | TResponseBasicError>
   createImage: (image: File) => Promise<IApiResponse | TResponseBasicError>
   updateImage: (image: File, id: string) => Promise<IApiResponse | TResponseBasicError>
@@ -147,14 +166,14 @@ const useUtilsStore = create<Actions & UtilsState>()(
               }
             )
 
-            // ✅ Actualiza el estado local con el nuevo tag
+            // ✅ Updates local state with the new tag
             if (response.data.statusCode === 201) {
               set(state => ({
-                tags: [...state.tags, response.data.data] // Usa response.data.data
+                tags: [...state.tags, response.data.data] // Uses response.data.data
               }))
             }
 
-            return response.data // Devuelve la respuesta completa
+            return response.data // Returns the full response
           } catch (error: any) {
             return error.response.data
           }
@@ -325,7 +344,7 @@ const useUtilsStore = create<Actions & UtilsState>()(
         },
 
         updateTimeLimit: async (id: string, data: { timeLimit: number }): Promise<IApiResponse | TResponseBasicError> => {
-          // Añade esta función
+          // Adds this function
           try {
             const response = await api.patch(`/api/v1/time/${id}`, data, {
               headers: {
@@ -362,7 +381,7 @@ const useUtilsStore = create<Actions & UtilsState>()(
         },
 
         getMemory: async (id: string): Promise<MemoryLimit> => {
-          // Añade esta función
+          // Adds this function
           try {
             const response = await api.get(`/api/v1/memory/${id}`)
             return response.data
@@ -375,7 +394,7 @@ const useUtilsStore = create<Actions & UtilsState>()(
           try {
             const response = await api.post(
               '/api/v1/memory',
-              { value: memory.value, id: memory.id }, // Envía el objeto con value y id
+              { value: memory.value, id: memory.id }, // Sends the object with value and id
               {
                 headers: {
                   Authorization: `Bearer ${useAuthStore.getState().token}`
@@ -389,7 +408,7 @@ const useUtilsStore = create<Actions & UtilsState>()(
         },
 
         updateMemory: async (id: string, data: { value: number }): Promise<IApiResponse | TResponseBasicError> => {
-          // Añade esta función
+          // Adds this function
           try {
             const response = await api.patch(`/api/v1/memory/${id}`, data, {
               headers: {
@@ -604,5 +623,8 @@ const useUtilsStore = create<Actions & UtilsState>()(
     )
   )
 )
+
+// Quick usage: import useUtilsStore and destructure needed actions/state
+// Example: const { getTags, tags } = useUtilsStore();
 
 export default useUtilsStore

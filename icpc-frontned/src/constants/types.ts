@@ -1,5 +1,19 @@
 import { ReactNode } from 'react'
 
+/*
+Input: None
+Output: TypeScript types, enums, and interfaces for the ICPC disclosure platform frontend
+Return value: Provides type definitions and constants for use throughout the frontend application
+Function: This file centralizes all shared types, enums, and interfaces used for exercises, notes, news, tickets, reports, 
+and UI components. It defines the structure of data exchanged between frontend and backend, as well as UI-related enums for 
+text sizes and tags. This ensures type safety, consistency, and easier maintenance across the project.
+Variables: enumTextSizes, enumTextTags, Option, Tags, Categories, Difficulties, TimeLimit, MemoryLimit, TicketType, TicketStatus, 
+TicketOperation, News, Note, DBImage, Exercise, Quote, AllTabs, IProfileTableItem, Ticket, Report, and response types.
+Date: 28 - 05 - 2025
+Author: Mario Fernando Landa López
+*/
+
+// Enum for Tailwind CSS text sizes used in the UI
 export enum enumTextSizes {
   s128 = 'text-9xl',
   s96 = 'text-8xl',
@@ -23,6 +37,7 @@ export enum enumTextSizes {
   s7 = '[7px]'
 }
 
+// Enum for HTML tags used in text components
 export enum enumTextTags {
   h1 = 'h1',
   h2 = 'h2',
@@ -35,17 +50,19 @@ export enum enumTextTags {
   label = 'label',
   a = 'a',
   ul = 'ul',
-
   li = 'li',
   div = 'div'
 }
 
+// Type for ReactNode children
 type typeReactNode = ReactNode
 
+// Interface for components that accept ReactNode children
 export interface IReactNode {
   children?: typeReactNode
 }
 
+// Basic error response structure from backend
 export type TResponseBasicError = {
   Code: number
   ResponseMessage: string
@@ -53,6 +70,7 @@ export type TResponseBasicError = {
   Success: boolean
 }
 
+// Detailed error response structure from backend
 export type TResponseError = {
   ErrorCode: number
   ErrorMessage: string
@@ -60,51 +78,59 @@ export type TResponseError = {
   AttemptedValue?: { [key: string]: string } | string | number | boolean
 }
 
+// Generic API response interface for backend communication
 export interface IApiResponse<E = {}> {
   data: any
-  rows?: number // totalCurrentPageRecords
-  totalRows?: number // totalRecords
-  currentPage?: number // currentPageNumber
-  totalPageRecords?: number // totalCurrentPageRecords
-  totalAvailablePages?: number
+  rows?: number // total records in the current page
+  totalRows?: number // total records in the database
+  currentPage?: number // current page number
+  totalPageRecords?: number // total records in the current page
+  totalAvailablePages?: number // total number of available pages
   error: boolean
   statusCode: number | undefined
   message: string
   errors: E | TResponseError | any
 }
 
+// Option type for select/dropdown components
 export interface Option {
   label: string
   value: string
 }
 
+// Tag entity used for exercises, notes, etc.
 export interface Tags {
   id: string
   name: string
   color: string
 }
 
+// Category entity for exercises and notes
 export interface Categories {
   id: string
   name: string
 }
 
+// Difficulty entity for exercises
 export interface Difficulties {
   id: string
   level: number
   name: string
 }
 
+// Time limit entity for exercises
 export interface TimeLimit {
   id: string
   timeLimit: number
 }
 
+// Memory limit entity for exercises
 export interface MemoryLimit {
   id: string
   memoryLimit: number
 }
 
+// Enum for ticket types (used in moderation and change tracking)
 export enum TicketType {
   EXERCISE = 'exercise',
   NOTE = 'note',
@@ -113,18 +139,21 @@ export enum TicketType {
   USER = 'user'
 }
 
+// Enum for ticket status
 export enum TicketStatus {
   PENDING = 'pending',
   ACCEPTED = 'accepted',
   REJECTED = 'rejected'
 }
 
+// Enum for ticket operations
 export enum TicketOperation {
   CREATE = 'create',
   UPDATE = 'update',
   DELETE = 'delete'
 }
 
+// News entity structure
 export interface News {
   index: number
   id: string
@@ -137,6 +166,7 @@ export interface News {
   }
 }
 
+// Note entity structure
 export interface Note {
   id: string
   title: string
@@ -150,12 +180,14 @@ export interface Note {
   }
 }
 
+// Image entity structure for database images
 export interface DBImage {
   id: string
   assetName: string
   data: Buffer
 }
 
+// Exercise entity structure
 export interface Exercise {
   id: string
   title: string
@@ -175,11 +207,13 @@ export interface Exercise {
   author: string
 }
 
+// Quote entity for motivational or informational quotes
 export interface Quote {
   phrase: string
-  author : string
+  author: string
 }
 
+// Object containing all tab names for navigation and UI
 export const AllTabs = {
   EXERCISES: 'Ejercicios',
   NOTES: 'Apuntes',
@@ -194,6 +228,7 @@ export const AllTabs = {
   ACCOUNT: 'Cuentas'
 }
 
+// Interface for items displayed in the user profile table
 export interface IProfileTableItem {
   color?: string
   tagName?: string
@@ -203,29 +238,31 @@ export interface IProfileTableItem {
   title: string
 }
 
-  export interface Ticket {
-    id: string,
-    itemType: TicketType,
-    commentId: {
-      id: string,
-      body: string
-    },
-    operation: TicketOperation,
-    originalExerciseId: Exercise,
-    modifiedExerciseId: Exercise,
-    originalNoteId: Note,
-    modifiedNoteId: Note,
-    originalNewsId: News,
-    modifiedNewsId: News,
-    status: TicketStatus
+// Ticket entity for tracking changes, moderation, and history
+export interface Ticket {
+  id: string
+  itemType: TicketType
+  commentId: {
+    id: string
+    body: string
   }
+  operation: TicketOperation
+  originalExerciseId: Exercise
+  modifiedExerciseId: Exercise
+  originalNoteId: Note
+  modifiedNoteId: Note
+  originalNewsId: News
+  modifiedNewsId: News
+  status: TicketStatus
+}
 
-  export interface Report {
-    id: string,
-    summary: string,
-    report: string,
-    itemType: TicketType,
-    note: Note,
-    excercise: Exercise,
-    news: News
-  }
+// Report entity for reporting issues or content
+export interface Report {
+  id: string
+  summary: string
+  report: string
+  itemType: TicketType
+  note: Note
+  excercise: Exercise
+  news: News
+}
