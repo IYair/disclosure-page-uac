@@ -24,7 +24,7 @@ export class FactsController {
 
   @Get()
   findAll() {
-    return this.factsService.findAll();
+    return this.factsService.findRandomOne();
   }
 
   @Get(':id')
