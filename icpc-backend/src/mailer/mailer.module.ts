@@ -4,10 +4,23 @@ import { MailerService } from './mailer.service';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersModule } from 'src/users/users.module';
 import { Role } from 'src/roles/entities/role.entity';
 import { Comment } from 'src/comment/entities/comment.entity';
 import { Ticket } from 'src/ticket/entities/ticket.entity';
+
+/**
+ * MailerModule
+ *
+ * Handles email notification features and dependencies.
+ *
+ * Structure:
+ * - Imports: Required modules for mailer integration.
+ * - Providers: Mailer service and related providers.
+ * - Exports: Mailer service for use in other modules.
+ *
+ * Date: 02 - 06 - 2025
+ * Author: Gerardo Omar Rodriguez Ramirez
+ */
 
 @Module({
   imports: [

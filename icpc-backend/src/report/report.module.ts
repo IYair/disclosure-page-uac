@@ -15,6 +15,21 @@ import { Role } from 'src/roles/entities/role.entity';
 import { Comment } from 'src/comment/entities/comment.entity';
 import { Ticket } from 'src/ticket/entities/ticket.entity';
 
+/**
+ * ReportModule
+ *
+ * Handles report-related features and dependencies for user reports.
+ *
+ * Structure:
+ * - Imports: Required modules for report management.
+ * - Providers: Report service and related providers.
+ * - Controllers: Report API endpoints.
+ * - Exports: Report service for use in other modules.
+ *
+ * Date: 02 - 06 - 2025
+ * Author: Gerardo Omar Rodriguez Ramirez
+ */
+
 @Module({
   imports: [
     TypeOrmModule.forFeature([

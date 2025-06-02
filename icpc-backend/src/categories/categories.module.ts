@@ -9,6 +9,21 @@ import { Ticket } from 'src/ticket/entities/ticket.entity';
 import { Note } from 'src/notes/entities/note.entity';
 import { LoggerService } from 'src/services/logger.service';
 
+/**
+ * CategoriesModule
+ *
+ * Handles category-related features and dependencies.
+ *
+ * Structure:
+ * - Imports: Required modules for category management.
+ * - Providers: Category service and related providers.
+ * - Controllers: Category API endpoints.
+ * - Exports: Category service for use in other modules.
+ *
+ * Date: 02 - 06 - 2025
+ * Author: Gerardo Omar Rodriguez Ramirez
+ */
+
 @Module({
   imports: [
     TypeOrmModule.forFeature([Category, Excercise, Comment, Ticket, Note])

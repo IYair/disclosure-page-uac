@@ -21,6 +21,21 @@ import { LoggerService } from './services/logger.service';
 import { FactsModule } from './facts/facts.module';
 import { MailerModule } from './mailer/mailer.module';
 
+/**
+ * AppModule
+ *
+ * Main application module that imports and configures all feature modules, database connection, and global services.
+ *
+ * Structure:
+ * - Imports: Loads all feature modules (users, auth, roles, categories, notes, etc.), TypeORM, config, and mailer modules.
+ * - Providers: Registers global services (e.g., LoggerService).
+ * - Exports: Exports global services for use in other modules.
+ *
+ * This module is the root of the application and is loaded by main.ts.
+ *
+ * Date: 02 - 06 - 2025
+ * Author: Gerardo Omar Rodriguez Ramirez
+ */
 @Module({
   imports: [
     ConfigModule.forRoot({
