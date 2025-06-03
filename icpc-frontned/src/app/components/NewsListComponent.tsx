@@ -5,22 +5,31 @@ import { TextComponent } from './text/TextComponent'
 import { enumTextTags, News } from '@/constants/types'
 import useNewsStore from '@/store/useNewsStore'
 
+// Implementation of lazy loading for the items in the list
 const LazyNewsItemComponent = React.lazy(() => import('./cards/NewsItemComponent'))
 
+/*
+Input: An optional tailwind string
+Output: An object with the properties for the NewsListComponent
+Return value: An object with the properties of the NewsListComponent
+Function: To describe the properties (required and optional) of the NewsListComponent
+Variables: className
+Date: 29 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 interface INewsListComponentProps {
   className?: string
 }
 
 /*
-Input: a string of TailwindCSS
-Output: a list of news articles
-Return value: a list of news articles as a component
-Function: maps the news articles and displays them
-Variables: className, news { id, href, title, image }
-Date: 12 - 04 - 2024
+Input: className (optional string for custom classes)
+Output: List of news articles as a component
+Return value: JSX.Element (news list)
+Function: Fetches and displays a list of news articles, using lazy loading for each item
+Variables: className, newsList, news, getNews, style, ref
+Date: 29 - 05 - 2025
 Author: Gerardo Omar Rodriguez Ramirez
 */
-
 const NewsListComponent = ({ ...props }: Readonly<INewsListComponentProps>) => {
   const style = cn(props.className, 'w-11/12 flex flex-row flex-wrap gap-4')
   let ref = React.createRef<HTMLDivElement>()
@@ -28,6 +37,7 @@ const NewsListComponent = ({ ...props }: Readonly<INewsListComponentProps>) => {
   const [news, setNews] = useState<News[]>(newsList)
   const getNews = useNewsStore(state => state.getNews)
   
+  // Fetch news articles when the component mounts
   useEffect(() => {
     getNews().then(response => {
       setNews(response)
@@ -45,6 +55,7 @@ const NewsListComponent = ({ ...props }: Readonly<INewsListComponentProps>) => {
         </TextComponent>
       </div>
       <div className={style} ref={ref}>
+        {/* If the news list is not empty, render the news items; otherwise show a message */}
         {news.length > 0 ? (
           news.map((newsItem: News) => (
             <Suspense key={newsItem.index}>
@@ -56,7 +67,7 @@ const NewsListComponent = ({ ...props }: Readonly<INewsListComponentProps>) => {
           ))
         ) : (
           <TextComponent
-            className='text-center w-full' // Agregado w-full para ocupar todo el ancho
+            className='text-center w-full'
             tag={enumTextTags.h1}
             sizeFont='s20'>
             No hay noticias

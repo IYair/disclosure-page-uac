@@ -2,20 +2,28 @@ import React from 'react'
 import NoteItemComponent from '../components/NoteItemComponent'
 import { Note } from '@/constants/types'
 
+/*
+Input: notes (array of Note objects)
+Output: List of note items as a component
+Return value: JSX.Element (note list)
+Function: Maps a set of note articles into a list of clickable items
+Variables: notes
+Date: 29 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 interface NoteListProps {
   notes: Note[]
 }
 
 /*
-Input: a list of notes objects with id, tagId, title, description, and a list of tag objects with id, name, and color
-Output: a list of notes with the title, description, and tags
-Return value: a list of notes as a component
-Function: maps a set of notes articles into a list
-Variables: notes { id, tagId, title, description, tags { id, name, color } }
-Date: 12 - 04 - 2024
+Input: notes (array of Note objects)
+Output: List of note items as a component
+Return value: JSX.Element (note list)
+Function: Maps a set of note articles into a list of clickable items
+Variables: notes
+Date: 29 - 05 - 2025
 Author: Gerardo Omar Rodriguez Ramirez
 */
-
 const NoteListComponent = ({ ...props }: Readonly<NoteListProps>) => {
   return (
     <div className='flex flex-col gap-2'>

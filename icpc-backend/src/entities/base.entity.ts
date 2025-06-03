@@ -6,6 +6,20 @@ import {
   Column
 } from 'typeorm';
 
+/**
+ * Base Entity
+ *
+ * Provides common fields for all entities (e.g., id, timestamps).
+ *
+ * Structure:
+ * - Fields: id, created_at, created_by, updated_at, updated_by, deleted_at, deleted_by.
+ * - Relations: None (this is a base entity).
+ * - Decorators: TypeORM entity and column decorators.
+ *
+ * Date: 02 - 06 - 2025
+ * Author: Gerardo Omar Rodriguez Ramirez
+ */
+
 export class BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;

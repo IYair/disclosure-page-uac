@@ -8,6 +8,17 @@ import { Tags } from '@/constants/types'
 import ReportButtonComponent from '@/app/components/buttons/ReportButtonComponent'
 import { toast } from 'sonner'
 
+/*
+Input: A title string, a description string, content string, a boolean to show the "report error" button,
+an array of tags, and an optional itemId string
+Output: An object with properties for the NoteCardComponent
+Return value: An object with the properties of the NoteCardComponent
+Function: To describe the properties (required and optional) of the NoteCardComponent
+Variables: title, description, content, showButton, tags, itemId
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
+
 interface NoteCardProps {
   title: string
   description: string
@@ -18,18 +29,28 @@ interface NoteCardProps {
 }
 
 /*
-Input: the title, description, content, showButton, and a list of tags with their id, name, and color
-Output: a card with the title, description, content, showButton, and a list of tags
-Return value: a card component used to display notes articles
-Function: creates a card component with the title, description, content, showButton, and a list of tags
-Variables: title, description, content, showButton, tags { id, name, color }
-Date: 21 - 03 - 2024
+Input: None
+Output: A Toast message with the described text
+Return value: None
+Function: Display a toast message when the button is clicked
+Variables: toast
+Date: 28 - 05 - 2025
 Author: Gerardo Omar Rodriguez Ramirez
 */
 
 function onclick() {
   toast.success('Redirigiendo a la página de ejercicios')
 }
+
+/*
+Input: An object with properties described in the NoteCardProps interface, see above
+Output: A card component that displays a note with title, description, content, and optional button
+Return value: A React Node
+Function: Display a card with all the contents of a note
+Variables: title, description, content, showButton, tags, itemId
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 
 export default function NoteCardComponent({ ...props }: Readonly<NoteCardProps>) {
   return (

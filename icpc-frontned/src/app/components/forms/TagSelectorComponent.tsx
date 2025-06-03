@@ -4,6 +4,17 @@ import { enumTextTags, Tags } from '@/constants/types'
 import Select, { MultiValue, StylesConfig } from 'react-select'
 import chroma from 'chroma-js'
 
+/*
+Input: An array of Tags, the currently selected tags, an id for the tag selector,
+a function to handle changes, and a label for the tag selector
+Output: An object with properties for the TagSelectorComponent
+Return value: An object with the properties of the TagSelectorComponent
+Function: To describe the properties (required and optional) of the TagSelectorComponent
+Variables: options, selectedTags, id, onChange, label
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
+
 interface TagSelectorProps {
   options: Tags[]
   selectedTags: Tags[]
@@ -12,16 +23,7 @@ interface TagSelectorProps {
   label: string
 }
 
-/*
-Input: none
-Output: a StylesConfig object with the styles for the tags
-Return value: a StylesConfig object
-Function: creates a StylesConfig object to color the tags the tag selector
-Variables: colourStyles
-Date: 21 - 03 - 2024
-Author: Gerardo Omar Rodriguez Ramirez
-*/
-
+// Define the styles for the react-select component
 const colourStyles: StylesConfig<Tags, true> = {
   control: styles => ({ ...styles, backgroundColor: 'white' }),
   option: (styles, { data, isDisabled, isFocused, isSelected }) => {
@@ -95,13 +97,12 @@ const colourStyles: StylesConfig<Tags, true> = {
 }
 
 /*
-Input: a list of all possible tags with an id, name and color; a list of the selected tags with an id, name and color;
-the id of the tag selector; a function to handle the change of the selected tags
-Output: a tag selector with the options and the selected tags
-Return value: a tag selector component to display the tags and select the desired tags
-Function: creates a component to search and select tags from a list of options
+Input: An object with properties described in the TagSelectorProps interface, see above
+Output: A tag selector with the options and the selected tags
+Return value: A React Node
+Function: Creates a component to search and select tags from a list of options
 Variables: options { id, name, color }, selectedTags { id, name, color }, id, handleChange, selectedTags
-Date: 22 - 03 - 2024
+Date: 28 - 05 - 2025
 Author: Gerardo Omar Rodriguez Ramirez
 */
 

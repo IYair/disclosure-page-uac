@@ -9,6 +9,7 @@ import UserComponent from './UserComponent'
 import useStore from '@/store/useStore'
 import SearchBarComponent from './SearchBarComponent'
 
+// Routes for the dropdown menu and the links associated to them
 const routes = [
   {
     id: 1,
@@ -38,15 +39,14 @@ const routes = [
 ]
 
 /*
-Input: a list of routes with id, name and href; and a boolean to determine if the user is logged in
-Output: the navbar component with the logo, the search bar, the routes and the user icon or the login link
-Return value: the site's navbar as a component
-Function: sets the navbar of the site and the elements that it contains
-Variables: routes { id, name, href }, verified
-Date: 12 - 04 - 2024
+Input: None (uses hooks and store state)
+Output: JSX.Element with the navigation bar layout
+Return value: JSX.Element
+Function: Renders the navigation bar, including logo, links, search bar, user dropdown, and mobile menu
+Variables: routes, verified
+Date: 29 - 05 - 2025
 Author: Gerardo Omar Rodriguez Ramirez
 */
-
 export default function NavbarComponent() {
 
   const verified = useStore(state => state.isLogged)
@@ -64,6 +64,7 @@ export default function NavbarComponent() {
               </Link>
             </div>
             <div className='hidden items-center lg:ml-6 lg:flex lg:space-x-8'>
+              {/* Loop through all the routes and place them as options in the menu */}
               {routes.map(route => (
                 <Link
                   href={route.href}
@@ -92,6 +93,7 @@ export default function NavbarComponent() {
           <div className='hidden lg:ml-4 lg:flex lg:items-center'>
             {/* Profile dropdown */}
             <Link
+              // If the user has logged in, display the dropdown menu; otherwise redirect to the login page
               href={verified ? '#' : '/login'}
               className='hover:text-base-accent dark:text-dark-accent dark:hover:text-complementary'>
               <UserComponent

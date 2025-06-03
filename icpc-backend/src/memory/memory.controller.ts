@@ -30,6 +30,18 @@ export class MemoryController {
     private readonly loggerService: LoggerService
   ) {}
 
+  /*
+  Input: createMemoryDto: CreateMemoryDto, req: any
+  Output: Promise<Memory>
+  Return value: Created memory entity
+  Function: Creates a new memory limit
+  Variables: createMemoryDto, req, newMemory
+  Route: POST /memory
+  Access: User
+  Method: POST
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @ApiBearerAuth()
   @Post()
   @UseGuards(AuthGuard)
@@ -49,6 +61,18 @@ export class MemoryController {
     return newMemory;
   }
 
+  /*
+  Input: None
+  Output: Promise<Memory[]>
+  Return value: Array of all memory limits
+  Function: Retrieves all memory limits
+  Variables: None
+  Route: GET /memory
+  Access: Public
+  Method: GET
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Get()
   @ApiResponse({
     description: 'The memory limit list has been successfully retrieved.'
@@ -58,6 +82,18 @@ export class MemoryController {
     return this.memoryService.findAll();
   }
 
+  /*
+  Input: id: string
+  Output: Promise<Memory>
+  Return value: Memory entity
+  Function: Retrieves a memory limit by id
+  Variables: id
+  Route: GET /memory/:id
+  Access: Public
+  Method: GET
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Get(':id')
   @ApiResponse({
     description: 'The memory limit has been successfully retrieved.'
@@ -67,6 +103,18 @@ export class MemoryController {
     return this.memoryService.findOne(id);
   }
 
+  /*
+  Input: id: string, updateMemoryDto: UpdateMemoryDto, req: any
+  Output: Promise<Memory>
+  Return value: Updated memory entity
+  Function: Updates a memory limit by id
+  Variables: id, updateMemoryDto, req, modifiedMemory
+  Route: PATCH /memory/:id
+  Access: User
+  Method: PATCH
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @ApiBearerAuth()
   @Patch(':id')
   @UseGuards(AuthGuard)
@@ -85,6 +133,18 @@ export class MemoryController {
     return modifiedMemory;
   }
 
+  /*
+  Input: id: string, req: any
+  Output: Promise<Memory>
+  Return value: Deleted memory entity
+  Function: Deletes a memory limit by id
+  Variables: id, req, deletedMemory
+  Route: DELETE /memory/:id
+  Access: User
+  Method: DELETE
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @ApiBearerAuth()
   @Delete(':id')
   @UseGuards(AuthGuard)

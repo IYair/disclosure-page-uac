@@ -2,6 +2,15 @@ import { enumTextTags } from '@/constants/types'
 import { TextComponent } from '../components/text/TextComponent'
 import TableComponent from '../components/tables/TableComponent'
 
+/*
+Input: None (uses hooks and store state)
+Output: JSX.Element with the exercises page layout
+Return value: JSX.Element
+Function: Renders the exercises page, displaying a list or grid of exercises
+Variables: (to be filled based on actual implementation)
+Date: 29 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 export default function Home() {
   return (
     <div className='mt-16'>

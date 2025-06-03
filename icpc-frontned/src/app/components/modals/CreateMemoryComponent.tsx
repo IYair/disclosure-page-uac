@@ -11,6 +11,15 @@ import { toast } from 'sonner'
 import { MemoryLimit } from '@/constants/types'
 import { ArrowUturnLeftIcon, XMarkIcon } from '@heroicons/react/20/solid'
 
+/*
+Input: methods (UseFormReturn), onCreateMemory (function), memoryId (optional string), onClose (function)
+Output: Props for CreateMemoryComponent
+Return value: CreateMemoryComponentProps interface
+Function: Describes the properties for the CreateMemoryComponent modal
+Variables: methods, onCreateMemory, memoryId, onClose
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 interface CreateMemoryComponentProps {
   methods: UseFormReturn<FieldValues>
   onCreateMemory: (memoryName: string) => void
@@ -18,6 +27,16 @@ interface CreateMemoryComponentProps {
   onClose: () => void
 }
 
+/*
+Input: methods, memoryId, onClose (from CreateMemoryComponentProps)
+Output: Modal for creating or editing a memory limit
+Return value: React Node (modal component)
+Function: Renders a modal for creating or editing a memory limit
+Variables: createMemory, updateMemory, getMemory, currentMemory, MemorySelect,
+selectedMemoryUnit, setSelectedMemoryUnit, useEffect, clearForm, onSubmit
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 const CreateMemoryComponent: React.FC<CreateMemoryComponentProps> = ({ methods, memoryId, onClose }) => {
   const createMemory = useUtilsStore(state => state.createMemory)
   const updateMemory = useUtilsStore(state => state.updateMemory)

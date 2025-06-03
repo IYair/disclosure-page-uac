@@ -7,7 +7,21 @@ import { Role } from 'src/roles/entities/role.entity';
 import { Comment } from 'src/comment/entities/comment.entity';
 import { Ticket } from 'src/ticket/entities/ticket.entity';
 import { LoggerService } from 'src/services/logger.service';
-import { MailerService } from 'src/mailer/mailer.service';
+
+/**
+ * UsersModule
+ *
+ * Handles user-related features and dependencies.
+ *
+ * Structure:
+ * - Imports: Required modules for user management.
+ * - Providers: User service and related providers.
+ * - Controllers: User API endpoints.
+ * - Exports: User service for use in other modules.
+ *
+ * Date: 02 - 06 - 2025
+ * Author: Gerardo Omar Rodriguez Ramirez
+ */
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Role, Comment, Ticket])],

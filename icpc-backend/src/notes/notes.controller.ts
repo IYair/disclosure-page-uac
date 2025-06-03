@@ -23,7 +23,7 @@ import {
 } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/guard/auth.guard';
 import { GetNoteListDto } from './dto/get-note-list.dto';
-import { LoggerService } from '../services/logger.service'; // Importa el LoggerService
+import { LoggerService } from '../services/logger.service';
 
 @Controller()
 @ApiTags('Notes')
@@ -31,9 +31,21 @@ export class NotesController {
   constructor(
     private readonly notesService: NotesService,
     private readonly commentService: CommentService,
-    private readonly loggerService: LoggerService // Inyecta el LoggerService
+    private readonly loggerService: LoggerService
   ) {}
 
+  /**
+  Input: createNoteDto: CreateNoteDto, req: any
+  Output: Promise<any>
+  Return value: Created note object
+  Function: Creates a new note
+  Variables: createNoteDto, req, createdNote
+  Route: POST /notes
+  Access: User, Admin
+  Method: POST
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Post('notes')
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
@@ -47,12 +59,24 @@ export class NotesController {
     this.loggerService.logChange(
       'notes',
       'create',
-      req.user.name, // Nombre del usuario que hizo la operación
-      createdNote.id // ID del apunte creado
-    ); // Log de la operación
+      req.user.name,
+      createdNote.id
+    );
     return createdNote;
   }
 
+  /**
+  Input: None
+  Output: Promise<Note[]>
+  Return value: Array of all notes
+  Function: Retrieves all notes
+  Variables: None
+  Route: GET /notes
+  Access: Public
+  Method: GET
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Get('notes')
   @ApiCreatedResponse({
     description: 'The notes have been successfully retrieved.'
@@ -62,6 +86,18 @@ export class NotesController {
     return this.notesService.findAll();
   }
 
+  /**
+  Input: id: string
+  Output: Promise<Note>
+  Return value: Note object
+  Function: Retrieves a note by id
+  Variables: id
+  Route: GET /note/:id
+  Access: Public
+  Method: GET
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Get('note/:id')
   @ApiCreatedResponse({
     description: 'The note has been successfully retrieved.'
@@ -71,6 +107,18 @@ export class NotesController {
     return this.notesService.findOne(id);
   }
 
+  /**
+  Input: noteListDto: GetNoteListDto
+  Output: Promise<Note>
+  Return value: List of notes matching criteria
+  Function: Gets a list of notes based on filters
+  Variables: noteListDto
+  Route: POST /notes/list
+  Access: Public
+  Method: POST
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Post('notes/list/')
   @ApiCreatedResponse({
     description: 'The notes have been successfully retrieved.'
@@ -80,6 +128,18 @@ export class NotesController {
     return this.notesService.findNoteList(noteListDto);
   }
 
+  /**
+  Input: query: string
+  Output: Promise<Note[]>
+  Return value: Array of notes matching the query
+  Function: Searches notes by query string
+  Variables: query
+  Route: POST /notes/search/:query
+  Access: Public
+  Method: POST
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Post('notes/search/:query')
   @ApiCreatedResponse({
     description: 'The notes have been successfully retrieved.'
@@ -89,6 +149,18 @@ export class NotesController {
     return this.notesService.search(query);
   }
 
+  /**
+  Input: id: string
+  Output: Promise<boolean>
+  Return value: True if log was successful, false otherwise
+  Function: Logs a read event for a note
+  Variables: id, item
+  Route: POST /notes/log/:id
+  Access: Public
+  Method: POST
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Post('notes/log/:id')
   @ApiCreatedResponse({
     description: 'La lectura se ha registrado exitosamente.'
@@ -110,6 +182,18 @@ export class NotesController {
     }
   }
 
+  /**
+  Input: categoryId: string
+  Output: Promise<Note[]>
+  Return value: Array of notes in the category
+  Function: Retrieves all notes in a specific category
+  Variables: categoryId
+  Route: GET /notes/category/:categoryId
+  Access: Public
+  Method: GET
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Get('notes/category/:categoryId')
   @ApiCreatedResponse({
     description: 'The notes have been successfully retrieved.'
@@ -119,6 +203,18 @@ export class NotesController {
     return this.notesService.findAllInCategory(categoryId);
   }
 
+  /**
+  Input: None
+  Output: Promise<number>
+  Return value: Count of notes
+  Function: Gets the total count of notes
+  Variables: None
+  Route: GET /notes/count
+  Access: Public
+  Method: GET
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Get('notes/count')
   @ApiCreatedResponse({
     description: 'The number of notes has been successfully recovered.'
@@ -128,6 +224,18 @@ export class NotesController {
     return this.notesService.getCount();
   }
 
+  /**
+  Input: id: string, updateNoteDto: UpdateNoteDto, req: any
+  Output: Promise<Note>
+  Return value: Updated note object
+  Function: Updates a note by id
+  Variables: id, updateNoteDto, req, updatedNote
+  Route: PATCH /note/:id
+  Access: User
+  Method: PATCH
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Patch('note/:id')
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
@@ -142,15 +250,22 @@ export class NotesController {
     @Req() req: any
   ) {
     const updatedNote = await this.notesService.update(id, updateNoteDto);
-    this.loggerService.logChange(
-      'notes',
-      'update',
-      req.user.name, // Nombre del usuario que hizo la operación
-      id // ID del apunte actualizado
-    ); // Log de la operación
+    this.loggerService.logChange('notes', 'update', req.user.name, id);
     return updatedNote;
   }
 
+  /**
+  Input: id: string, user: string, req: any
+  Output: Promise<Note>
+  Return value: Deleted note object
+  Function: Deletes a note by id
+  Variables: id, user, req, deletedNote
+  Route: DELETE /note/:id/:user
+  Access: User
+  Method: DELETE
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Delete('note/:id/:user')
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
@@ -165,12 +280,7 @@ export class NotesController {
     @Req() req: any
   ) {
     const deletedNote = await this.notesService.remove(id, user);
-    this.loggerService.logChange(
-      'notes',
-      'delete',
-      req.user.name, // Nombre del usuario que hizo la operación
-      id // ID del apunte eliminado
-    ); // Log de la operación
+    this.loggerService.logChange('notes', 'delete', req.user.name, id);
     return deletedNote;
   }
 }

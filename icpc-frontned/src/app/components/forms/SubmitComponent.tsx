@@ -1,17 +1,27 @@
 import React from 'react'
 
+/*
+Input: A text string, and an action to execute
+Output: An object with properties for the SubmitComponent
+Return value: An object with the properties of the SubmitComponent
+Function: To describe the properties (required and optional) of the SubmitComponent
+Variables: text, action
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
+
 interface ISubmitProps {
   text?: string
   action: () => void
 }
 
 /*
-Input: a string with the text for the submit button
-Output: a submit button with the text
-Return value: a submit button component for a form
-Function: creates a button to submit a form
-Variables: text
-Date: 21 - 03 - 2024
+Input: An object with properties described in the ISubmitProps interface, see above
+Output: A submit button with the text
+Return value: A React Node
+Function: Creates a button to submit a form
+Variables: text, action
+Date: 28 - 08 - 2025
 Author: Gerardo Omar Rodriguez Ramirez
 */
 

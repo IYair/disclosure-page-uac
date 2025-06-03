@@ -4,6 +4,19 @@ import { News } from 'src/news/entities/news.entity';
 import { Note } from 'src/notes/entities/note.entity';
 import { Column, Entity, JoinTable, ManyToOne } from 'typeorm';
 
+/**
+ * Report Entity
+ *
+ * Represents a user report in the system.
+ *
+ * Structure:
+ * - Fields: summary, report, itemType, isOpen, note, excercise, news and those inherited from BaseEntity.
+ * - Relations: News, Note, Excercise, etc.
+ *
+ * Date: 02 - 06 - 2025
+ * Author: Gerardo Omar Rodriguez Ramirez
+ */
+
 //TODO: Remove this class and use the one in the tickets entity
 export enum ItemType {
   NOTE = 'note',

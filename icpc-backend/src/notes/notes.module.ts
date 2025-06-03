@@ -15,6 +15,21 @@ import { MailerModule } from 'src/mailer/mailer.module';
 import { UsersService } from 'src/users/users.service';
 import { Role } from 'src/roles/entities/role.entity';
 
+/**
+ * NotesModule
+ *
+ * Handles note-related features and dependencies.
+ *
+ * Structure:
+ * - Imports: Required modules for note management.
+ * - Providers: Note service and related providers.
+ * - Controllers: Note API endpoints.
+ * - Exports: Note service for use in other modules.
+ *
+ * Date: 02 - 06 - 2025
+ * Author: Gerardo Omar Rodriguez Ramirez
+ */
+
 @Module({
   imports: [
     TypeOrmModule.forFeature([

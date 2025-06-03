@@ -1,5 +1,15 @@
+/*
+Input: name: string, commentId: string
+Output: Category DTO object
+Return value: Instance of CreateCategoryDto
+Function: Data Transfer Object for creating a new category
+Variables: name, commentId
+Date: 03 - 06 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
+
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsBoolean, IsObject, IsOptional, IsString, Matches } from 'class-validator';
+import { IsString, Matches } from 'class-validator';
 
 export class CreateCategoryDto {
   @ApiProperty()

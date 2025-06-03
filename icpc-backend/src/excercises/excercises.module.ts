@@ -21,6 +21,21 @@ import { MailerModule } from 'src/mailer/mailer.module';
 import { UsersService } from 'src/users/users.service';
 import { Role } from 'src/roles/entities/role.entity';
 
+/**
+ * ExcercisesModule
+ *
+ * Handles exercise-related features and dependencies.
+ *
+ * Structure:
+ * - Imports: Required modules for exercise management.
+ * - Providers: Excercises service and related providers.
+ * - Controllers: Excercises API endpoints.
+ * - Exports: Excercises service for use in other modules.
+ *
+ * Date: 02 - 06 - 2025
+ * Author: Gerardo Omar Rodriguez Ramirez
+ */
+
 @Module({
   imports: [
     TypeOrmModule.forFeature([

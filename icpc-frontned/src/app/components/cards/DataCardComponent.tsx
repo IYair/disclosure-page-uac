@@ -1,6 +1,16 @@
 import { BasicPanelComponent } from '../panels/BasicPanelComponent'
 import { TextComponent } from '../text/TextComponent'
 
+/*
+Input: A title string, information string, an optional author string, and an optional image URL
+Output: An object with properties for the DataCardComponent
+Return value: An object with the properties of the DataCardComponent
+Function: To describe the properties (required and optional) of the DataCardComponent
+Variables: title, info, autor, image
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
+
 interface IInfoCardComponentProps {
   title: string
   info: string
@@ -9,12 +19,12 @@ interface IInfoCardComponentProps {
 }
 
 /*
-Input: the title of the card, the information to display, the author of the information, and an image if it has one
+Input: An object with properties described in the IInfoCardComponentProps interface, see above
 Output: a card with the title, information, author, and image if it has one
-Return value: a card component used for random quotes
+Return value: A React Node
 Function: creates a card component with the title, information, author, and image if it has one
 Variables: title, info, autor, image
-Date: 22 - 03 - 2024
+Date: 28 - 05 - 2025
 Author: Gerardo Omar Rodriguez Ramirez
 */
 

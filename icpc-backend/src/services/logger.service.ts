@@ -4,10 +4,13 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class LoggerService {
-  private logFilePath = path.join(process.cwd(), 'src/services/changes.log'); // Ruta actualizada
+  private readonly logFilePath = path.join(
+    process.cwd(),
+    'src/services/changes.log'
+  );
 
   constructor() {
-    // Crear el archivo de log si no existe
+    // If the log file does not exist, create it
     if (!fs.existsSync(this.logFilePath)) {
       console.log(`Creating log file: ${this.logFilePath}`);
       fs.writeFileSync(this.logFilePath, '', 'utf-8');
@@ -16,6 +19,15 @@ export class LoggerService {
     }
   }
 
+  /*
+  Input: module: string, action: string, userName: string, itemId: string
+  Output: void
+  Return value: None
+  Function: Logs a change action to the log file
+  Variables: timestamp, logEntry
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   logChange(module: string, action: string, userName: string, itemId: string) {
     const timestamp = new Date().toISOString();
     const logEntry = `${timestamp} - ${module} - ${action} - User: ${userName} - Item ID: ${itemId}`;
@@ -29,6 +41,15 @@ export class LoggerService {
     }
   }
 
+  /*
+  Input: module: string, itemId: string, category: string, tags: string
+  Output: void
+  Return value: None
+  Function: Logs a read action to a monthly log file
+  Variables: timestamp, currentMonth, currentYear, logEntry
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   logRead(module: string, itemId: string, category: string, tags: string) {
     const timestamp = new Date().toISOString();
     const currentMonth = new Date().toLocaleString('default', {

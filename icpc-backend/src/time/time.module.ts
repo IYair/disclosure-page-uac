@@ -1,3 +1,18 @@
+/**
+ * TimeModule
+ *
+ * Manages time limit features and dependencies for exercises.
+ *
+ * Structure:
+ * - Imports: Required modules for time management.
+ * - Providers: Time service and related providers.
+ * - Controllers: Time API endpoints.
+ * - Exports: Time service for use in other modules.
+ *
+ * Date: 02 - 06 - 2025
+ * Author: Gerardo Omar Rodriguez Ramirez
+ */
+
 import { Module } from '@nestjs/common';
 import { TimeService } from './time.service';
 import { TimeController } from './time.controller';

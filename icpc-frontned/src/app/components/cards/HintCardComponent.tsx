@@ -3,17 +3,31 @@ import React from 'react'
 import { BasicPanelComponent } from '../panels/BasicPanelComponent'
 import { MDXRemote } from 'next-mdx-remote'
 
+/*
+Input: The body of the hint card, which is an mdx string
+Output: An object with properties for the HintCardComponent
+Return value: An object with the properties of the HintCardComponent
+Function: To describe the properties of the HintCardComponent
+Variables: body
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
+
 interface HintCardComponentProps {
   body: string
 }
 
 /*
-Input: the body of the hint card
-Output: a card with an mdx body
-Return value: a card component used to display hints and solutions to exercises
-Function: creates a card component with an mdx body
+***DEPRECATED***
+This was used to display hints and solutions to exercises in a card format.
+Now it has been replaced by the `CollapsibleCardComponent` and `SimpleCollapsibleCardComponent` which allows for better user interaction.
+
+Input: An object with properties described in the HintCardComponentProps interface, see above
+Output: A card component that displays text in MDX format
+Return value: A React Node
+Function: Create a card with an MDX body that can be rendered in the UI
 Variables: body
-Date: 21 - 03 - 2024
+Date: 28 - 05 - 2025
 Author: Gerardo Omar Rodriguez Ramirez
 */
 

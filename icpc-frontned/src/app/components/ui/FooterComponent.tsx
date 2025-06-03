@@ -4,6 +4,15 @@ import { enumTextTags } from '@/constants/types'
 import LogoComponent from '../LogoComponent'
 import Link from 'next/link'
 
+/*
+Input: None (no props)
+Output: Footer UI with logo, links, help, contact, and copyright
+Return value: JSX.Element (FooterComponent UI)
+Function: Renders the footer section with logo, social links, help and contact links, and copyright
+Variables: none (uses only local constants and imported components)
+Date: 29 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 const FooterComponent = () => {
   return (
     <div className='w-full flex flex-col gap-2 p-8 mt-20'>

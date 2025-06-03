@@ -4,6 +4,19 @@ import { Image } from 'src/image/entities/image.entity';
 import { Ticket } from 'src/ticket/entities/ticket.entity';
 import { Report } from 'src/report/entities/report.entity';
 
+/**
+ * News Entity
+ *
+ * Represents a news item in the system.
+ *
+ * Structure:
+ * - Fields: title, body, isVisible, imageId, ticketOriginal, ticketModified, reports and those inherited from BaseEntity.
+ * - Relations: Image, Ticket, Report.
+ *
+ * Date: 02 - 06 - 2025
+ * Author: Gerardo Omar Rodriguez Ramirez
+ */
+
 @Entity()
 export class News extends BaseEntity {
   @Column({ nullable: false })

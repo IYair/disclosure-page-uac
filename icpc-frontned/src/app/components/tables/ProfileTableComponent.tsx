@@ -23,6 +23,15 @@ import { useForm } from 'react-hook-form'
 import DisplayReportComponent from '../cards/DisplayReportComponent'
 import ConfirmDenyComponent from '../buttons/Confirm&DenyComponent'
 
+/*
+Input: name (string), action (function to execute on option select), style (string for CSS classes), href (optional string for navigation)
+Output: Option object for table actions
+Return value: Option object
+Function: Defines the structure for an action option in the profile table (e.g., View, Edit, Delete)
+Variables: name, action, style, href
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 interface Option {
   name: string
   action: (id: string, itemType: string, href?: string) => void
@@ -30,6 +39,18 @@ interface Option {
   href?: string
 }
 
+/*
+Input: data (array of IProfileTableItem), itemType (string for the type of item),
+  update (boolean for refresh), setUpdate (function to toggle update),
+  onClose (function to close modals)
+Output: Renders a table of profile items with actions and modals
+Return value: JSX.Element (ProfileTableComponent UI)
+Function: Displays a table of items (exercises, notes, news, etc.) with options to view, edit, delete.
+  Also manages related modals and handles state for modals and deletion confirmation.
+Variables: methods, modal open states, active item IDs, delete states, selectedReportId, options array
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 interface IProfileTableComponentProps {
   data: IProfileTableItem[]
   itemType: string
@@ -38,6 +59,18 @@ interface IProfileTableComponentProps {
   onClose: () => void
 }
 
+/*
+Input: An object with properties described in IProfileTableComponentProps, see above
+Output: The component that displays the main data table of the profile page
+Return value: A React Node
+Function: To display different types of data items in a table for the user or admin to manage
+Variables: methods, isCategoryModalOpen, isDifficultyModalOpen, isMemoryModalOpen,
+isTimeModalOpen, isTagModalOpen, isExerciseModalOpen, isNoteModalOpen, isNewsModalOpen,
+isUserModalOpen, confirmDelete, deleteId, deleteItemType, activeCategoryId,
+activeDifficultyId, activeMemoryId, activeTimeId, activeTagId, activeExerciseId, activeNoteId, activeNewsId, activeUserId, selectedReportId
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 const ProfileTableComponent = (props: Readonly<IProfileTableComponentProps>) => {
   const methods = useForm()
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false)
@@ -74,20 +107,28 @@ const ProfileTableComponent = (props: Readonly<IProfileTableComponentProps>) => 
 
   const [selectedReportId, setSelectedReportId] = useState<string | null>(null)
 
+  // Function to handle redirection based on item type and ID
   const handleRedirect = (id: string, itemType: string, href?: string) => {
     window.location.href = `/${href}/${id}`
   }
 
+  // Function to handle showing the report modal
   const handleShowReport = (id: string, itemType: string) => {
     setSelectedReportId(id)
   }
 
+  // Function to update the table state
+  const updateTable = () => {
+    props.setUpdate(!props.update)
+  }
+
+  // Function to handle editing items based on their type
   const handleEdit = async (id: string, itemType: string) => {
     try {
-      // Realiza la solicitud para verificar si hay un ticket pendiente solo para noticias, ejercicios o notas
+      // Check if the item type is one of the main types
       if (itemType === 'Noticias' || itemType === 'Ejercicios' || itemType === 'Apuntes') {
         const response = await hasPendingTicket(id, itemType)
-
+        // If there are pending changes for the selected item, display an error message and return
         if (response === true) {
           toast.error('Ya existe una modificación en espera para este ítem.', {
             duration: 5000,
@@ -95,6 +136,7 @@ const ProfileTableComponent = (props: Readonly<IProfileTableComponentProps>) => 
           })
           return
         }
+        // Display the appropriate modal according to the item type
         switch (itemType) {
           case AllTabs.EXERCISES:
             setActiveExerciseId(id)
@@ -110,7 +152,6 @@ const ProfileTableComponent = (props: Readonly<IProfileTableComponentProps>) => 
             break
         }
       } else {
-        // Si no hay ticket pendiente, abre el modal correspondiente
         switch (itemType) {
           case AllTabs.CATEGORIES:
             setActiveCategoryId(id)
@@ -150,10 +191,13 @@ const ProfileTableComponent = (props: Readonly<IProfileTableComponentProps>) => 
     }
   }
 
+  // Function to handle deletion of items
   const handleDelete = async (id: string, itemType: string) => {
+    // Check if the item type is one of the main types
     if (itemType === 'Noticias' || itemType === 'Ejercicios' || itemType === 'Apuntes') {
       const response = await hasPendingTicket(id, itemType)
 
+      // If the selected item has pending changes, display an error message
       if (response === true) {
         toast.error('Hay una solicitud de modificación en espera para este ítem.', {
           duration: 5000,
@@ -167,8 +211,10 @@ const ProfileTableComponent = (props: Readonly<IProfileTableComponentProps>) => 
     setConfirmDelete(true)
   }
 
+  // Function to delete an item after user confirmation
   const confirmDeleteAction = async () => {
     let response
+    // Send the appropriate response according to item type
     switch (deleteItemType) {
       case AllTabs.EXERCISES:
         response = await deleteExercise(deleteId!)
@@ -199,6 +245,7 @@ const ProfileTableComponent = (props: Readonly<IProfileTableComponentProps>) => 
         break
     }
 
+    // If there is an item id in the response, the request was successful
     if ('id' in response!) {
       toast.success(`Solicitud de eliminación enviada`, { duration: 5000, style: { backgroundColor: 'green', color: 'white' } })
     }
@@ -209,6 +256,7 @@ const ProfileTableComponent = (props: Readonly<IProfileTableComponentProps>) => 
     props.setUpdate(!props.update)
   }
 
+  // Different options to be displayed in the options menu for every item and their associated functions
   const options: Option[] = [
     {
       name: 'Ver',
@@ -233,37 +281,39 @@ const ProfileTableComponent = (props: Readonly<IProfileTableComponentProps>) => 
     }
   ]
 
+  // Functions to set the available options according to the item type
   const setCurrentOptions = (id: string, itemType: string) => {
     switch (itemType) {
       case AllTabs.REPORTS:
-        return [options[3]] // "Ver" para reportes (corroborar cambios)
+        return [options[3]] // "Ver" for error reports
       case AllTabs.CHANGES:
-        return [options[0]] // "Ver" para cambios
+        return [options[0]] // "Ver" for change tickets
       case AllTabs.EXERCISES:
         return [
-          { ...options[0], href: 'exercises' }, // "Ver" para redirigir al ítem
+          { ...options[0], href: 'exercises' }, // "Ver" to redirect to the item
           options[1], // "Editar"
           options[2] // "Eliminar"
         ]
       case AllTabs.NOTES:
         return [
-          { ...options[0], href: 'note' }, // "Ver" para redirigir al ítem
+          { ...options[0], href: 'note' }, // "Ver" to redirect to the item
           options[1], // "Editar"
           options[2] // "Eliminar"
         ]
       case AllTabs.NEWS:
         return [
-          { ...options[0], href: 'news' }, // "Ver" para redirigir al ítem
+          { ...options[0], href: 'news' }, // "Ver" to redirect to the item
           options[1], // "Editar"
           options[2] // "Eliminar"
         ]
       default:
-        return [options[1], options[2]] // "Editar", "Eliminar" para otros ítems
+        return [options[1], options[2]] // "Editar", "Eliminar" for other items
     }
   }
 
   return (
     <div>
+      {/* If the state is true, display the modal */}
       {selectedReportId && (
         <DisplayReportComponent
           id={selectedReportId}
@@ -273,12 +323,14 @@ const ProfileTableComponent = (props: Readonly<IProfileTableComponentProps>) => 
           }}
         />
       )}
+      {/* If the state is true, display the modal */}
       {confirmDelete && (
         <ConfirmDenyComponent
           onConfirm={confirmDeleteAction}
           onCancel={() => setConfirmDelete(false)}
         />
       )}
+      {/* If the state is true, display the modal */}
       {isCategoryModalOpen && (
         <CreateCategoryComponent
           onClose={() => {
@@ -288,6 +340,7 @@ const ProfileTableComponent = (props: Readonly<IProfileTableComponentProps>) => 
           categoryId={activeCategoryId}
         />
       )}
+      {/* If the state is true, display the modal */}
       {isDifficultyModalOpen && (
         <CreateDifficultyComponent
           onClose={() => {
@@ -299,6 +352,7 @@ const ProfileTableComponent = (props: Readonly<IProfileTableComponentProps>) => 
           onCreateDifficulty={(difficultyName: string) => {}}
         />
       )}
+      {/* If the state is true, display the modal */}
       {isMemoryModalOpen && (
         <CreateMemoryComponent
           onClose={() => {
@@ -310,6 +364,7 @@ const ProfileTableComponent = (props: Readonly<IProfileTableComponentProps>) => 
           onCreateMemory={(memoryName: string) => {}}
         />
       )}
+      {/* If the state is true, display the modal */}
       {isTimeModalOpen && (
         <CreateTimeLimitComponent
           onClose={() => {
@@ -321,6 +376,7 @@ const ProfileTableComponent = (props: Readonly<IProfileTableComponentProps>) => 
           onCreateTimeLimit={(time: number) => {}}
         />
       )}
+      {/* If the state is true, display the modal */}
       {isTagModalOpen && (
         <CreateTagComponent
           onClose={() => {
@@ -332,19 +388,22 @@ const ProfileTableComponent = (props: Readonly<IProfileTableComponentProps>) => 
           onCreateTag={(tagName: string) => {}}
         />
       )}
+      {/* If the state is true, display the modal */}
       {isExerciseModalOpen && (
         <div className='fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50'>
           <div className='rounded-lg p-6 w-full max-h-[90%] overflow-y-auto'>
             <CreateExcerciseComponent
               onClose={() => {
-                setIsExerciseModalOpen(false)
                 props.setUpdate(!props.update)
+                setIsExerciseModalOpen(false)
               }}
               id={activeExerciseId}
+              onCreate={() => {}}
             />
           </div>
         </div>
       )}
+      {/* If the state is true, display the modal */}
       {isNoteModalOpen && (
         <div className='fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50'>
           <div className='rounded-lg p-6 w-full max-h-[90%] overflow-y-auto'>
@@ -358,6 +417,7 @@ const ProfileTableComponent = (props: Readonly<IProfileTableComponentProps>) => 
           </div>
         </div>
       )}
+      {/* If the state is true, display the modal */}
       {isNewsModalOpen && (
         <div className='fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50'>
           <div className='rounded-lg p-6 w-full max-h-[90%] overflow-y-auto'>
@@ -371,6 +431,7 @@ const ProfileTableComponent = (props: Readonly<IProfileTableComponentProps>) => 
           </div>
         </div>
       )}
+      {/* If the state is true, display the modal */}
       {isUserModalOpen && (
         <div className='fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50'>
           <div className='rounded-lg p-6 w-full max-h-[90%] overflow-y-auto'>
@@ -403,7 +464,9 @@ const ProfileTableComponent = (props: Readonly<IProfileTableComponentProps>) => 
             </tr>
           </thead>
           <tbody>
+            {/* If the length of the data is different from 0, map the data; otherwise, show a 'no data' message */}
             {props.data.length !== 0 ? (
+              // Loop through all items to display an item in the table
               props.data.map(item => (
                 <tr
                   key={item.index}
@@ -412,6 +475,7 @@ const ProfileTableComponent = (props: Readonly<IProfileTableComponentProps>) => 
                     className={`whitespace-nowrap max-w-[200px] overflow-hidden text-ellipsis py-4 pl-4 pr-3 text-sm font-medium text-gray-900 
                     dark:text-dark-accent sm:pl-6 lg:pl-8`}>
                     <TextComponent>{item.title}</TextComponent>
+                    {/* If the item has a tagName and a color, render a tag */}
                     {item.tagName && item.color && (
                       <div className='max-w-min'>
                         <TagComponent
@@ -421,6 +485,7 @@ const ProfileTableComponent = (props: Readonly<IProfileTableComponentProps>) => 
                         />
                       </div>
                     )}
+                    {/* If the item has a level, display the number */}
                     {item.level && <TextComponent>{item.level}</TextComponent>}
                   </td>
                   <td
