@@ -4,6 +4,17 @@ import { enumTextTags, Option } from '@/constants/types'
 import Select, { StylesConfig, SelectInstance } from 'react-select'
 import chroma from 'chroma-js'
 
+/*
+Input: An array of Option objects, the currently selected option, an id for the selector,
+label for the selector, a boolean to indicate if the selector is clearable, and a function to handle changes.
+Output: An object with properties for the InputSelectorComponent
+Return value: An object with the properties of the InputSelectorComponent
+Function: To describe the properties (required and optional) of the InputSelectorComponent
+Variables: options, selectedOption, id, label, clearable, onChange
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
+
 interface InputSelectorProps {
   options: Option[]
   selectedOption: Option | null
@@ -13,6 +24,7 @@ interface InputSelectorProps {
   onChange: (val: Option | null) => void
 }
 
+// Define the styles for the react-select component
 const colourStyles: StylesConfig<Option> = {
   control: styles => ({ ...styles, backgroundColor: 'white' }),
   option: (styles, { isDisabled, isFocused, isSelected }) => {
@@ -38,12 +50,11 @@ const colourStyles: StylesConfig<Option> = {
 }
 
 /*
-Input: a list of all posible options; the currently selected value;
-the id of the selector; a function to handle the change of value
-Output: a searchable selector with the options and the selected value
-Return value: a selector component to display the options and select the desired value
-Function: creates a component to search and select from a list of options
-Variables:
+Input: An object with properties described in the InputSelectorProps interface, see above
+Output: A searchable selector with the options and the selected value
+Return value: A React Node
+Function: Creates a component to search and select from a list of options
+Variables: options, selectedOption, id, label, clearable, ref
 Date: 07 - 05 - 2024
 Author: Gerardo Omar Rodriguez Ramirez
 */
@@ -55,7 +66,7 @@ const InputSelectorComponent = forwardRef(
       selectedOption,
       id,
       label,
-      clearable = true, // Cambiado a true por defecto
+      clearable = true,
       onChange
     }: Readonly<InputSelectorProps>,
     ref
@@ -84,13 +95,13 @@ const InputSelectorComponent = forwardRef(
           value={selectedOption}
           isSearchable={true}
           isMulti={false}
-          onChange={onChange} // Simplificado
+          onChange={onChange}
           getOptionLabel={(option) => option.label}
           getOptionValue={(option) => option.value}
           styles={colourStyles}
           isClearable={clearable}
           ref={inputRef}
-          classNamePrefix="react-select" // Añadido para estilizado personalizado
+          classNamePrefix="react-select"
         />
       </div>
     )

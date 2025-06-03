@@ -7,6 +7,17 @@ import { DataCardComponent } from './components/cards/DataCardComponent'
 import { LastNewsComponent } from './components/ui/LastNewsComponent'
 import useUtilsStore from '@/store/useUtilsStore'
 export const dynamic = 'force-dynamic'
+
+/*
+Input: None, although it uses a store to fetch data
+Output: The landing page of the website, including a welcome message, a header image, and several cards with information
+Return value: a React component that renders the home page
+Function: Creates a home page component
+Variables: dailyQuote, RandomFact, items, dataCard, dataRamdomCard
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
+
 export default async function Home() {
   const dailyQuote: Quote = await useUtilsStore.getState().getDailyQuote()
   const RandomFact: string = await useUtilsStore.getState().getRandomFact()
@@ -46,10 +57,7 @@ export default async function Home() {
 
   const dataRamdomCard = {
     title: 'Dato aleatorio',
-    //info: `“El objetivo del rigor no es destruir toda intuición, sino que debería usarse para destruir
-    //la mala intuición a la vez que clarificar y elevar la buena intuición.”`,
     info: `“${RandomFact}”`,
-    //autor: 'TERENCE TAO',
     image: 'images/dumie-data.png'
   }
 
@@ -113,8 +121,6 @@ ejercicios propuestos de diferentes niveles.`}
           <DataCardComponent
             title={dataRamdomCard.title}
             info={dataRamdomCard.info}
-            //autor={dataRamdomCard.autor}
-            //image={dataRamdomCard.image}
           />
         </div>
         <div className='px-4 md:px-0 md:pl-4 h-full w-full'>

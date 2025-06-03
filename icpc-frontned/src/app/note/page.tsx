@@ -10,6 +10,15 @@ import InputSelectorComponent from '../components/dropdowns/InputSelectorCompone
 import TagSelectorComponent from '../components/forms/TagSelectorComponent'
 import { TextComponent } from '../components/text/TextComponent'
 
+/*
+Input: None (uses hooks and store state)
+Output: Note list page with filtering and pagination
+Return value: JSX.Element (note list page)
+Function: Renders the note list page, allows filtering by category and tags, and displays notes
+Variables: categories, tags, methods, options, category, selectedTags, data, getList, getCategories
+Date: 29 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 export default function Home() {
   const categories = useUtilsStore.getState().categories
   const tags = useUtilsStore.getState().tags
@@ -42,6 +51,7 @@ export default function Home() {
                   id='category'
                   onChange={val => {
                     field.onChange(val)
+                    // Update the category state with the selected value
                     setCategory((val === null ? '' : val.label) as string)
                   }}
                   options={options.map(item => {
@@ -73,6 +83,7 @@ export default function Home() {
             />
           </div>
           <div className='overflow-hidden px-4 py-5 sm:px-0'>
+            {/* If the list of notes is not empty, pass the notes to the NoteListComponent; otherwise show a text */}
             {data.length > 0 ? (
               <NoteListComponent notes={data} />
             ) : (

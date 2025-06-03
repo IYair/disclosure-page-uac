@@ -4,6 +4,18 @@ import { enumTextTags } from '@/constants/types'
 import { FieldValues, UseFormRegister } from 'react-hook-form'
 import cn from 'classnames'
 
+/*
+Input: A text as a label, a register for the value, a field name for the form,
+an autocomplete attribute, an id for the text field, a boolean indicating if the field is required,
+a type for the input, a class name for the component, and a placeholder for the input
+Output: An object with properties for the TextFieldComponent
+Return value: An object with the properties of the TextFieldComponent
+Function: To describe the properties (required and optional) of the TextFieldComponent
+Variables: labelText, register, fieldName, auto, id, necessary, type, className, placeholder
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
+
 interface ITextFieldProps {
   labelText: string
   register: UseFormRegister<FieldValues>
@@ -21,14 +33,12 @@ const textFieldClassname =
   'block w-full rounded-md p-2 text-dark-primary shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-accent'
 
 /*
-Input: a text to be used as a label, a register function, a name for the form field, an autocomplete attribute,
-an id for the text field, a boolean that indicates if the field is required, a type for the input,
-a class name for the component, a placeholder for the input
-Output: a text field with a label
-Return value: a text field component to be used in a form
-Function: creates a component to write a single line of text in a form
+Input: An object with the properties described in the ITextFieldProps interface, see above
+Output: A text field with a label
+Return value: A React Node
+Function: Creates a component to write a single line of text in a form
 Variables: labelText, register, fieldName, auto, id, necessary, type, className, placeholder, style
-Date: 22 - 03 - 2024
+Date: 28 - 05 - 2025
 Author: Gerardo Omar Rodriguez Ramirez
 */
 

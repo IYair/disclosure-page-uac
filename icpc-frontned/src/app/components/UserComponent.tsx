@@ -9,6 +9,15 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import useStore from '@/store/useStore'
 
+/*
+Input: verified (boolean for login status), options (array of {id, name, href})
+Output: Dropdown menu with user options
+Return value: JSX.Element (user dropdown)
+Function: Renders a user icon that acts as a dropdown menu with navigation and logout
+Variables: router, optionStyle, logout, handleLogout, options, verified
+Date: 29 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 interface IUserProps {
   verified: boolean
   options: {
@@ -19,35 +28,35 @@ interface IUserProps {
 }
 
 /*
-Input: a list of options with id, name and href; and a boolean to determine if the user is logged in
-Output: a user icon that acts as a dropdown menu with the options passed
-Return value: a dropdown menu with the user options as a component
-Function: sets a dropdown menu with the user options
-Variables: verified, options { id, name, href }
-Date: 12 - 04 - 2024
+Input: An object with properties described in the IUserProps interface, see above
+Output: Dropdown menu with user options
+Return value: JSX.Element (user dropdown)
+Function: Renders a user icon that acts as a dropdown menu with navigation and logout
+Variables: router, optionStyle, logout, handleLogout, options, verified
+Date: 29 - 05 - 2025
 Author: Gerardo Omar Rodriguez Ramirez
 */
-
 export default function UserComponent({ options, verified }: Readonly<IUserProps>) {
   const router = useRouter()
   const optionStyle =
     'hover:text-secondary hover:bg-gray-100 px-4 py-2 dark:text-accent  dark:hover:text-complementary dark:hover:bg-secondary'
 
+  // Function to combine class names conditionally
   function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
   }
 
-  // al oprimir el botón de cerrar sesión, se debe ejecutar el hook useStore para eliminar el token de la sesión
   const logout = useStore(state => state.logout)
 
+  // Function to handle logout and redirect if on profile page
   const handleLogout = async () => {
     await logout()
-    if (window.location.pathname === '/profile') {  //Detecta si estas en la pagina de Perfil
-      //window.location.href = '/' // Redirige a la página principal
+    if (window.location.pathname === '/profile') {  
       router.push('/')
     }
   }
   
+  // If the user is not verified, return a simple login text; otherwise render the dropdown menu
   return verified ? (
     <Menu
       as='div'
@@ -55,6 +64,7 @@ export default function UserComponent({ options, verified }: Readonly<IUserProps
       {({ open }) => (
         <>
           <Menu.Button>
+            {/* If the menu is open, show the close icon; otherwise, show the user icon */}
             {open ? (
               <XMarkIcon
                 className='block h-6 w-6 m-2'
@@ -76,6 +86,7 @@ export default function UserComponent({ options, verified }: Readonly<IUserProps
               className={`absolute right-4 mt-8 w-56 origin-top-right rounded-md bg-white 
                   dark:bg-primary shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}>
               <div className='py-1 grid grid-cols-1'>
+                {/* Loop through all the options and render them */}
                 {options.map(option => (
                   <Menu.Item key={option.id}>
                     {({ active }) => (
@@ -92,6 +103,7 @@ export default function UserComponent({ options, verified }: Readonly<IUserProps
                     )}
                   </Menu.Item>
                 ))}
+                {/* If the user is verified, show the profile and logout options; otherwise show login */}
                 {verified ? (
                   <>
                     <Menu.Item>

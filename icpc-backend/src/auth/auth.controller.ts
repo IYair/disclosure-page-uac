@@ -47,6 +47,18 @@ export class AuthController {
     private readonly httpService: HttpService
   ) {}
 
+  /**
+  Input: loginDto: LoginDto
+  Output: Promise<LoginResponseDto>
+  Return value: Login response with user info and JWT token
+  Function: Authenticates a user and returns a JWT token
+  Variables: loginDto
+  Route: POST /auth/login
+  Access: Public
+  Method: POST
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Post('login')
   @ApiCreatedResponse({
     description: 'Login successful',
@@ -59,6 +71,18 @@ export class AuthController {
     return await this.authService.login(loginDto);
   }
 
+  /**
+  Input: token: string
+  Output: Promise<CaptchaResponse>
+  Return value: Captcha verification result
+  Function: Verifies Google reCAPTCHA token
+  Variables: token, secretKey, url, response, success, score
+  Route: POST /auth/captcha
+  Access: Public
+  Method: POST
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Post('captcha')
   @ApiCreatedResponse({
     description: 'Captcha verified successfully',
@@ -78,6 +102,18 @@ export class AuthController {
     }
   }
 
+  /**
+  Input: registerDto: RegisterDto
+  Output: Promise<CreateUserResponseDto>
+  Return value: Created user response
+  Function: Registers a new user (admin only)
+  Variables: registerDto
+  Route: POST /auth/register
+  Access: Admin
+  Method: POST
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Post('register')
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
@@ -99,6 +135,18 @@ export class AuthController {
     return await this.authService.register(registerDto);
   }
 
+  /**
+  Input: req: RequestWithUser
+  Output: Promise<User>
+  Return value: User profile info
+  Function: Returns the profile of the authenticated user
+  Variables: req, userData
+  Route: GET /auth/profile
+  Access: User
+  Method: GET
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Get('profile')
   @Auth(RoleEnum.USER)
   @ApiOkResponse({

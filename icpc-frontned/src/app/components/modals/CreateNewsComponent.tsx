@@ -16,10 +16,30 @@ import useAuthStore from '@/store/useStore'
 import { ArrowUturnLeftIcon, XMarkIcon } from '@heroicons/react/20/solid'
 import ConfirmDenyComponent from '../buttons/Confirm&DenyComponent'
 
+/*
+Input: An id string, an onClose function
+Output: An object with properties for the CreateNewsComponent
+Return value: An object with the properties of the CreateNewsComponent
+Function: To describe the properties (required and optional) of the CreateNewsComponent
+Variables: id, onClose
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
+
 interface CreateNewsComponentProps {
   id?: string
   onClose: () => void
 }
+
+/*
+Input: An object with properties described in the CreateNewsComponentProps interface, see above
+Output: A modal component to create or edit a news article
+Return value: A React Node
+Function: To allow the user to create or edit a news article
+Variables: methods, createNews, getNewsArticle, createImage, updateImage, updateNews, imageInputRef, coverImage, showConfirm
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 
 const CreateNewsComponent = (props: CreateNewsComponentProps) => {
   const methods = useForm<FieldValues>()
@@ -34,10 +54,14 @@ const CreateNewsComponent = (props: CreateNewsComponentProps) => {
   const [coverImage, setCoverImage] = React.useState('')
   const [showConfirm, setShowConfirm] = React.useState(false)
 
+  // Effect to load the news article if an ID is provided
   useEffect(() => {
+    // If an ID is provided, fetch the news article
     if (props.id) {
+      // Function to fetch the news article and set the form values
       const fetchNews = async () => {
         const news = await getNewsArticle(props.id!)
+        // If the news article is found, reset the form with its values
         if (news) {
           methods.reset({
             title: news.title,
@@ -45,6 +69,7 @@ const CreateNewsComponent = (props: CreateNewsComponentProps) => {
             content: news.body
           })
           setCoverImage(news.imageId.id)
+          
         } else {
           toast.error('No se encontró la noticia con el ID proporcionado.', {
             duration: 5000,
@@ -59,10 +84,14 @@ const CreateNewsComponent = (props: CreateNewsComponentProps) => {
     }
   }, [props.id, methods, getNewsArticle])
 
+  // Function to handle form submission
   const onSubmit: SubmitHandler<FieldValues> = async formData => {
+    // Function to process the response after uploading the image
     const processResponse = async (uploadedImage: any) => {
+      // If the uploaded image contains data, extract the image ID and proceed with creating or updating the news article
       if ('data' in uploadedImage) {
         const imageId = uploadedImage.data?.imageId?.id || uploadedImage.data?.id
+        // If the image ID is not found, show an error message
         if (!imageId) {
           toast.error('Error al obtener el ID de la imagen', {
             duration: 5000,
@@ -74,6 +103,7 @@ const CreateNewsComponent = (props: CreateNewsComponentProps) => {
           return
         }
 
+        // If an id was provided, update the news article; otherwise, create a new one
         const response = props.id
           ? await updateNews(
               {
@@ -92,6 +122,7 @@ const CreateNewsComponent = (props: CreateNewsComponentProps) => {
               userAuthor: String(useAuthStore.getState().user?.userName),
               role: String(useAuthStore.getState().user?.role)
             })
+        // If the response contains an ID, show a success message; otherwise, show an error message
         if (response) {
           const toastOptions = {
             duration: 5000,
@@ -125,6 +156,7 @@ const CreateNewsComponent = (props: CreateNewsComponentProps) => {
         })
       }
     }
+    // If the file is a string, it means it's already uploaded, so we can directly process the response; otherwise, we upload the image
     if (typeof formData.file === 'string') {
       processResponse({ data: { id: (await getNewsArticle(props.id!)).imageId.id } })
     } else {
@@ -133,6 +165,7 @@ const CreateNewsComponent = (props: CreateNewsComponentProps) => {
     }
   }
 
+  // Function to validate the form data before submission
   const dataValidate = () => {
     const data = methods.getValues()
     const missingFields = []
@@ -141,6 +174,7 @@ const CreateNewsComponent = (props: CreateNewsComponentProps) => {
     if (!data.content) missingFields.push('Cuerpo de la noticia')
     if (!data.file) missingFields.push('Archivo de imagen')
 
+    // If there are missing fields, show an error message and return
     if (missingFields.length > 0) {
       toast.error(`Favor de llenar los datos de: ${missingFields.join(', ')}`, {
         duration: 5000,
@@ -154,10 +188,14 @@ const CreateNewsComponent = (props: CreateNewsComponentProps) => {
     setShowConfirm(true)
   }
 
+  // Function to clear the form fields
   const clearForm = () => {
+    // If an ID is provided, reset the form with the current news article values; otherwise, reset the form to empty values
     if (props.id) {
+      // Fetch the news article and reset the form with its values
       const fetchNews = async () => {
         const news = await getNewsArticle(props.id!)
+        // If the news article is found, reset the form with its values; otherwise, show an error message
         if (news) {
           methods.reset({
             title: news.title,
@@ -187,6 +225,7 @@ const CreateNewsComponent = (props: CreateNewsComponentProps) => {
 
   return (
     <>
+      {/* If the showConfirm state is true, display the confirmation modal */}
       {showConfirm && (
         <ConfirmDenyComponent
           onConfirm={() => {
@@ -232,6 +271,7 @@ const CreateNewsComponent = (props: CreateNewsComponentProps) => {
               tag={enumTextTags.h1}
               sizeFont='s16'
               className='dark:text-dark-accent'>
+              {/* Display the appropriate text if an id was provided */}
               {props.id ? 'Editar noticia' : 'Crear noticia'}
             </TextComponent>
 
@@ -275,6 +315,7 @@ const CreateNewsComponent = (props: CreateNewsComponentProps) => {
               )}
             />
             <SubmitComponent
+              // Display the appropriate text if an id was provided
               text={props.id ? 'Actualizar noticia' : 'Crear noticia'}
               action={dataValidate}
             />

@@ -25,7 +25,7 @@ import {
   ApiUnauthorizedResponse
 } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
-import { LoggerService } from '../services/logger.service'; // Importa el LoggerService
+import { LoggerService } from '../services/logger.service';
 import { ImageService } from 'src/image/image.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 
@@ -35,9 +35,21 @@ export class NewsController {
   constructor(
     private readonly imageService: ImageService,
     private readonly newsService: NewsService,
-    private readonly loggerService: LoggerService // Inyecta el LoggerService
+    private readonly loggerService: LoggerService
   ) {}
 
+  /*
+  Input: createNewsDto: CreateNewsDto, req: any
+  Output: Promise<News>
+  Return value: Created news entity
+  Function: Creates a news item
+  Variables: createNewsDto, req, createdNews
+  Route: POST /news
+  Access: User
+  Method: POST
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Post()
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
@@ -52,12 +64,24 @@ export class NewsController {
     this.loggerService.logChange(
       'news',
       'create',
-      req.user.name, // Nombre del usuario que hizo la operación
-      createdNews.id // ID de la noticia creada
-    ); // Log de la operación
+      req.user.name,
+      createdNews.id
+    );
     return createdNews;
   }
 
+  /*
+  Input: None
+  Output: Promise<News[]>
+  Return value: Array of all news items
+  Function: Retrieves all news items
+  Variables: None
+  Route: GET /news
+  Access: Public
+  Method: GET
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Get()
   @ApiCreatedResponse({
     description: 'Las noticias se han obtenido exitosamente.'
@@ -68,11 +92,35 @@ export class NewsController {
     return this.newsService.findAll();
   }
 
+  /*
+  Input: None
+  Output: Promise<number>
+  Return value: Count of news items
+  Function: Gets the total count of news items
+  Variables: None
+  Route: GET /news/count
+  Access: Public
+  Method: GET
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Get('count')
   async getCount(): Promise<number> {
     return this.newsService.getCount();
   }
 
+  /*
+  Input: id: string
+  Output: Promise<News>
+  Return value: News entity
+  Function: Retrieves a news item by id
+  Variables: id
+  Route: GET /news/:id
+  Access: Public
+  Method: GET
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Get(':id')
   @ApiCreatedResponse({
     description: 'La noticia se ha obtenido exitosamente.'
@@ -83,6 +131,18 @@ export class NewsController {
     return this.newsService.findOne(id);
   }
 
+  /*
+  Input: query: string
+  Output: Promise<News[]>
+  Return value: Array of news items matching the query
+  Function: Searches news items by query string
+  Variables: query
+  Route: POST /news/search/:query
+  Access: Public
+  Method: POST
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Post('search/:query')
   @ApiCreatedResponse({
     description: 'Las noticias se han obtenido exitosamente.'
@@ -93,6 +153,18 @@ export class NewsController {
     return this.newsService.search(query);
   }
 
+  /*
+  Input: id: string, file: Express.Multer.File
+  Output: Promise<News>
+  Return value: News entity with updated image
+  Function: Swaps the image of a news item
+  Variables: id, file, image
+  Route: PATCH /news/image/:id
+  Access: User
+  Method: PATCH
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @UseInterceptors(FileInterceptor('file'))
   @Patch('image/:id')
   @ApiBearerAuth()
@@ -121,6 +193,18 @@ export class NewsController {
     return this.newsService.swapImage(id, image.id);
   }
 
+  /*
+  Input: id: string, updateNewsDto: UpdateNewsDto, req: any
+  Output: Promise<News>
+  Return value: Updated news entity
+  Function: Updates a news item by id
+  Variables: id, updateNewsDto, req, updatedNews
+  Route: PATCH /news/:id
+  Access: User
+  Method: PATCH
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Patch(':id')
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
@@ -136,15 +220,22 @@ export class NewsController {
     @Req() req: any
   ) {
     const updatedNews = await this.newsService.update(id, updateNewsDto);
-    this.loggerService.logChange(
-      'news',
-      'update',
-      req.user.name, // Nombre del usuario que hizo la operación
-      id // ID de la noticia actualizada
-    ); // Log de la operación
+    this.loggerService.logChange('news', 'update', req.user.name, id);
     return updatedNews;
   }
 
+  /*
+  Input: id: string, user: string, req: any
+  Output: Promise<News>
+  Return value: Deleted news entity
+  Function: Deletes a news item by id
+  Variables: id, user, req, deletedNews
+  Route: DELETE /news/:id/:user
+  Access: User
+  Method: DELETE
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Delete(':id/:user')
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
@@ -160,12 +251,7 @@ export class NewsController {
     @Req() req: any
   ) {
     const deletedNews = await this.newsService.remove(id, user);
-    this.loggerService.logChange(
-      'news',
-      'delete',
-      req.user.name, // Nombre del usuario que hizo la operación
-      id // ID de la noticia eliminada
-    ); // Log de la operación
+    this.loggerService.logChange('news', 'delete', req.user.name, id);
     return deletedNews;
   }
 }

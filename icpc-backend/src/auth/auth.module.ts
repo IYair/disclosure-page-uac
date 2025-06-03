@@ -10,6 +10,21 @@ import { User } from 'src/users/entities/user.entity';
 import { RolesService } from 'src/roles/roles.service';
 import { HttpModule } from '@nestjs/axios';
 
+/**
+ * AuthModule
+ *
+ * Handles authentication features and dependencies.
+ *
+ * Structure:
+ * - Imports: Required modules for authentication.
+ * - Providers: Auth service and related providers.
+ * - Controllers: Auth API endpoints.
+ * - Exports: Auth service for use in other modules.
+ *
+ * Date: 02 - 06 - 2025
+ * Author: Gerardo Omar Rodriguez Ramirez
+ */
+
 @Module({
   controllers: [AuthController],
   providers: [AuthService, RolesService],

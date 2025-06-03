@@ -10,6 +10,15 @@ import { toast } from 'sonner'
 import { TimeLimit } from '@/constants/types'
 import { ArrowUturnLeftIcon, XMarkIcon } from '@heroicons/react/20/solid'
 
+/*
+Input: methods (UseFormReturn<FieldValues>), onCreateTimeLimit (function), timeId (optional string), onClose (function)
+Output: Props for CreateTimeLimitComponent
+Return value: CreateTimeLimitComponentProps interface
+Function: Describes the properties for the CreateTimeLimitComponent modal
+Variables: methods, onCreateTimeLimit, timeId, onClose
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 interface CreateTimeLimitComponentProps {
   methods: UseFormReturn<FieldValues>
   onCreateTimeLimit: (time: number) => void
@@ -17,14 +26,26 @@ interface CreateTimeLimitComponentProps {
   onClose: () => void
 }
 
+/*
+Input: methods, onCreateTimeLimit, timeId, onClose (from CreateTimeLimitComponentProps)
+Output: Modal for creating or editing a time limit
+Return value: React Node (modal component)
+Function: Renders a modal for creating or editing a time limit, including a value field
+Variables: createTimeLimit, updateTimeLimit, getTimeLimit, currentTimeLimit, useEffect, clearForm, onSubmit
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 const CreateTimeLimitComponent: React.FC<CreateTimeLimitComponentProps> = ({ methods, onCreateTimeLimit, timeId, onClose }) => {
   const createTimeLimit = useUtilsStore(state => state.createTimeLimit)
   const updateTimeLimit = useUtilsStore(state => state.updateTimeLimit)
   const getTimeLimit = useUtilsStore(state => state.getTimeLimit)
   const [currentTimeLimit, setCurrentTimeLimit] = useState<TimeLimit>({} as TimeLimit)
 
+  // Effect hook to load the time limit if timeId is provided
   useEffect(() => {
+    // Function to load the time limit based on timeId
     const loadTimeLimit = async () => {
+      // If timeId is provided, fetch the time limit details and fill the form with its values
       if (timeId) {
         const timeLimits = await getTimeLimit()
         const timeLimit = timeLimits.find(t => t.id === timeId)
@@ -42,7 +63,9 @@ const CreateTimeLimitComponent: React.FC<CreateTimeLimitComponentProps> = ({ met
     loadTimeLimit()
   }, [timeId, getTimeLimit, methods])
 
+  // Function to clear the form fields
   const clearForm = () => {
+    // Reset the form fields to their initial values
     if (timeId) {
       methods.reset({
         TimeLimit: currentTimeLimit.timeLimit.toString()
@@ -50,18 +73,21 @@ const CreateTimeLimitComponent: React.FC<CreateTimeLimitComponentProps> = ({ met
     } else methods.setValue('TimeLimit', '')
   }
 
+  // Function to handle form submission
   const onSubmit: SubmitHandler<FieldValues> = async data => {
     const timeData = {
       timeLimit: parseInt(data.TimeLimit)
     }
 
     let response
+    // If timeId is provided, update the time limit; otherwise, create a new one
     if (timeId) {
       response = await updateTimeLimit(timeId, { timeLimit: timeData.timeLimit })
     } else {
       response = await createTimeLimit(timeData.timeLimit)
     }
 
+    // Handle the response from the API, if an id is found in the response then the request was successful
     if ('id' in response) {
       toast.success(`Límite de tiempo ${timeId ? 'editado' : 'creado'} con éxito.`, {
         duration: 5000,
@@ -88,7 +114,7 @@ const CreateTimeLimitComponent: React.FC<CreateTimeLimitComponentProps> = ({ met
               <button
                 type='button'
                 onClick={clearForm}
-                className='text-inherit' // Color heredado del padre
+                className='text-inherit'
               >
                 <ArrowUturnLeftIcon className='h-6 w-6' />
               </button>
@@ -98,7 +124,7 @@ const CreateTimeLimitComponent: React.FC<CreateTimeLimitComponentProps> = ({ met
               title='Cerrar formulario'>
               <button
                 onClick={onClose}
-                className='text-inherit' // Color heredado del padre
+                className='text-inherit'
               >
                 <XMarkIcon className='h-6 w-6' />
               </button>
@@ -112,6 +138,7 @@ const CreateTimeLimitComponent: React.FC<CreateTimeLimitComponentProps> = ({ met
             <div className='flex flex-col items-center'>
               <LogoComponent size={100} />
               <h2 className='text-center text-lg font-bold dark:text-dark-accent'>
+                {/* Display the appropriate text if an id was provided */}
                 {timeId ? 'Editar límite de tiempo' : 'Crear nuevo límite de tiempo'}
               </h2>
               <TextFieldComponent
@@ -123,6 +150,7 @@ const CreateTimeLimitComponent: React.FC<CreateTimeLimitComponentProps> = ({ met
                 type='text'
               />
               <SubmitComponent
+                // Display the appropriate text if an id was provided
                 text={timeId ? 'Actualizar' : 'Crear'}
                 action={() => {}}
               />

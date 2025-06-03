@@ -5,10 +5,28 @@ import { ButtonComponent } from '@/app/components/buttons/ButtonComponent';
 import useUtilsStore from '@/store/useUtilsStore';
 import { toast } from 'sonner';
 
+/*
+Input: 
+Output: 
+Return value: 
+Function: 
+Variables: 
+Date: 29 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 interface TicketActionsProps {
   ticketId: string;
 }
 
+/*
+Input: 
+Output: 
+Return value: 
+Function: 
+Variables: 
+Date: 29 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 export const TicketActions: React.FC<TicketActionsProps> = ({ ticketId }) => {
   const approveTicket = useUtilsStore (state => state.approveTicket)
   const acceptTicket = async () => {

@@ -7,6 +7,16 @@ import { TextComponent } from '../text/TextComponent'
 import ExerciseHeaderComponent from '../ui/ExerciseHeaderComponent'
 import ExerciseMarkdownComponent from '../ui/ExerciseMarkdownComponent'
 
+/*
+Input: An Exercise object, a description string, an optional solution string, an optional itemId string, and an optional clue string
+Output: An object with properties for the ExerciseCardComponent
+Return value: An object with the properties of the ExerciseCardComponent
+Function: To describe the properties (required and optional) of the ExerciseCardComponent
+Variables: exercise, description, solution, itemId, clue
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
+
 interface ExerciseCardComponentProps {
   exercise: Exercise
   description: string
@@ -14,6 +24,16 @@ interface ExerciseCardComponentProps {
   itemId?: string
   clue?: string
 }
+
+/*
+Input: An object with properties described in the ExerciseCardComponentProps interface, see above
+Output: A React component that renders an exercise with all the relevant information
+Return value: A React Node
+Function: To display all the content of an exercise
+Variables: exercise, description, solution, itemId, clue
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 
 const ExerciseCardComponent = ({ ...props }: Readonly<ExerciseCardComponentProps>) => {
   return (
@@ -26,9 +46,9 @@ const ExerciseCardComponent = ({ ...props }: Readonly<ExerciseCardComponentProps
 
       <div className='mx-auto w-full px-4 py-8 sm:px-6 lg:px-8'>
         {' '}
-        {/* Contenido principal */}
+        {/* Main content */}
         <div className='mx-auto grid w-full max-w-full grid-cols-1 grid-rows-1 items-start gap-x-8 gap-y-8 lg:grid-cols-3'>
-          {/* Resumen del ejercicio */}
+          {/* Summary */}
           <div className='lg:col-start-3 lg:row-end-1'>
             <div className='rounded-lg bg-gray-50 shadow-sm ring-1 ring-gray-900/5'>
               <dl className='flex flex-wrap p-4'>
@@ -76,7 +96,7 @@ const ExerciseCardComponent = ({ ...props }: Readonly<ExerciseCardComponentProps
             </div>
           </div>
 
-          {/* Detalles del ejercicio */}
+          {/* Details of the exercise */}
           <div
             className='-mx-4 w-full px-4 py-8 shadow-sm ring-1 ring-gray-900/5 sm:mx-0 sm:rounded-lg sm:px-8 sm:pb-14 
             lg:col-span-2 lg:row-span-2 lg:row-end-2 xl:px-16 xl:pb-20 xl:pt-16'>
@@ -133,6 +153,7 @@ const ExerciseCardComponent = ({ ...props }: Readonly<ExerciseCardComponentProps
           </div>
         </div>
       </div>
+      {/* Component to render the cards with the description, constraints, clue and solution */}
       <ExerciseMarkdownComponent
         description={props.description}
         clue={props.clue}

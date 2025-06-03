@@ -5,19 +5,47 @@ import React, { Fragment, useEffect, useState } from 'react'
 import ReportButtonComponent from '../buttons/ReportButtonComponent'
 import LogoComponent from '../LogoComponent' // Importa el LogoComponent
 
+/*
+Input: category (string, exercise category), title (string, exercise title), itemId (string, exercise ID)
+Output: ExerciseHeaderComponentProps object for ExerciseHeaderComponent
+Return value: ExerciseHeaderComponentProps interface
+Function: Describes the properties for the ExerciseHeaderComponent (category, title, item ID)
+Variables: category, title, itemId
+Date: 29 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 interface ExerciseHeaderComponentProps {
   category: string
   title: string
   itemId: string
 }
 
+/*
+Input: An array of strings with tailwind classes
+Output: A single string of tailwind classes
+Return value: A string
+Function: Combines multiple tailwind class strings into one
+Variables: classes
+Date: 29 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
+/*
+Input: category (string), title (string), itemId (string)
+Output: Header UI for exercise page, with category, title, and report button
+Return value: JSX.Element (ExerciseHeaderComponent UI)
+Function: Renders a header for the exercise page, showing the category, title, and a report button if not on a ticket page
+Variables: isTicketPage, props
+Date: 29 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 const ExerciseHeaderComponent = ({ ...props }: Readonly<ExerciseHeaderComponentProps>) => {
   const [isTicketPage, setIsTicketPage] = useState(false)
 
+  // Effect to determine if the current page is a ticket page
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setIsTicketPage(window.location.pathname.includes('ticket'))
@@ -26,7 +54,6 @@ const ExerciseHeaderComponent = ({ ...props }: Readonly<ExerciseHeaderComponentP
 
   return (
     <header className='relative isolate'>
-      {/* Fondo y encabezado */}
       <div
         className='absolute inset-0 -z-10 overflow-hidden'
         aria-hidden='true'>
@@ -44,7 +71,6 @@ const ExerciseHeaderComponent = ({ ...props }: Readonly<ExerciseHeaderComponentP
       </div>
 
       <div className='mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8'>
-        {/* Título y botones */}
         <div className='mx-auto flex flex-col lg:flex-row max-w-2xl items-center justify-between gap-x-8 lg:mx-0 lg:max-w-none'>
           <div className='flex items-center gap-x-6'>
             <h1>
@@ -61,6 +87,7 @@ const ExerciseHeaderComponent = ({ ...props }: Readonly<ExerciseHeaderComponentP
                   hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'>
               Apuntes
             </a>
+            {/* If this is not in the ticket page, display the report error button */}
             {!isTicketPage && (
               <div
                 className='rounded-md px-3 py-2 text-sm font-semibold focus-visible:outline 

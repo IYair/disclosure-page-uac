@@ -11,6 +11,15 @@ import useUtilsStore from '@/store/useUtilsStore'
 import { ArrowUturnLeftIcon, XMarkIcon } from '@heroicons/react/20/solid'
 import TextAreaComponent from '../forms/TextAreaComponent'
 
+/*
+Input: methods (UseFormReturn<FieldValues>), itemType (string), itemId (string), onSubmit (function), onCancel (function)
+Output: Props for ReportCardComponent
+Return value: IReportCardProps interface
+Function: Describes the properties for the ReportCardComponent modal
+Variables: methods, itemType, itemId, onSubmit, onCancel
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 interface IReportCardProps {
   methods: UseFormReturn<FieldValues>
   itemType: string
@@ -19,10 +28,21 @@ interface IReportCardProps {
   onCancel: () => void
 }
 
+/*
+Input: methods, itemType, itemId, onSubmit, onCancel (from IReportCardProps)
+Output: Modal for submitting a report about an item
+Return value: React Node (modal component)
+Function: Renders a modal for submitting a report, including description and content fields
+Variables: createReport, handleSubmit, clearForm, methods, itemType, itemId, onSubmit, onCancel
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 const ReportCardComponent = ({ itemType, itemId, onSubmit, onCancel, methods }: Readonly<IReportCardProps>) => {
   const { createReport } = useUtilsStore()
 
+  // Function to handle form submission
   const handleSubmit = async (data: FieldValues) => {
+    // Validate that description and content fields are filled
     if (!data.description || !data.content) {
       toast.error('Favor de rellenar el reporte', {
         duration: 5000,
@@ -41,6 +61,7 @@ const ReportCardComponent = ({ itemType, itemId, onSubmit, onCancel, methods }: 
         itemType,
         itemId: itemId
       })
+      // Check if the response contains an ID, indicating success
       if ('id' in response) {
         toast.success('Reporte Enviado', {
           duration: 5000,
@@ -72,6 +93,7 @@ const ReportCardComponent = ({ itemType, itemId, onSubmit, onCancel, methods }: 
     }
   }
 
+  // Function to clear the form fields
   const clearForm = () => {
     methods.reset()
   }

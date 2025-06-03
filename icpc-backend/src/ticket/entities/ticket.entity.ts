@@ -5,6 +5,19 @@ import { Note } from 'src/notes/entities/note.entity';
 import { Comment } from 'src/comment/entities/comment.entity';
 import { Column, Entity, JoinTable, ManyToOne } from 'typeorm';
 
+/**
+ * Ticket Entity
+ *
+ * Represents a moderation or tracking ticket in the system.
+ *
+ * Structure:
+ * - Fields: originalExerciseId, modifiedExerciseId, originalNewsId, modifiedNewsId, originalNoteId, modifiedNoteId, itemType, commentId, status, operation, otherId and those inherited from BaseEntity.
+ * - Relations: Comment, Excercise, Note, News.
+ *
+ * Date: 02 - 06 - 2025
+ * Author: Gerardo Omar Rodriguez Ramirez
+ */
+
 export enum TicketOperation {
   CREATE = 'create',
   UPDATE = 'update',
