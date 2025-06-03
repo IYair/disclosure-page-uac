@@ -30,6 +30,18 @@ export class DifficultyController {
     private readonly loggerService: LoggerService
   ) {}
 
+  /*
+  Input: createDifficultyDto: CreateDifficultyDto, req: any
+  Output: Promise<Difficulty>
+  Return value: Created difficulty entity
+  Function: Creates a new difficulty level
+  Variables: createDifficultyDto, req, newDifficulty
+  Route: POST /difficulty
+  Access: User
+  Method: POST
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @ApiBearerAuth()
   @Post()
   @UseGuards(AuthGuard)
@@ -54,6 +66,18 @@ export class DifficultyController {
     return newDifficulty;
   }
 
+  /*
+  Input: None
+  Output: Promise<Difficulty[]>
+  Return value: Array of all difficulty levels
+  Function: Retrieves all difficulty levels
+  Variables: None
+  Route: GET /difficulty
+  Access: Public
+  Method: GET
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Get()
   @ApiResponse({
     description: 'The difficulty level list has been successfully retrieved.'
@@ -64,6 +88,18 @@ export class DifficultyController {
     return this.difficultyService.findAll();
   }
 
+  /*
+  Input: id: string
+  Output: Promise<Difficulty>
+  Return value: Difficulty entity
+  Function: Retrieves a difficulty level by id
+  Variables: id
+  Route: GET /difficulty/:id
+  Access: Public
+  Method: GET
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Get(':id')
   @ApiResponse({
     description: 'The difficulty level has been successfully retrieved.'
@@ -74,6 +110,18 @@ export class DifficultyController {
     return this.difficultyService.findOne(id);
   }
 
+  /*
+  Input: id: string, updateDifficultyDto: UpdateDifficultyDto, req: any
+  Output: Promise<Difficulty>
+  Return value: Updated difficulty entity
+  Function: Updates a difficulty level by id
+  Variables: id, updateDifficultyDto, req, modifiedDifficulty
+  Route: PATCH /difficulty/:id
+  Access: User
+  Method: PATCH
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @ApiBearerAuth()
   @Patch(':id')
   @UseGuards(AuthGuard)
@@ -100,6 +148,18 @@ export class DifficultyController {
     return modifiedDifficulty;
   }
 
+  /*
+  Input: id: string, req: any
+  Output: Promise<Difficulty>
+  Return value: Deleted difficulty entity
+  Function: Deletes a difficulty level by id
+  Variables: id, req, deletedDifficulty
+  Route: DELETE /difficulty/:id
+  Access: User
+  Method: DELETE
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @ApiBearerAuth()
   @Delete(':id')
   @UseGuards(AuthGuard)

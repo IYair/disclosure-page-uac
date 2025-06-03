@@ -34,21 +34,69 @@ export class TicketController {
     private readonly loggerService: LoggerService
   ) {}
 
+  /*
+  Input: createTicketDto: CreateTicketDto
+  Output: Promise<Ticket>
+  Return value: Created ticket entity
+  Function: Creates a new ticket
+  Variables: createTicketDto
+  Route: POST /ticket
+  Access: Public
+  Method: POST
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Post()
   async create(@Body() createTicketDto: CreateTicketDto) {
     return this.ticketService.create(createTicketDto);
   }
 
+  /*
+  Input: None
+  Output: Promise<Ticket[]>
+  Return value: Array of all tickets
+  Function: Retrieves all tickets
+  Variables: None
+  Route: GET /ticket
+  Access: Public
+  Method: GET
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Get()
   findAll() {
     return this.ticketService.findAll();
   }
 
+  /*
+  Input: None
+  Output: Promise<Ticket[]>
+  Return value: Array of pending tickets
+  Function: Retrieves all pending tickets
+  Variables: None
+  Route: GET /ticket/pending
+  Access: Public
+  Method: GET
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Get('pending')
   findPending() {
     return this.ticketService.findPending();
   }
 
+  /*
+  Input: itemId: string, itemType: string
+  Output: Promise<{ hasPendingTicket: boolean }>
+  Return value: Object indicating if item has pending ticket
+  Function: Checks if an item has a pending ticket
+  Variables: itemId, itemType, hasPending
+  Route: GET /ticket/hasPending/:itemId/:itemType
+  Access: Public
+  Method: GET
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Get('hasPending/:itemId/:itemType')
   async hasPendingTicket(
     @Param('itemId') itemId: string,
@@ -74,11 +122,35 @@ export class TicketController {
     return { hasPendingTicket: hasPending };
   }
 
+  /*
+  Input: id: string
+  Output: Promise<Ticket>
+  Return value: Ticket entity
+  Function: Retrieves a ticket by id
+  Variables: id
+  Route: GET /ticket/:id
+  Access: Public
+  Method: GET
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.ticketService.findOne(id);
   }
 
+  /*
+  Input: id: string, req: any
+  Output: Promise<Ticket>
+  Return value: Approved ticket entity
+  Function: Approves a ticket by id
+  Variables: id, req
+  Route: POST /ticket/approve/:id
+  Access: Admin
+  Method: POST
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @ApiBearerAuth()
   @Auth(RoleEnum.ADMIN)
   @Post('approve/:id')
@@ -87,6 +159,18 @@ export class TicketController {
     return this.ticketService.approve(id);
   }
 
+  /*
+  Input: id: string, req: any
+  Output: Promise<Ticket>
+  Return value: Rejected ticket entity
+  Function: Rejects a ticket by id
+  Variables: id, req
+  Route: POST /ticket/reject/:id
+  Access: Admin
+  Method: POST
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @ApiBearerAuth()
   @Auth(RoleEnum.ADMIN)
   @Post('reject/:id')
@@ -95,6 +179,18 @@ export class TicketController {
     return this.ticketService.reject(id);
   }
 
+  /*
+  Input: id: string, updateTicketDto: UpdateTicketDto
+  Output: Promise<Ticket>
+  Return value: Updated ticket entity
+  Function: Updates a ticket by id
+  Variables: id, updateTicketDto
+  Route: PATCH /ticket/:id
+  Access: Admin
+  Method: PATCH
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @ApiBearerAuth()
   @Auth(RoleEnum.ADMIN)
   @Patch(':id')
@@ -102,6 +198,18 @@ export class TicketController {
     return this.ticketService.update(id, updateTicketDto);
   }
 
+  /*
+  Input: id: string
+  Output: Promise<Ticket>
+  Return value: Deleted ticket entity
+  Function: Deletes a ticket by id
+  Variables: id
+  Route: DELETE /ticket/:id
+  Access: Admin
+  Method: DELETE
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @ApiBearerAuth()
   @Auth(RoleEnum.ADMIN)
   @Delete(':id')

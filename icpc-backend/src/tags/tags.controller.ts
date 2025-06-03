@@ -30,6 +30,18 @@ export class TagsController {
     private readonly loggerService: LoggerService
   ) {}
 
+  /*
+  Input: createTagDto: CreateTagDto, req: any
+  Output: Promise<Tag>
+  Return value: Created tag entity
+  Function: Creates a new tag
+  Variables: createTagDto, req, newTag
+  Route: POST /tags
+  Access: User
+  Method: POST
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @ApiBearerAuth()
   @Post()
   @UseGuards(AuthGuard)
@@ -44,6 +56,18 @@ export class TagsController {
     return newTag;
   }
 
+  /*
+  Input: None
+  Output: Promise<Tag[]>
+  Return value: Array of all tags
+  Function: Retrieves all tags
+  Variables: None
+  Route: GET /tags
+  Access: Public
+  Method: GET
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Get()
   @ApiResponse({
     description: 'The tag list has been successfully retrieved.'
@@ -54,6 +78,18 @@ export class TagsController {
     return this.tagsService.findAll();
   }
 
+  /*
+  Input: id: string
+  Output: Promise<Tag>
+  Return value: Tag entity
+  Function: Retrieves a tag by id
+  Variables: id
+  Route: GET /tags/:id
+  Access: Public
+  Method: GET
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Get(':id')
   @ApiResponse({
     description: 'The tag has been successfully retrieved.'
@@ -64,6 +100,18 @@ export class TagsController {
     return this.tagsService.findOne(id);
   }
 
+  /*
+  Input: id: string, updateTagDto: UpdateTagDto, req: any
+  Output: Promise<Tag>
+  Return value: Updated tag entity
+  Function: Updates a tag by id
+  Variables: id, updateTagDto, req, modifiedTag
+  Route: PATCH /tags/:id
+  Access: User
+  Method: PATCH
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @ApiBearerAuth()
   @Patch(':id')
   @UseGuards(AuthGuard)
@@ -87,6 +135,18 @@ export class TagsController {
     return modifiedTag;
   }
 
+  /*
+  Input: id: string, req: any
+  Output: Promise<Tag>
+  Return value: Deleted tag entity
+  Function: Deletes a tag by id
+  Variables: id, req, deletedTag
+  Route: DELETE /tags/:id
+  Access: User
+  Method: DELETE
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @ApiBearerAuth()
   @Delete(':id')
   @UseGuards(AuthGuard)

@@ -32,6 +32,18 @@ export class ExcercisesController {
     private readonly loggerService: LoggerService // Inyecta el LoggerService
   ) {}
 
+  /*
+  Input: createExcerciseDto: CreateExcerciseDto, req: any
+  Output: Promise<Excercise>
+  Return value: Created exercise object
+  Function: Creates a new exercise
+  Variables: createExcerciseDto, req, createdExercise
+  Route: POST /excercises
+  Access: User, Admin
+  Method: POST
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Post()
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
@@ -51,12 +63,24 @@ export class ExcercisesController {
     this.loggerService.logChange(
       'excercises',
       'create',
-      req.user.name, // Nombre del usuario que hizo la operación
-      createdExercise.id // ID del ejercicio creado
-    ); // Log de la operación
+      req.user.name,
+      createdExercise.id
+    );
     return createdExercise;
   }
 
+  /*
+  Input: None
+  Output: Promise<Excercise[]>
+  Return value: Array of all exercises
+  Function: Retrieves all exercises
+  Variables: None
+  Route: GET /excercises
+  Access: Public
+  Method: GET
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Get()
   @ApiCreatedResponse({
     description: 'Los ejercicios se han obtenido exitosamente.'
@@ -67,6 +91,18 @@ export class ExcercisesController {
     return this.exercisesService.findAll();
   }
 
+  /*
+  Input: None
+  Output: Promise<number>
+  Return value: Count of exercises
+  Function: Gets the total count of exercises
+  Variables: None
+  Route: GET /excercises/count
+  Access: Public
+  Method: GET
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Get('/count')
   @ApiCreatedResponse({
     description: 'The exercise count has been successfully obtained.'
@@ -77,6 +113,18 @@ export class ExcercisesController {
     return this.exercisesService.getCount();
   }
 
+  /*
+  Input: id: string
+  Output: Promise<Excercise>
+  Return value: Exercise object
+  Function: Retrieves an exercise by id
+  Variables: id
+  Route: GET /excercises/:id
+  Access: Public
+  Method: GET
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Get(':id')
   @ApiCreatedResponse({
     description: 'El ejercicio se ha obtenido exitosamente.'
@@ -87,11 +135,35 @@ export class ExcercisesController {
     return this.exercisesService.findOne(id);
   }
 
+  /*
+  Input: body: GetExerciseListDto
+  Output: Promise<Excercise[]>
+  Return value: List of exercises matching criteria
+  Function: Gets a list of exercises based on filters
+  Variables: body
+  Route: POST /excercises/list
+  Access: Public
+  Method: POST
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Post('/list')
   getList(@Body() body: GetExerciseListDto) {
     return this.exercisesService.getList(body);
   }
 
+  /*
+  Input: query: string
+  Output: Promise<Excercise[]>
+  Return value: Array of exercises matching the query
+  Function: Searches exercises by query string
+  Variables: query
+  Route: POST /excercises/search/:query
+  Access: Public
+  Method: POST
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Post('search/:query')
   @ApiCreatedResponse({
     description: 'Los ejercicios se han obtenido exitosamente.'
@@ -102,6 +174,18 @@ export class ExcercisesController {
     return await this.exercisesService.search(query);
   }
 
+  /*
+  Input: id: string
+  Output: Promise<boolean>
+  Return value: True if log was successful, false otherwise
+  Function: Logs a read event for an exercise
+  Variables: id, item
+  Route: POST /excercises/log/:id
+  Access: Public
+  Method: POST
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Post('/log/:id')
   @ApiCreatedResponse({
     description: 'La lectura se ha registrado exitosamente.'
@@ -123,6 +207,18 @@ export class ExcercisesController {
     }
   }
 
+  /*
+  Input: id: string, updateExcerciseDto: UpdateExcerciseDto, req: any
+  Output: Promise<Excercise>
+  Return value: Updated exercise object
+  Function: Updates an exercise by id
+  Variables: id, updateExcerciseDto, req, updatedExercise
+  Route: PATCH /excercises/:id
+  Access: User
+  Method: PATCH
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Patch(':id')
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
@@ -140,15 +236,22 @@ export class ExcercisesController {
       id,
       updateExcerciseDto
     );
-    this.loggerService.logChange(
-      'excercises',
-      'update',
-      req.user.name, // Nombre del usuario que hizo la operación
-      id // ID del ejercicio actualizado
-    ); // Log de la operación
+    this.loggerService.logChange('excercises', 'update', req.user.name, id);
     return updatedExercise;
   }
 
+  /*
+  Input: id: string, user: string, req: any
+  Output: Promise<Excercise>
+  Return value: Deleted exercise object
+  Function: Deletes an exercise by id
+  Variables: id, user, req, deletedExercise
+  Route: DELETE /excercises/:id/:user
+  Access: User
+  Method: DELETE
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Delete(':id/:user')
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
@@ -163,12 +266,7 @@ export class ExcercisesController {
     @Req() req: any
   ) {
     const deletedExercise = await this.exercisesService.remove(id, user);
-    this.loggerService.logChange(
-      'excercises',
-      'delete',
-      req.user.name, // Nombre del usuario que hizo la operación
-      id // ID del ejercicio eliminado
-    ); // Log de la operación
+    this.loggerService.logChange('excercises', 'delete', req.user.name, id);
     return deletedExercise;
   }
 }
