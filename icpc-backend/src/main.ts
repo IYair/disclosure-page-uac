@@ -3,10 +3,25 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { readFileSync, existsSync } from 'node:fs';
+import { join } from 'path';
+
+if (
+  !existsSync(join(process.cwd(), 'key.pem')) ||
+  !existsSync(join(process.cwd(), 'cert.pem'))
+) {
+  throw new Error('SSL certificate files not found: key.pem or cert.pem');
+}
+
+const httpsOptions = {
+  key: readFileSync(join(process.cwd(), 'key.pem')),
+  cert: readFileSync(join(process.cwd(), 'cert.pem'))
+};
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    cors: true
+    cors: true,
+    httpsOptions
   });
 
   app.useStaticAssets(process.cwd() + process.env.ASSETS_PATH);
