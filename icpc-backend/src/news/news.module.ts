@@ -14,6 +14,21 @@ import { MailerModule } from 'src/mailer/mailer.module';
 import { UsersService } from 'src/users/users.service';
 import { Role } from 'src/roles/entities/role.entity';
 
+/**
+ * NewsModule
+ *
+ * Handles news-related features and dependencies.
+ *
+ * Structure:
+ * - Imports: Required modules for news management.
+ * - Providers: News service and related providers.
+ * - Controllers: News API endpoints.
+ * - Exports: News service for use in other modules.
+ *
+ * Date: 02 - 06 - 2025
+ * Author: Gerardo Omar Rodriguez Ramirez
+ */
+
 @Module({
   imports: [
     TypeOrmModule.forFeature([News, Image, Ticket, Comment, User, Role]),

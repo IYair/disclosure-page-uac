@@ -13,6 +13,19 @@ import { Tag } from 'src/tags/entities/tag.entity';
 import { Ticket } from 'src/ticket/entities/ticket.entity';
 import { Report } from 'src/report/entities/report.entity';
 
+/**
+ * Note Entity
+ *
+ * Represents a note or article in the system.
+ *
+ * Structure:
+ * - Fields: category, title, commentId, tags, body, isVisible, ticketOriginal, ticketModified, reports and those inherited from BaseEntity.
+ * - Relations: Category, Comment, Tag, Ticket, Report.
+ *
+ * Date: 02 - 06 - 2025
+ * Author: Gerardo Omar Rodriguez Ramirez
+ */
+
 @Entity()
 export class Note extends BaseEntity {
   @ManyToOne(() => Category, category => category.notes)

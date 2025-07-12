@@ -14,13 +14,23 @@ export const metadata: Metadata = {
   description: 'Plataforma para la divulgación de información y recursos del ICPC'
 }
 
+/*
+Input: A list of React Nodes (children), the montserrat font, and metadata for the page
+Output: A React component that serves as the root layout for the application
+Return value: A React component
+Function: It declares the root layout for all pages in the website, including the navbar, footer, and captcha wrapper
+Variables: children, metadata, montserrat
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
+
 export default function RootLayout({
   children
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
-    <html lang='en'>
+    <html lang='es'>
       <body className={classNames(montserrat.className, 'bg-white dark:bg-dark-secondary ')}>
         <NavbarComponent />
         <CaptchaWrapperComponent>{children}</CaptchaWrapperComponent>

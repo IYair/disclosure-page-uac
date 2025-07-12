@@ -4,12 +4,23 @@ import { Note } from 'src/notes/entities/note.entity';
 import { Ticket } from 'src/ticket/entities/ticket.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 
+/**
+ * Comment Entity
+ *
+ * Represents a comment in the system, used for notes, tickets, etc.
+ *
+ * Structure:
+ * - Fields: body, category, notes, tickets and those inherited from BaseEntity.
+ * - Relations: Category, Note, Ticket.
+ *
+ * Date: 02 - 06 - 2025
+ * Author: Gerardo Omar Rodriguez Ramirez
+ */
 @Entity()
 export class Comment extends BaseEntity {
   @Column({ nullable: false })
   body: string;
 
-  // un comentario solo puede pertenecer a una categoria
   @OneToMany(() => Category, category => category.comment)
   category: Category[];
 

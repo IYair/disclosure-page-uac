@@ -5,6 +5,15 @@ import { TextComponent } from '../text/TextComponent';
 import { enumTextTags } from '@/constants/types';
 import cn from 'classnames';
 
+/*
+Input: options (array of {index, id, name}), fieldName, id, labelText, selected, onChange, className
+Output: Props for SelectComponent
+Return value: ISelectProps interface
+Function: Describes the properties for the SelectComponent dropdown
+Variables: options, fieldName, id, labelText, selected, onChange, className
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 interface ISelectProps {
   options: {
     index: number;
@@ -20,29 +29,27 @@ interface ISelectProps {
 }
 
 /*
-Input: a list of strings that define CSS classes
+Input: classes (array of strings)
 Output: a single string of Tailwind CSS
 Return value: a string with the CSS classes
 Function: joins multiple strings into a single string
 Variables: classes
-Date: 21 - 03 - 2024
+Date: 28 - 05 - 2025
 Author: Gerardo Omar Rodriguez Ramirez
 */
-
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
 /*
-Input: a list of options with id, name and href; a fieldName, an id, a label, a selected value, a function to handle the change and a className
+Input: a list of options, fieldName, id, label, selected value, onChange handler, className
 Output: a dropdown menu with the options
 Return value: a dropdown menu component to display the options and return the selected option to a form
 Function: creates a dropdown menu with the options to be used in a form
-Variables: options {id, name}, fieldName, id, labelText, selected, onChange, className, reference, classes, open, newSelected, option
-Date: 21 - 03 - 2024
+Variables: options, fieldName, id, labelText, selected, onChange, className, reference, classes, open, newSelected, option
+Date: 28 - 05 - 2025
 Author: Gerardo Omar Rodriguez Ramirez
 */
-
 export function SelectComponent({ ...props }: Readonly<ISelectProps>) {
   const reference = React.useRef<HTMLSelectElement | null>(null);
   const classes = cn(props.className, 'w-full');
@@ -62,7 +69,7 @@ export function SelectComponent({ ...props }: Readonly<ISelectProps>) {
         id={props.id}
       />
       <Listbox
-        value={props.selected || ''} // Si selected es undefined, usa una cadena vacía
+        value={props.selected || ''} // Use empty string if selected is undefined
         onChange={(newSelected) => {
           props.onChange(newSelected);
           if (reference.current) {
@@ -81,7 +88,7 @@ export function SelectComponent({ ...props }: Readonly<ISelectProps>) {
                   sm:text-sm sm:leading-6 overflow-hidden`}
               >
                 <span className="block truncate">
-                  {props.selected || 'Elija una opción'} {/* Muestra el valor seleccionado o un texto por defecto */}
+                  {props.selected || 'Elija una opción'} {/* Show selected value or default text */}
                 </span>
                 <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                   <ChevronUpDownIcon
@@ -102,6 +109,7 @@ export function SelectComponent({ ...props }: Readonly<ISelectProps>) {
                   className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base 
                     shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                 >
+                  {/* Render each option in the dropdown */}
                   {props.options.map((option) => (
                     <ListboxOption
                       key={option.id}
@@ -117,11 +125,11 @@ export function SelectComponent({ ...props }: Readonly<ISelectProps>) {
                         <>
                           <div className="flex items-center">
                             <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate')}>
-                              {option.name} {/* Muestra el nombre de la opción */}
+                              {option.name} {/* Show the option name */}
                             </span>
                           </div>
 
-                          {selected ? ( // Si la opción está seleccionada, muestra un ícono de check
+                          {selected ? ( // If the option is selected, show a check icon
                             <span
                               className={classNames(
                                 active ? 'text-white' : 'text-indigo-600',

@@ -9,6 +9,16 @@ import useNewsStore from '@/store/useNewsStore'
 import useExcerciseStore from '@/store/useExcerciseStore'
 import useNoteStore from '@/store/useNoteStore'
 
+/*
+Input: A title string, an icon string, an info string, a href string, and a type number
+Output: An object with properties for the InfoCardComponent
+Return value: An object with the properties of the InfoCardComponent
+Function: To describe the properties of the InfoCardComponent
+Variables: title, icon, info, href, type
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
+
 interface IInfoCardComponentProps {
   title: string
   icon: string
@@ -18,12 +28,12 @@ interface IInfoCardComponentProps {
 }
 
 /*
-Input: the title, icon, information, href, and exercises to display in the card
-Output: a card with the title, icon, information, href to redirect, and a number of exercises
-Return value: a card component used to display information about the exercises, notes and news articles
-Function: creates a card component with the title, icon, information, href to redirect, and a number of exercises
-Variables: title, icon, info, href, exercises
-Date: 21 - 03 - 2024
+Input: An object with properties described in the IInfoCardComponentProps interface, see above
+Output: A card with all the information about the exercises, notes and news articles according to the type
+Return value: A React Node
+Function: Creates a small card with the title, icon, information and a link to see more
+Variables: title, icon, info, href, exercises, value
+Date: 28 - 05 - 2025
 Author: Gerardo Omar Rodriguez Ramirez
 */
 
@@ -34,6 +44,7 @@ export const InfoCardComponent = ({ title = 'Title', type = 0, href = '#', ...pr
 
   const [value, setValue] = useState<number>(0)
 
+  // An effect hook to fetch the count of items based on the type
   useEffect(() => {
     switch (type) {
       case 0:
@@ -57,6 +68,7 @@ export const InfoCardComponent = ({ title = 'Title', type = 0, href = '#', ...pr
     <BasicPanelComponent>
       <div className='flex justify-between items-center'>
         <div className='flex flex-row gap-2 '>
+          {/* Displays the icon if the "icon" string matches the value */}
           {props.icon === 'NewspaperIcon' && <NewspaperIcon className='w-6 h-6' />}
           {props.icon === 'ListBulletIcon' && <ListBulletIcon className='w-6 h-6' />}
           {props.icon === 'BookOpenIcon' && <BookOpenIcon className='w-6 h-6' />}
@@ -87,6 +99,7 @@ export const InfoCardComponent = ({ title = 'Title', type = 0, href = '#', ...pr
           tag={enumTextTags.p}
           sizeFont='s12'
           className='leading-5 text-gray-500'>
+          {/* Displays the info text or a default text if info is not provided */}
           {props.info || `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`}
         </TextComponent>
       </div>

@@ -3,6 +3,19 @@ import { Excercise } from 'src/excercises/entities/excercise.entity';
 import { Note } from 'src/notes/entities/note.entity';
 import { Column, Entity, ManyToMany } from 'typeorm';
 
+/**
+ * Tag Entity
+ *
+ * Represents a tag for categorizing notes, exercises, etc.
+ *
+ * Structure:
+ * - Fields: name, color, notes, excercises and those inherited from BaseEntity.
+ * - Relations: Note, Excercise.
+ *
+ * Date: 02 - 06 - 2025
+ * Author: Gerardo Omar Rodriguez Ramirez
+ */
+
 @Entity()
 export class Tag extends BaseEntity {
   @Column({ nullable: false, unique: true })

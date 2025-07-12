@@ -1,12 +1,17 @@
 import { ArrowLongLeftIcon, ArrowLongRightIcon } from '@heroicons/react/20/solid'
 
 /*
-Input: none
-Output: a set of hyperlinks to navigate through a list of items
-Return value: a set of hyperlinks as a component
-Function: creates a set of hyperlinks to jump to different pages of a list of items
-Variables: none
-Date: 11 - 04 - 2024
+***UNUSED***
+Originally created to implement pagination in the different tables across the website.
+Now this component is currently unused, and the tables display all results without a
+limit in length
+
+Input: None
+Output: A set of numbered buttons to navigate through a list of items
+Return value: A React Node
+Function: Creates a list of clickable numbers to divide the contents of a table in pages of a fixed length
+Variables: None
+Date: 28 - 05 - 2025
 Author: Gerardo Omar Rodriguez Ramirez
 */
 export const PaginationComponent = () => {

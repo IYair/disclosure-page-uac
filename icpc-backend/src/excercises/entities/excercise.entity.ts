@@ -16,6 +16,19 @@ import { Memory } from 'src/memory/entities/memory.entity';
 import { Ticket } from 'src/ticket/entities/ticket.entity';
 import { Report } from 'src/report/entities/report.entity';
 
+/**
+ * Excercise Entity
+ *
+ * Represents an exercise or problem in the system.
+ *
+ * Structure:
+ * - Fields: title, description, input, output, constraints, example_input, example_output, author, clue, solution, isVisible, user, category, difficulty, memoryId, time, tags, ticketOriginal, ticketModified, reports and those inherited from BaseEntity.
+ * - Relations: Category, Difficulty, Time, Memory, Tag, Ticket, Report, User.
+ *
+ * Date: 02 - 06 - 2025
+ * Author: Gerardo Omar Rodriguez Ramirez
+ */
+
 @Entity()
 export class Excercise extends BaseEntity {
   @Column({ nullable: false })

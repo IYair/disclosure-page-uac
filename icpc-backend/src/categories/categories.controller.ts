@@ -30,6 +30,18 @@ export class CategoriesController {
     private readonly loggerService: LoggerService
   ) {}
 
+  /*
+  Input: createCategoryDto: CreateCategoryDto, req: any
+  Output: Promise<Category>
+  Return value: Created category entity
+  Function: Creates a new category
+  Variables: createCategoryDto, req, newCategory
+  Route: POST /categories
+  Access: User
+  Method: POST
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Post()
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
@@ -49,18 +61,54 @@ export class CategoriesController {
     return newCategory;
   }
 
+  /*
+  Input: None
+  Output: Promise<Category[]>
+  Return value: Array of all categories
+  Function: Retrieves all categories
+  Variables: None
+  Route: GET /categories
+  Access: Public
+  Method: GET
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Get()
   findAll() {
     return this.categoriesService.findAll();
   }
 
+  /*
+  Input: id: string
+  Output: Promise<Category>
+  Return value: Category entity
+  Function: Retrieves a category by id
+  Variables: id
+  Route: GET /categories/:id
+  Access: Public
+  Method: GET
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.categoriesService.findOne(id);
   }
 
-  @Patch(':id')
+  /*
+  Input: id: string, updateCategoryDto: UpdateCategoryDto, req: any
+  Output: Promise<Category>
+  Return value: Updated category entity
+  Function: Updates a category by id
+  Variables: id, updateCategoryDto, req, modifiedCategory
+  Route: PATCH /categories/:id
+  Access: User
+  Method: PATCH
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @ApiBearerAuth()
+  @Patch(':id')
   @UseGuards(AuthGuard)
   @ApiCreatedResponse({
     description: 'The note has been successfully updated.'
@@ -85,8 +133,20 @@ export class CategoriesController {
     return modifiedCategory;
   }
 
-  @Delete(':id')
+  /*
+  Input: id: string, req: any
+  Output: Promise<Category>
+  Return value: Deleted category entity
+  Function: Deletes a category by id
+  Variables: id, req, deletedCategory
+  Route: DELETE /categories/:id
+  Access: User
+  Method: DELETE
+  Date: 02 - 06 - 2025
+  Author: Gerardo Omar Rodriguez Ramirez
+  */
   @ApiBearerAuth()
+  @Delete(':id')
   @UseGuards(AuthGuard)
   @ApiCreatedResponse({
     description: 'The note has been successfully deleted.'

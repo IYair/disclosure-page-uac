@@ -1,3 +1,4 @@
+
 import React from 'react';
 import ExerciseCardComponent from '@/app/components/cards/ExerciseCardComponent';
 import NewsCardComponent from '@/app/components/cards/NewsCardComponent';
@@ -10,9 +11,19 @@ import rehypeKatex from 'rehype-katex';
 import { TextComponent } from '@/app/components/text/TextComponent';
 import { TicketActions } from '@/app/ticket/TicketActions';
 
+/*
+Input: params (object with id string)
+Output: JSX.Element with the ticket detail, update, or 404 page
+Return value: JSX.Element
+Function: Renders the ticket detail page, showing the original and modified content for updates, or a 404 message if not found
+Variables: params, ticket, pageContent, serializeNote
+Date: 29 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 const TicketPage = async ({ params }: Readonly<{ params: { id: string } }>) => {
   const ticket: Ticket = await useUtilsStore.getState().getTicket(params.id);
 
+  // Function to serialize MDX content with math support
   async function serializeNote(mdx: string) {
     return await serialize(mdx, {
       mdxOptions: {
@@ -22,11 +33,14 @@ const TicketPage = async ({ params }: Readonly<{ params: { id: string } }>) => {
     });
   }
 
+  // If the ticket is not found, return a loading message
   if (!ticket) return <div>Cargando...</div>;
 
   let pageContent = <></>;
+  // Check if the ticket is an update operation
   if (ticket.operation === TicketOperation.UPDATE) {
     switch (ticket.itemType) {
+      // Handle the case where the ticket is an update for an exercise
       case TicketType.EXERCISE:
         const originalDescription = await serializeNote(ticket.originalExerciseId.description)
         const originalSolution = await serializeNote(ticket.originalExerciseId.solution)
@@ -48,7 +62,7 @@ const TicketPage = async ({ params }: Readonly<{ params: { id: string } }>) => {
                 exercise={ticket.originalExerciseId}
                 description={originalDescription.compiledSource}
                 solution={originalSolution.compiledSource}
-                clue={ticket.originalExerciseId.clue ? ticket.originalExerciseId.clue : ''} // Mostrar pista
+                clue={ticket.originalExerciseId.clue ? ticket.originalExerciseId.clue : ''}
               />
             </div>
             <div>
@@ -65,13 +79,13 @@ const TicketPage = async ({ params }: Readonly<{ params: { id: string } }>) => {
                 exercise={ticket.modifiedExerciseId}
                 description={modifiedDescription.compiledSource}
                 solution={modifiedSolution.compiledSource}
-                clue={ticket.modifiedExerciseId.clue ? ticket.modifiedExerciseId.clue : ''} // Mostrar pista
+                clue={ticket.modifiedExerciseId.clue ? ticket.modifiedExerciseId.clue : ''}
               />
             </div>
           </div>
         )
         break
-
+      // Handle the case where the ticket is an update for a news article
       case TicketType.NEWS:
         pageContent = (
           <div className='grid place-items-center grid-cols-1 gap-16'>
@@ -102,7 +116,7 @@ const TicketPage = async ({ params }: Readonly<{ params: { id: string } }>) => {
           </div>
         )
         break
-
+      // Handle the case where the ticket is an update for a note
       case TicketType.NOTE:
         const originalContent = await serializeNote(ticket.originalNoteId.body)
         const modifiedContent = await serializeNote(ticket.modifiedNoteId.body)
@@ -143,6 +157,7 @@ const TicketPage = async ({ params }: Readonly<{ params: { id: string } }>) => {
         break
     }
   } else {
+    // If the ticket is not an update, display the original content
     switch (ticket.itemType) {
       case TicketType.EXERCISE:
         const description = await serializeNote(ticket.originalExerciseId.description);
@@ -160,12 +175,12 @@ const TicketPage = async ({ params }: Readonly<{ params: { id: string } }>) => {
               exercise={ticket.originalExerciseId}
               description={description.compiledSource}
               solution={solution.compiledSource}
-              clue={ticket.originalExerciseId.clue ? ticket.originalExerciseId.clue : ''} // Mostrar pista
+              clue={ticket.originalExerciseId.clue ? ticket.originalExerciseId.clue : ''}
             />
           </>
         )
         break
-
+      // Handle the case where the ticket is for a news article
       case TicketType.NEWS:
         pageContent = (
           <>
@@ -182,7 +197,7 @@ const TicketPage = async ({ params }: Readonly<{ params: { id: string } }>) => {
           </>
         )
         break
-
+      // Handle the case where the ticket is for a note
       case TicketType.NOTE:
         const body = await serializeNote(ticket.originalNoteId.body)
         pageContent = (

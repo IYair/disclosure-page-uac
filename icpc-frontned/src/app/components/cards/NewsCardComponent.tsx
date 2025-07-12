@@ -9,6 +9,16 @@ import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
 import ReportButtonComponent from '../buttons/ReportButtonComponent'
 
+/*
+Input: An id string, an optional itemId string, and an optional isTicketPage boolean
+Output: An object with properties for the NewsCardComponent
+Return value: An object with the properties of the NewsCardComponent
+Function: To describe the properties (required and optional) of the NewsCardComponent
+Variables: id, itemId, isTicketPage
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
+
 interface NewsCardComponentProps {
   id: string
   itemId?: string
@@ -16,18 +26,28 @@ interface NewsCardComponentProps {
 }
 
 /*
-Input: the title of the news article, the author, the creation date, and the body of the news article
-Output: a card with the title, author, creation date, and body of the news article
-Return value: a card component used to display news articles
-Function: creates a card component with the title, author, creation date, and body of the news article
-Variables: title, author, createdAt, body
-Date: 21 - 03 - 2024
+Input: A single id string representing the news article
+Output: A News object containing the article's details
+Return value: A News object, see News type in '@/constants/types'
+Function: Fetches a news article by its id from the news store
+Variables: id
+Date: 28 - 05 - 2025
 Author: Gerardo Omar Rodriguez Ramirez
 */
 
 async function getNewsArticle(id: string): Promise<News> {
   return await useNewsStore.getState().getNewsArticle(id)
 }
+
+/*
+Input: An object with properties described in the NewsCardComponentProps interface, see above
+Output: A card component that displays a news article with title, image, author, date, and body
+Return value: A React Node
+Function: Display a card with all the contents of a news article
+Variables: isTicketPage, news, body
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 
 async function NewsCardComponent({ isTicketPage = false, ...props  }: Readonly<NewsCardComponentProps>) {
   const news = await getNewsArticle(props.id)
@@ -37,9 +57,10 @@ async function NewsCardComponent({ isTicketPage = false, ...props  }: Readonly<N
       rehypePlugins: [rehypeKatex as any]
     }
   })
-  //const image = await getCover(news.imageId.id)
+
   return (
     <BasicPanelComponent backgroundColor='bg-white dark:bg-dark-primary w-full md:w-11/12'>
+      { /* Renders the report button if this component is NOT rendered inside the page of a ticket */}
       {!isTicketPage && (
         <div className='flex justify-end w-full px-16'>
           <ReportButtonComponent
@@ -62,11 +83,13 @@ async function NewsCardComponent({ isTicketPage = false, ...props  }: Readonly<N
       <TextComponent
         sizeFont='s14'
         className='text-gray-500 font-medium my-4'>
+        { /* Displays the username of the professor that uploaded the article or "Anónimo" if the value is null */}
         {news.created_by ?? 'Anónimo'}
       </TextComponent>
       <TextComponent
         sizeFont='s14'
         className='text-gray-500 font-medium my-4'>
+        { /* Displays the date of creation of the article in YYYY-MM-DD format */}
         {news.created_at ? `${news.created_at.split('Z')[0].toString().split('T')[0]}` : ''}
       </TextComponent>
       <MarkdownBodyComponent body={body.compiledSource} />

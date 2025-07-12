@@ -1,16 +1,36 @@
 'use client';
-
 import React, { useState } from 'react';
 import { TextComponent } from '../text/TextComponent';
+
+/*
+Input: A title string and a body string
+Output: An object with properties for the SimpleCollapsibleCardComponent
+Return value: An object with the properties of the SimpleCollapsibleCardComponent
+Function: To describe the properties of the SimpleCollapsibleCardComponent
+Variables: title, body
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 
 interface SimpleCollapsibleCardComponentProps {
   title: string;
   body: string;
 }
 
+/*
+Input: An object with properties described in the SimpleCollapsibleCardComponentProps interface, see above
+Output: A collapsible card component that displays a title and body content
+Return value: A React Node
+Function: To display a hint for exercises in a card format that can be expanded or collapsed
+Variables: isOpen, title, body
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
+
 const SimpleCollapsibleCardComponent: React.FC<SimpleCollapsibleCardComponentProps> = ({ title, body }) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  // Function to toggle the card open/close state
   const toggleCard = () => {
     setIsOpen(!isOpen);
   };

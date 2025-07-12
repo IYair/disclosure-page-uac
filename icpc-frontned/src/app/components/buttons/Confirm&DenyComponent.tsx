@@ -1,9 +1,29 @@
 import React from 'react';
 
+/*
+Input: A pair of callback functions
+Output: An object with properties for the ConfirmDenyComponent
+Return value: An object with the properties of the ConfirmDenyComponent
+Function: To define the properties (required and optional) of the ConfirmDenyComponent
+Variables: onConfirm, onCancel
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
+
 interface ConfirmDenyProps {
   onConfirm: () => void;
   onCancel: () => void;
 }
+
+/*
+Input: An object with properties for the ConfirmDenyComponent, see above
+Output: A modal component with buttons to confirm or deny an action
+Return value: A React component that renders a confirmation modal
+Function: To create a confirmation modal and execute a callback function according to the user's choice
+Variables: onConfirm, onCancel
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 
 const ConfirmDenyComponent: React.FC<ConfirmDenyProps> = ({ onConfirm, onCancel }) => {
   return (

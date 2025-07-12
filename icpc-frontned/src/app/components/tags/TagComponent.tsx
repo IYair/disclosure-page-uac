@@ -3,6 +3,15 @@ import { TextComponent } from '../text/TextComponent'
 import { XMarkIcon } from '@heroicons/react/20/solid'
 import { readableColor, getLuminance } from 'polished'
 
+/*
+Input: color (string, hex color code), tagName (string, tag label), showIcon (boolean, show close icon)
+Output: TagProps object for TagComponent
+Return value: TagProps interface
+Function: Describes the properties for the TagComponent (color, label, icon visibility)
+Variables: color, tagName, showIcon
+Date: 29 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 interface TagProps {
   color: string
   tagName: string
@@ -10,29 +19,36 @@ interface TagProps {
 }
 
 /*
-Input: tag properties containing a color, a name, and a boolean to show an icon
-Output: a tag badge with a name and a color
-Return value: a badge component that represents a tag
-Function: creates a badge component to represent a tag, assigning a color and a name
-Variables: color, tagName, showIcon
-Date: 12 - 04 - 2024
+Input: backgroundColor (string, hex color code)
+Output: string (text color, either #FFFFFF or #000000)
+Return value: string (text color)
+Function: Determines the appropriate text color for a given background color, forcing white for specific reds
+Variables: luminance, forceWhiteFor
+Date: 29 - 05 - 2025
 Author: Gerardo Omar Rodriguez Ramirez
 */
-
 const determineTextColor = (backgroundColor: string): string => {
   const luminance = getLuminance(backgroundColor);
-  
-  // Si el color es rojo puro o similar, forzar blanco
-  const forceWhiteFor = ['#FF0000', '#E60026', '#C21807']; // Puedes agregar más tonalidades
+  const forceWhiteFor = ['#FF0000', '#E60026', '#C21807'];
 
+  // If the background color is one of the specified colors, force white text
   if (forceWhiteFor.includes(backgroundColor.toUpperCase())) {
     return '#FFFFFF';
   }
 
-  // Condición personalizada basada en luminancia (puedes ajustar el umbral)
+  // Custom condition based on luminance
   return luminance > 0.5 ? '#000000' : '#FFFFFF';
 };
 
+/*
+Input: color (hex string), tagName (string), showIcon (boolean)
+Output: Tag UI element with label and optional close icon
+Return value: JSX.Element (TagComponent UI)
+Function: Renders a tag with a background color, label, and optional close icon
+Variables: backgroundColor, textColor, props
+Date: 29 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 const TagComponent = ({ ...props }: Readonly<TagProps>) => {
   const backgroundColor = `#${props.color}`
   const textColor = determineTextColor(backgroundColor);
@@ -47,6 +63,7 @@ const TagComponent = ({ ...props }: Readonly<TagProps>) => {
         style={{ color: textColor }}>
         {props.tagName}
       </TextComponent>
+      {/* If showIcon is true, display the close button */}
       {props.showIcon ? (
         <button>
           <XMarkIcon className='block h-4 w-4' style={{ color: textColor }} />

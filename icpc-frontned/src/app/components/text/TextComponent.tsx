@@ -3,6 +3,15 @@ import { enumTextTags, IReactNode } from '@/constants/types'
 import cn from 'classnames'
 import { ReactNode } from 'react'
 
+/*
+Input: className (string or array of strings for custom classes), tag (enumTextTags, HTML tag), sizeFont (font size), children (content), other props
+Output: ITextComponentProps object for TextComponent
+Return value: ITextComponentProps interface
+Function: Describes the properties for the TextComponent (tag, font size, class, children, etc.)
+Variables: className, tag, sizeFont, children, [key: string]: any
+Date: 29 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 interface ITextComponentProps extends IReactNode {
   tag?: enumTextTags
   sizeFont?: 's12' | 's14' | 's16' | 's18' | 's20' | 's24' | 's28' | 's36' | 's48' | 's60' | 's72' | 's96' | 's128'
@@ -28,15 +37,14 @@ const sizeClasses = {
 }
 
 /*
-Input: an HTML tag, a font size, a set of TailwindCSS classes, and a set of children
-Output: a string of text surrounded in a specific HTML tag with a specific font size and CSS classes
-Return value: a string of text as a component
-Function: creates a string of text and sets the style
-Variables: tag, sizeFont, className, children
-Date: 12 - 04 - 2024
+Input: className (string or array), tag (enumTextTags), sizeFont (font size), children (content), other props
+Output: Text element with custom tag, font size, and classes
+Return value: JSX.Element (TextComponent UI)
+Function: Renders a text element with a customizable tag, font size, and classes, displaying children content
+Variables: CustomTag, classes, props
+Date: 29 - 05 - 2025
 Author: Gerardo Omar Rodriguez Ramirez
 */
-
 export const TextComponent = ({ className = [], tag = enumTextTags.p, sizeFont = 's16', ...props }: ITextComponentProps) => {
   const CustomTag = tag
   const classes = cn('montserrat', `${className}`, `${sizeClasses[sizeFont]}`)
@@ -46,6 +54,7 @@ export const TextComponent = ({ className = [], tag = enumTextTags.p, sizeFont =
       className={classes}
       {...props}
     >
+      {/* Either show the children of the component or an empty string */}
       {props.children ? props.children : ''}
     </CustomTag>
   )

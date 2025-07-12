@@ -20,18 +20,19 @@ import { ArrowUturnLeftIcon, XMarkIcon } from '@heroicons/react/20/solid'
 import ConfirmDenyComponent from '../buttons/Confirm&DenyComponent'
 
 /*
-Input: None
-Output: a form to create an exercise
-Return value: a modal form component to create an exercise
-Function: creates a form to write exercises, handles sending the data to the database
-Variables: methods, tags, categories, difficulty, timeLimits, memoryLimits
-Date: 21 - 03 - 2024
+Input: An optional id, a function to execute when the modal is closed
+Output: An object with properties for the CreateExerciseComponent
+Return value: An object with the properties of the CreateExerciseComponent
+Function: To describe the properties (required and optional) of the CreateExerciseComponent
+Variables: id, onClose
+Date: 28 - 05 - 2025
 Author: Gerardo Omar Rodriguez Ramirez
 */
 
 interface CreateExerciseComponentProps {
   id?: string
   onClose: () => void
+  onCreate: () => void
 }
 
 const CreateExcerciseComponent = (props: CreateExerciseComponentProps) => {
@@ -65,6 +66,7 @@ const CreateExcerciseComponent = (props: CreateExerciseComponentProps) => {
   let [memoryLimits, setMemoryLimits] = useState<MemoryLimit[]>(memoryLimitList)
   let [update, setUpdate] = useState<boolean>(false)
 
+  // Effect to fetch initial data for the form
   useEffect(() => {
     const fetchExercise = async () => {
       try {
@@ -84,14 +86,18 @@ const CreateExcerciseComponent = (props: CreateExerciseComponentProps) => {
           setMemoryLimits(response)
         })
 
+        // If an ID is provided, fetch the exercise data to pre-fill the form
         if (props.id) {
           const exercise = await getExercise(props.id)
+          // If the exercise is found, set the form values and selected options
           if (exercise) {
             methods.reset({
               name: exercise.title,
               category: { label: exercise.category.name, value: exercise.category.id },
               difficulty: { label: exercise.difficulty.name, value: exercise.difficulty.id },
+              // If time limit is set, format it for the form
               time: exercise.time ? { label: exercise.time.timeLimit.toString(), value: exercise.time.id } : null,
+              // If memory limit is set, format it for the form
               memoryId:
                 exercise.memoryId !== null ? { label: exercise.memoryId.memoryLimit.toString(), value: exercise.memoryId.id } : null,
               input: exercise.input,
@@ -107,6 +113,7 @@ const CreateExcerciseComponent = (props: CreateExerciseComponentProps) => {
             })
             setSelectedCategory({ label: exercise.category.name, value: exercise.category.id })
             setSelectedTags(exercise.tags)
+            // If memory limit is set, format it for the form
             setSelectedMemory(
               exercise.memoryId !== null ? { label: exercise.memoryId.memoryLimit.toString(), value: exercise.memoryId.id } : null
             )
@@ -134,7 +141,9 @@ const CreateExcerciseComponent = (props: CreateExerciseComponentProps) => {
     fetchExercise()
   }, [props.id, methods, getExercise, getCategories, getDifficulties, getTags, getTimeLimit, getMemoryLimit, update])
 
+  // Function to handle form submission
   const onSubmit: SubmitHandler<FieldValues> = async formData => {
+    // Function to process the response from the API after creating or updating an exercise
     const processResponse = async (response: any) => {
       const toastOptions = {
         duration: 5000,
@@ -143,6 +152,7 @@ const CreateExcerciseComponent = (props: CreateExerciseComponentProps) => {
           color: '#ffffff'
         }
       }
+      // If the response contains an ID, it means the exercise was created or updated successfully and the modal closes
       if (response.id) {
         toast.success(props.id ? 'Ejercicio Actualizado' : 'Ejercicio creado con éxito.', toastOptions)
         props.onClose()
@@ -174,6 +184,7 @@ const CreateExcerciseComponent = (props: CreateExerciseComponentProps) => {
       role: String(useAuthStore.getState().user?.role)
     }
 
+    // If an ID is provided, update the existing exercise, otherwise create a new one
     if (props.id) {
       const response = await updateExcercise(exerciseData, props.id)
       await processResponse(response)
@@ -183,6 +194,7 @@ const CreateExcerciseComponent = (props: CreateExerciseComponentProps) => {
     }
   }
 
+  // Function to handle the creation of a new category
   const handleCreateCategory = async (newValue: Option) => {
     const category = newValue.label
     const response = await createCategory({ name: category, commentId: category })
@@ -200,6 +212,7 @@ const CreateExcerciseComponent = (props: CreateExerciseComponentProps) => {
     setUpdate(!update)
   }
 
+  // Function to handle the creation of a new time limit
   const handleCreateTimeLimit = async (newValue: Option) => {
     const timeLimit = parseInt(newValue.label)
     const response = await createTimeLimit(timeLimit)
@@ -217,12 +230,13 @@ const CreateExcerciseComponent = (props: CreateExerciseComponentProps) => {
     setUpdate(!update)
   }
 
-  // ...existing code...
-
+  // Function to clear the form and reset the selected options
   const clearForm = () => {
+    // If an id was provided, fetch the exercise data to reset the form
     if (props.id) {
       const fetchExercise = async () => {
         const exercise = await getExercise(props.id!)
+        // If the exercise is found, reset the form with its data
         if (exercise) {
           methods.reset({
             name: exercise.title,
@@ -256,17 +270,20 @@ const CreateExcerciseComponent = (props: CreateExerciseComponentProps) => {
       }
       fetchExercise()
     } else {
+      // If no id was provided, reset the form to its initial state
       methods.reset()
       setSelectedCategory(null)
       setSelectedMemory(null)
     }
   }
+
+  // Function to validate the form data before submission
   const dataValidate = () => {
     const data = methods.getValues()
     const missingFields = []
     const invalidFields = []
 
-    // Validación de campos obligatorios
+    // Validation of required fields
     if (!data.name) missingFields.push('Nombre del ejercicio')
     if (data.category.length === 0) missingFields.push('Categoría')
     if (data.difficulty.length === 0) missingFields.push('Nivel de dificultad')
@@ -277,13 +294,13 @@ const CreateExcerciseComponent = (props: CreateExerciseComponentProps) => {
     if (data.tags.length === 0) missingFields.push('Etiquetas')
     if (!data.description) missingFields.push('Descripción del problema')
 
-    // Validación de longitud de caracteres
+    // Validation of field length
     if (data.input && data.input.length > 255) invalidFields.push('Entrada esperada')
     if (data.output && data.output.length > 255) invalidFields.push('Salida esperada')
     if (data.example_input && data.example_input.length > 255) invalidFields.push('Ejemplo de entrada')
     if (data.example_output && data.example_output.length > 255) invalidFields.push('Ejemplo de salida')
 
-    // Mostrar errores si hay campos faltantes o inválidos
+    // Show missing fields
     if (missingFields.length > 0) {
       toast.error(`Favor de llenar los datos de: ${missingFields.join(', ')}`, {
         duration: 5000,
@@ -296,6 +313,7 @@ const CreateExcerciseComponent = (props: CreateExerciseComponentProps) => {
       return
     }
 
+    // Show invalid fields
     if (invalidFields.length > 0) {
       toast.error(`Los siguientes campos no deben exceder 255 caracteres: ${invalidFields.join(', ')}`, {
         duration: 5000,
@@ -312,6 +330,7 @@ const CreateExcerciseComponent = (props: CreateExerciseComponentProps) => {
   }
   return (
     <>
+      {/* Display the ConfirmDenyComponent according to state */}
       {showConfirm && (
         <ConfirmDenyComponent
           onConfirm={() => {
@@ -357,6 +376,7 @@ const CreateExcerciseComponent = (props: CreateExerciseComponentProps) => {
               tag={enumTextTags.h1}
               sizeFont='s16'
               className='dark:text-dark-accent'>
+              {/* Display the appropriate text if an id was provided */}
               {props.id ? 'Editar ejercicio' : 'Crear ejercicio'}
             </TextComponent>
           </div>
@@ -547,6 +567,7 @@ const CreateExcerciseComponent = (props: CreateExerciseComponentProps) => {
           </div>
           <div className='flex flex-col items-center'>
             <SubmitComponent
+              // Set the text based on whether an ID is provided
               text={props.id ? 'Actualizar ejercicio' : 'Crear ejercicio'}
               action={dataValidate}
             />

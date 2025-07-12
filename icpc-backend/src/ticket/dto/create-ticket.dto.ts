@@ -1,3 +1,13 @@
+/*
+Input: itemType: string, description: string, operation: string, originalExerciseId: string, modifiedExerciseId: string, originalNoteId: string, modifiedNoteId: string, originalNewsId: string, modifiedNewsId: string, status: string
+Output: Ticket DTO object
+Return value: Instance of CreateTicketDto
+Function: Data Transfer Object for creating a new ticket
+Variables: itemType, description, operation, originalExerciseId, modifiedExerciseId, originalNoteId, modifiedNoteId, originalNewsId, modifiedNewsId, status
+Date: 03 - 06 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
+
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, ValidateIf } from 'class-validator';
 

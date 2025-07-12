@@ -13,21 +13,29 @@ import { toast } from 'sonner'
 import { ArrowUturnLeftIcon, XMarkIcon } from '@heroicons/react/20/solid'
 import ConfirmDenyComponent from '../buttons/Confirm&DenyComponent'
 
+/*
+Input: onClose (function), id (optional string)
+Output: Props for CreateUserComponent
+Return value: ICreateUserProps interface
+Function: Describes the properties for the CreateUserComponent modal
+Variables: onClose, id
+Date: 28 - 05 - 2025
+Author: Gerardo Omar Rodriguez Ramirez
+*/
 interface ICreateUserProps {
   onClose: () => void
   id?: string
 }
 
 /*
-Input: a set of methods and a state to handle the form
-Output: a modal form to create a user account
-Return value: a modal form component used to create a user account
-Function: creates a modal form component able to return the answers of a form
-Variables: methods, response, createUser, onSubmit, toast, 
-Date: 22 - 03 - 2024
+Input: onClose, id (from ICreateUserProps)
+Output: Modal for creating or editing a user account
+Return value: React Node (modal component)
+Function: Renders a modal for creating or editing a user, including form fields for user data and admin permissions
+Variables: methods, createUser, updateUser, getUser, user, currentUser, showConfirm, useEffect, fetchUser, onSubmit, clearForm
+Date: 28 - 05 - 2025
 Author: Gerardo Omar Rodriguez Ramirez
 */
-
 const CreateUserComponent = (props: ICreateUserProps) => {
   const methods = useForm<FieldValues>()
   const createUser = useStore(state => state.createUser)
@@ -37,11 +45,15 @@ const CreateUserComponent = (props: ICreateUserProps) => {
   const [currentUser, setCurrentUser] = useState<IUser>({} as IUser)
   const [showConfirm, setShowConfirm] = React.useState(false)
 
+  // Effect hook to load the user if an ID is provided
   useEffect(() => {
+    // Function to fetch user data based on the provided ID
     const fetchUser = async () => {
       try {
+        // If an ID is provided, fetch the user data
         if (props.id) {
           const user = await getUser(props.id)
+          // If user data is found, reset the form with the user's details
           if (user) {
             methods.reset({
               name: user.name,
@@ -75,6 +87,7 @@ const CreateUserComponent = (props: ICreateUserProps) => {
     fetchUser()
   }, [props.id, methods, getUser])
 
+  // Function to handle form submission
   const onSubmit: SubmitHandler<FieldValues> = async data => {
     const userData = {
       name: String(data.name),
@@ -86,9 +99,11 @@ const CreateUserComponent = (props: ICreateUserProps) => {
       isAdmin: Boolean(data.isAdmin)
     }
 
+    // If an id was provided, update the user data; otherwise create a new account
     const response = props.id
       ? await updateUser(props.id, { ...userData, role: user!.role, editorId: user!.id })
       : await createUser(userData)
+    // if an id was found in the response, the request was successful
     if ('id' in response) {
       toast.success(`La cuenta de usuario se ha ${props.id ? 'actualizado' : 'creado'} con éxito.`, {
         duration: 5000,
@@ -109,7 +124,9 @@ const CreateUserComponent = (props: ICreateUserProps) => {
     }
   }
 
+  // Function to clear the form fields
   const clearForm = () => {
+    // Reset the form fields to their initial values
     if (props.id) {
       methods.reset({
         name: currentUser.name,
@@ -127,6 +144,7 @@ const CreateUserComponent = (props: ICreateUserProps) => {
 
   return (
     <>
+      {/* If the showConfirm state is true, show the confirmation modal */}
       {showConfirm && (
         <ConfirmDenyComponent
           onConfirm={() => {
@@ -173,6 +191,7 @@ const CreateUserComponent = (props: ICreateUserProps) => {
               tag={enumTextTags.h1}
               sizeFont='s16'
               className='dark:text-dark-accent'>
+              {/* Display the appropriate text if an id was provided */}
               {props.id ? 'Editar usuario' : 'Crear cuenta de usuario'}
             </TextComponent>
             <TextFieldComponent
@@ -233,6 +252,7 @@ const CreateUserComponent = (props: ICreateUserProps) => {
               register={methods.register}
             />
             <SubmitComponent
+              // Display the appropriate text if an id was provided
               text={props.id ? 'Actualizar cuenta' : 'Crear cuenta'}
               action={() => {}}
             />
