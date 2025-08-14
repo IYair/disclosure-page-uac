@@ -24,7 +24,6 @@
     "@hookform/resolvers": "^3.10.0",
     "@nestjs-modules/mailer": "^1.6.1",
     "@nestjs/axios": "^4.0.0",
-
     "@nestjs/common": "^11.0.13",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.13",
@@ -38,6 +37,8 @@
     "bcrypt": "^5.1.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
+    "fs": "^0.0.1-security",
+    "googleapis": "^153.0.0",
     "mysql2": "^3.5.2",
     "node-fetch": "^2.6.1",
     "nodemailer": "^7.0.2",
