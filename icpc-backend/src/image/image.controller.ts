@@ -139,13 +139,27 @@ export class ImageController {
   @ApiResponse({
     description: 'The image has been successfully updated.'
   })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Archivo a subir',
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary'
+        }
+      }
+    }
+  })
+  @UseInterceptors(FileInterceptor('file'))
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiInternalServerErrorResponse({ description: 'Internal Server Error' })
   async update(
     @Param('id') id: string,
-    @Body() updateImageDto: UpdateImageDto
+    @UploadedFile() file: Express.Multer.File
   ) {
-    return await this.imageService.update(id, updateImageDto);
+    return await this.imageService.update(id, file);
   }
 
   /*
