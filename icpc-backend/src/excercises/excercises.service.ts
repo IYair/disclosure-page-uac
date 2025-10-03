@@ -175,12 +175,14 @@ export class ExcercisesService {
       commentId: commentId
     });
     const savedTicket = await this.ticketRepository.save(ticket);
-    this.mailerService.sendMail(
-      true,
-      'create',
-      savedExcercise.title,
-      'ejercicio'
-    );
+    if (createExcerciseDto.role !== 'admin') {
+      this.mailerService.sendMail(
+        true,
+        'create',
+        savedExcercise.title,
+        'ejercicio'
+      );
+    }
     // If the exercise and ticket were successfully saved, return the exercise object
     if (savedExcercise && savedTicket) {
       return savedExcercise;
