@@ -108,7 +108,9 @@ export class NotesService {
     const savedTicket = await this.ticketRepository.save(ticket);
     // If the ticket is successfully saved and the note is created, send a mail notification
     if (newNote && savedTicket) {
-      this.mailerService.sendMail(true, 'create', newNote.title, 'apunte');
+      if (createNoteDto.role !== 'admin') {
+        this.mailerService.sendMail(true, 'create', newNote.title, 'apunte');
+      }
       return {
         id: newNote.id,
         categoryId: newNote.category,

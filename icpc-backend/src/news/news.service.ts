@@ -80,7 +80,14 @@ export class NewsService {
       const savedTicket = await this.ticketRepository.save(ticket);
       // If the ticket is successfully saved, send a mail notification and return the new item
       if (savedNews && savedTicket) {
-        this.mailerService.sendMail(true, 'create', savedNews.title, 'noticia');
+        if (createNewsDto.role !== 'admin') {
+          this.mailerService.sendMail(
+            true,
+            'create',
+            savedNews.title,
+            'noticia'
+          );
+        }
         return savedNews;
       } else {
         throw new BadRequestException('Error al crear la noticia');
